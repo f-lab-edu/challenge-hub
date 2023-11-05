@@ -1,0 +1,19 @@
+rootProject.name = 'challenge-hub'
+//include 'user-authentication', 'challenge-management', 'community-interaction'
+
+// 기본 사용자 인터페이스 및 인증 모듈
+include 'user-authentication'
+// 챌린지 생성 및 관리 모듈
+include 'challenge-management'
+// 소셜 네트워킹 및 커뮤니티 기능 모듈
+include 'community-interaction'
+//// 건강 데이터 모니터링 및 분석 모듈
+//include 'health-analytics'
+//// 전문가 Q&A 및 컨텐츠 공유 모듈
+//include 'expert-content'
+//// 온라인 워크샵 및 교육 세션 모듈
+//include 'workshop-module'
+//// 명상 및 웰빙 클래스 관련 모듈
+//include 'wellbeing-classes'
+//// 환경 친화적 챌린지 및 커뮤니티 액션 모듈
+//include 'sustainable-actions'
