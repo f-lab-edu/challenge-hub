@@ -10,24 +10,11 @@ java {
     sourceCompatibility = '17'
 }
 
-//configurations {
-//    compileOnly {
-//        extendsFrom annotationProcessor
-//    }
-//}
-
 repositories {
     mavenCentral()
 }
 
-// NoSQL 쓸 지 뭐 쓸 지 아직 정해진 게 없고.. session 쓸 지도 안 정했고.. 흠
-// 일단 추가하기엔 완전 초창기 build.gradle을 짜는데는 어느정도는 무리한 거 같고
 dependencies {
-    // 당장 모니터링 할 게 있나?
-//    implementation 'org.springframework.boot:spring-boot-starter-actuator'
-//    implementation 'org.springframework.boot:spring-boot-starter-web'
-//    compileOnly 'org.projectlombok:lombok'
-//    annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.10.0'
 }
