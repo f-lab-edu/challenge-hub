@@ -9,7 +9,7 @@ group = 'daehee'
 
 java {
     sourceCompatibility = '17'
-    // targetCompatibility도 있던데 이건 뭘까
+    // targetCompatibility도 있던데 이건 뭘까, sourceCompatibility는 뭐지, 이 둘은 서로 어떤 연관이 있을까?
 }
 
 // repositories의 역할은 뭘까?
