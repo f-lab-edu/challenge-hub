@@ -5,6 +5,7 @@ rootProject.name = 'challenge-hub'
 //include 'user-authentication', 'challenge-management', 'community-interaction'
 
 // 기본 사용자 인터페이스 및 인증 모듈
+// include ':user-authentication' 이런 식으로도 작성하는데 무슨 차이일까
 include 'user-authentication'
 // 챌린지 생성 및 관리 모듈
 include 'challenge-management'
