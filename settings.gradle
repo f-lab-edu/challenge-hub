@@ -1,4 +1,7 @@
+// rootProject.name은 꼭 필요한 것일까?
 rootProject.name = 'challenge-hub'
+
+// 한 줄로 나눠진 거랑 여러줄로나눠진 거랑은 무슨 차이지?
 //include 'user-authentication', 'challenge-management', 'community-interaction'
 
 // 기본 사용자 인터페이스 및 인증 모듈
