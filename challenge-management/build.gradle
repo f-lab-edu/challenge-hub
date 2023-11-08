@@ -1,7 +1,6 @@
-// 플러그인이 하는 역할은 무엇일까
 plugins {
-    id 'java' // id java란?
-    id 'org.springframework.boot' version '3.1.5' // 버전 안 써주면 안되나?, 버전 매번 따로 명시해야하나?
+    id 'java'
+    id 'org.springframework.boot' version '3.1.5'
     id 'io.spring.dependency-management' version '1.1.3'
 }
 
@@ -9,21 +8,17 @@ group = 'daehee'
 
 java {
     sourceCompatibility = '17'
-    // targetCompatibility도 있던데 이건 뭘까, sourceCompatibility는 뭐지, 이 둘은 서로 어떤 연관이 있을까?
 }
 
-// repositories의 역할은 뭘까?
 repositories {
     mavenCentral()
 }
 
-// dependencies의 역할은 무엇이며, Implementation이나 testImplementation 등등의 역할은 뭘까
 dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.10.0'
 }
 
-// 이거 꼭 필요할까
 test {
     useJUnitPlatform()
 }
