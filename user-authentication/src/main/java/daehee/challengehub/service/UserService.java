@@ -54,4 +54,14 @@ public class UserService {
         // 비밀번호 변경 로직 구현
         return "Password changed successfully";
     }
+
+    public String uploadAvatar() {
+        // 프로필 사진 업로드 로직 구현
+        return "Avatar uploaded successfully";
+    }
+
+    public String getAchievements() {
+        // 달성한 성과 목록 조회 로직 구현
+        return "List of achievements";
+    }
 }

@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 import daehee.challengehub.service.CommunityInteractionService;
 
 @RestController
-@RequestMapping("/social")
 public class CommunityInteractionController {
 
     private final CommunityInteractionService communityService;
