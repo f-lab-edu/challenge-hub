@@ -45,15 +45,7 @@ public class UserController {
         return ResponseEntity.ok(responseMessage);
     }
 
-<<<<<<< HEAD
     // 이메일 인증
-=======
-    @PostMapping("/users")
-    public ResponseEntity<String> signup() {
-        return ResponseEntity.ok(userService.signup());
-    }
-
->>>>>>> 1d47c3a (UPDATE : Controller 스켈레톤 코드 수정 중)
     @GetMapping("/users/verify/{token}")
     public ResponseEntity<String> verifyEmail(@PathVariable String token) {
         // 임의의 토큰 값 설정
@@ -72,11 +64,8 @@ public class UserController {
         }
     }
 
-<<<<<<< HEAD
 
     // 소셜 계정으로 회원가입
-=======
->>>>>>> 1d47c3a (UPDATE : Controller 스켈레톤 코드 수정 중)
     @PostMapping("/users/social")
     public ResponseEntity<String> signupWithSocial(@RequestBody UserSocialLoginDto userSocialLoginDto) {
         // 임의의 소셜 계정 정보 생성
@@ -91,6 +80,7 @@ public class UserController {
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     // 일반 로그인
 =======
 <<<<<<< HEAD
@@ -98,6 +88,9 @@ public class UserController {
 =======
 >>>>>>> 1d47c3a (UPDATE : Controller 스켈레톤 코드 수정 중)
 >>>>>>> c066573 (Resolve merge conflicts before rebase)
+=======
+
+>>>>>>> 4defbf2 (커밋 메시지)
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody UserLoginDto userLoginDto) {
         // 임의의 로그인 데이터 생성
@@ -112,13 +105,14 @@ public class UserController {
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> 4defbf2 (커밋 메시지)
 
 >>>>>>> c066573 (Resolve merge conflicts before rebase)
     // 소셜 로그인
-=======
->>>>>>> 1d47c3a (UPDATE : Controller 스켈레톤 코드 수정 중)
     @PostMapping("/login/social")
     public ResponseEntity<String> loginWithSocial(@RequestBody UserLoginDto userLoginDto) {
         // 임의의 소셜 로그인 데이터 생성
@@ -132,13 +126,14 @@ public class UserController {
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> 4defbf2 (커밋 메시지)
 
 >>>>>>> c066573 (Resolve merge conflicts before rebase)
     // 2단계 인증
-=======
->>>>>>> 1d47c3a (UPDATE : Controller 스켈레톤 코드 수정 중)
     @PostMapping("/login/2fa")
     public ResponseEntity<String> twoFactorAuthentication(@RequestBody UserLoginDto userLoginDto) {
         // 임의의 2단계 인증 데이터 생성
@@ -152,13 +147,14 @@ public class UserController {
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> 4defbf2 (커밋 메시지)
 
 >>>>>>> c066573 (Resolve merge conflicts before rebase)
     // 비밀번호 재설정
-=======
->>>>>>> 1d47c3a (UPDATE : Controller 스켈레톤 코드 수정 중)
     @PostMapping("/password/reset")
     public ResponseEntity<String> resetPassword(@RequestBody PasswordChangeDto passwordChangeDto) {
         // 임의의 비밀번호 재설정 데이터 생성
@@ -172,13 +168,14 @@ public class UserController {
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> 4defbf2 (커밋 메시지)
 
 >>>>>>> c066573 (Resolve merge conflicts before rebase)
     // 프로필 조회
-=======
->>>>>>> 1d47c3a (UPDATE : Controller 스켈레톤 코드 수정 중)
     @GetMapping("/profile")
     public ResponseEntity<UserProfileDto> getProfile() {
         // 임의의 유저 프로필 데이터 생성
@@ -193,13 +190,14 @@ public class UserController {
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> 4defbf2 (커밋 메시지)
 
 >>>>>>> c066573 (Resolve merge conflicts before rebase)
     // 프로필 업데이트
-=======
->>>>>>> 1d47c3a (UPDATE : Controller 스켈레톤 코드 수정 중)
     @PutMapping("/profile")
     public ResponseEntity<String> updateProfile(@RequestBody UserProfileDto userProfileDto) {
         // 임의의 유저 프로필 업데이트 데이터 생성
@@ -214,10 +212,7 @@ public class UserController {
         return ResponseEntity.ok(responseMessage);
     }
 
-<<<<<<< HEAD
     // 비밀번호 변경
-=======
->>>>>>> 1d47c3a (UPDATE : Controller 스켈레톤 코드 수정 중)
     @PutMapping("/profile/password")
     public ResponseEntity<String> changePassword(@RequestBody PasswordChangeDto passwordChangeDto) {
         PasswordChangeDto newPasswordData = PasswordChangeDto.builder()
@@ -229,7 +224,6 @@ public class UserController {
         return ResponseEntity.ok(responseMessage);
     }
 
-<<<<<<< HEAD
     // 프로필 이미지 업로드
     @PostMapping("/profile/avatar")
     public ResponseEntity<String> uploadAvatar() {
@@ -255,6 +249,7 @@ public class UserController {
 <<<<<<< HEAD
 =======
 
+<<<<<<< HEAD
 =======
     @PostMapping("/profile/avatar")
     public ResponseEntity<String> uploadAvatar() {
@@ -267,4 +262,6 @@ public class UserController {
     }
 >>>>>>> 1d47c3a (UPDATE : Controller 스켈레톤 코드 수정 중)
 >>>>>>> c066573 (Resolve merge conflicts before rebase)
+=======
+>>>>>>> 4defbf2 (커밋 메시지)
 }
