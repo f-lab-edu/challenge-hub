@@ -17,7 +17,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/challenges")
 public class ChallengeController {
-
     // 챌린지 생성
     @PostMapping
     public ResponseEntity<String> createChallenge(@RequestBody ChallengeDto challengeDto) {
@@ -83,7 +82,6 @@ public class ChallengeController {
     }
 
 
-
     // 챌린지 수정
     @PutMapping("/{id}")
     public ResponseEntity<String> updateChallenge(@PathVariable Long id, @RequestBody ChallengeDto challengeDto) {
@@ -103,7 +101,6 @@ public class ChallengeController {
     }
 
 
-
     // 챌린지 삭제
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteChallenge(@PathVariable Long id) {
@@ -117,6 +114,7 @@ public class ChallengeController {
         boolean isDeletionSuccessful = true; // 이 값을 변경하여 성공/실패 시나리오 선택
         return ResponseEntity.ok(isDeletionSuccessful ? successMessage : failureMessage);
     }
+
 
     // 챌린지 참여
     @PostMapping("/{id}/participation")
@@ -134,6 +132,7 @@ public class ChallengeController {
                 newParticipation.getUserId(), newParticipation.getChallengeId(), newParticipation.getStartDate(), newParticipation.getEndDate());
         return ResponseEntity.ok(responseMessage);
     }
+
 
     // 챌린지에 태그 추가
     @PostMapping("/{id}/tags")
@@ -183,7 +182,6 @@ public class ChallengeController {
     }
 
 
-
     // 챌린지에서 이미지 제거
     @DeleteMapping("/{id}/images/{imageId}")
     public ResponseEntity<String> removeImageFromChallenge(@PathVariable Long id, @PathVariable Long imageId) {
@@ -216,7 +214,6 @@ public class ChallengeController {
 
         return ResponseEntity.ok(invitations);
     }
-
 
 
     // 챌린지에 댓글 작성
@@ -256,7 +253,6 @@ public class ChallengeController {
     }
 
 
-
     // 챌린지 규칙 조회
     // TODO: 이것도 비슷하지 않나.. 챌린지 관련 Dto에 다 적어야 할 거 같은데
     @GetMapping("/{id}/rules")
@@ -267,7 +263,6 @@ public class ChallengeController {
         String responseMessage = String.format("챌린지 ID %d의 규칙 조회 성공: %s", id, challengeRules);
         return ResponseEntity.ok(responseMessage);
     }
-
 
 
     // 챌린지 설정 변경
@@ -287,6 +282,7 @@ public class ChallengeController {
         String responseMessage = String.format("챌린지 ID %d 설정 업데이트 성공: %s", id, updatedSettings.getTitle());
         return ResponseEntity.ok(responseMessage);
     }
+
 
     // 챌린지 리더보드 조회
     @GetMapping("/{id}/leaderboard")
@@ -333,7 +329,6 @@ public class ChallengeController {
 
         return ResponseEntity.ok(participantDetails);
     }
-
 
 
     // TODO: DTO 관련 처리로 바꾸기

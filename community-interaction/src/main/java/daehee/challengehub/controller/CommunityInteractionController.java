@@ -11,11 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Arrays;
 import java.util.List;
 
-
 @RestController
 public class CommunityInteractionController {
-
-
     // 친구 추가
     @PostMapping("/friends")
     public ResponseEntity<String> addFriend(@RequestBody FriendDto friendDto) {
@@ -87,45 +84,6 @@ public class CommunityInteractionController {
         return ResponseEntity.ok(followersList);
     }
 
-    // 그룹 메시지 전송
-    @PostMapping("/groups/{id}/messages")
-    public ResponseEntity<String> sendMessageToGroup(@PathVariable Long id, @RequestBody MessageDto messageDto) {
-        MessageDto newMessage = MessageDto.builder()
-                .senderId(123L)
-                .receiverId(id)
-                .messageContent("샘플 그룹 메시지")
-                .sentTime("2023-11-15 10:00:00")
-                .isRead(false)
-                .build();
-
-        String responseMessage = String.format("그룹 ID %d에 메시지 전송 성공: %s", id, newMessage.getMessageContent());
-        return ResponseEntity.ok(responseMessage);
-    }
-
-
-    // 그룹 내 메시지 조회
-    @GetMapping("/groups/{id}/messages")
-    public ResponseEntity<List<MessageDto>> getGroupMessages(@PathVariable Long id) {
-        List<MessageDto> messagesList = Arrays.asList(
-                MessageDto.builder()
-                        .senderId(123L)
-                        .receiverId(id)
-                        .messageContent("첫 번째 그룹 메시지")
-                        .sentTime("2023-11-15 09:00:00")
-                        .isRead(true)
-                        .build(),
-                MessageDto.builder()
-                        .senderId(456L)
-                        .receiverId(id)
-                        .messageContent("두 번째 그룹 메시지")
-                        .sentTime("2023-11-15 09:30:00")
-                        .isRead(false)
-                        .build()
-        );
-
-        return ResponseEntity.ok(messagesList);
-    }
-
 
     // 다른 사용자의 프로필 조회
     @GetMapping("/user/{userId}/profile")
@@ -140,6 +98,7 @@ public class CommunityInteractionController {
     }
 
 
+    // 다른 사용자에게 개인 메시지 전송
     @PostMapping("/user/{userId}/message")
     public ResponseEntity<String> sendMessageToUser(@PathVariable Long userId, @RequestBody MessageDto messageDto) {
         MessageDto newMessage = MessageDto.builder()
@@ -153,7 +112,6 @@ public class CommunityInteractionController {
         String responseMessage = String.format("사용자 %d에게 메시지 전송 성공: %s", userId, newMessage.getMessageContent());
         return ResponseEntity.ok(responseMessage);
     }
-
 
 
     // 개인 메시지 목록 조회
@@ -178,6 +136,7 @@ public class CommunityInteractionController {
 
         return ResponseEntity.ok(messagesList);
     }
+
 
     // TODO: FriendRequestDto 구현해야할 듯, Friend 관련 컨트롤러도 분리가 필요해보임
     // 친구 요청 목록 조회
@@ -259,7 +218,6 @@ public class CommunityInteractionController {
     }
 
 
-
     // 커뮤니티 포스트 목록 조회
     @GetMapping("/community/posts")
     public ResponseEntity<List<CommunityPostDto>> getCommunityPosts() {
@@ -288,7 +246,6 @@ public class CommunityInteractionController {
 
         return ResponseEntity.ok(posts);
     }
-
 
 
     // 포스트 좋아요

@@ -15,7 +15,6 @@ import java.util.List;
 
 @RestController
 public class UserController {
-
     // 회원가입
     @PostMapping("/users")
     public ResponseEntity<String> signup(@RequestBody UserSignupDto userSignupDto) {
@@ -44,6 +43,7 @@ public class UserController {
                 standardUser.getUsername(), adminUser.getUsername(), guestUser.getUsername());
         return ResponseEntity.ok(responseMessage);
     }
+
 
     // 이메일 인증
     @GetMapping("/users/verify/{token}")
@@ -203,6 +203,7 @@ public class UserController {
         return ResponseEntity.ok(responseMessage);
     }
 
+
     // 프로필 이미지 업로드
     @PostMapping("/profile/avatar")
     public ResponseEntity<String> uploadAvatar() {
@@ -218,6 +219,7 @@ public class UserController {
 //        return ResponseEntity.ok(responseMessage);
         return null;
     }
+
 
     // 성과 목록 조회
     @GetMapping("/profile/achievements")
