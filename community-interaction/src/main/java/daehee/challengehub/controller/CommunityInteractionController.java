@@ -319,7 +319,6 @@ public class CommunityInteractionController {
                 .challengeId(achievementDto.getChallengeId()) // 챌린지 ID
                 .achievementDetails("새로운 챌린지 완료!") // 성취 내용
                 .achievedDate("2023-11-15") // 성취한 날짜
-                .isVerified(true) // 성취 인증 여부
                 .build();
 
         String responseMessage = String.format("사용자 ID %d: '%s' 성취 공유 성공",
