@@ -29,7 +29,6 @@ public class ChallengeController {
                 .endDate("2023-12-01")
                 .category("건강")
                 .difficulty("초급")
-                .isPublic(true)
                 .createdBy("User123")
                 .build();
 
@@ -49,7 +48,6 @@ public class ChallengeController {
                         .endDate("2023-11-30")
                         .category("건강")
                         .difficulty("초급")
-                        .isPublic(true)
                         .createdBy("User123")
                         .build(),
                 ChallengeDto.builder()
@@ -59,7 +57,6 @@ public class ChallengeController {
                         .endDate("2023-12-15")
                         .category("교육")
                         .difficulty("중급")
-                        .isPublic(false)
                         .createdBy("User456")
                         .build()
         );
@@ -79,7 +76,6 @@ public class ChallengeController {
                 .endDate("2023-10-31")
                 .category("생활 습관")
                 .difficulty("중급")
-                .isPublic(true)
                 .createdBy("User789")
                 .build();
 
@@ -99,7 +95,6 @@ public class ChallengeController {
                 .endDate("2023-11-15")
                 .category("건강")
                 .difficulty("초급")
-                .isPublic(false)
                 .createdBy("User123")
                 .build();
 
@@ -137,35 +132,6 @@ public class ChallengeController {
 
         String responseMessage = String.format("사용자(ID: %d)가 챌린지(ID: %d)에 참여 성공: %s부터 %s까지",
                 newParticipation.getUserId(), newParticipation.getChallengeId(), newParticipation.getStartDate(), newParticipation.getEndDate());
-        return ResponseEntity.ok(responseMessage);
-    }
-
-    // 챌린지 진행 상태 조회
-    @GetMapping("/{id}/progress")
-    public ResponseEntity<ChallengeProgressReportDto> getChallengeProgress(@PathVariable Long id) {
-        // 임의의 챌린지 진행 상태 데이터 생성
-        ChallengeProgressReportDto progressReport = ChallengeProgressReportDto.builder()
-                .challengeId(id)
-                .progressDetails("챌린지 진행 중, 5일 중 3일 완료")
-                .reportDate("2023-11-15")
-                .progressPercentage(60.0)
-                .build();
-
-        return ResponseEntity.ok(progressReport);
-    }
-
-    // 챌린지 성과 등록
-    @PostMapping("/{id}/feedback")
-    public ResponseEntity<String> addChallengeFeedback(@PathVariable Long id, @RequestBody ChallengeFeedbackDto challengeFeedbackDto) {
-        // 임의의 피드백 데이터 생성
-        ChallengeFeedbackDto newFeedback = ChallengeFeedbackDto.builder()
-                .userId(123L) // 사용자 ID
-                .challengeId(id) // 챌린지 ID
-                .feedback("챌린지는 매우 도전적이었습니다!") // 피드백 내용
-                .createdAt("2023-11-11T10:00:00") // 피드백 작성 시간
-                .build();
-
-        String responseMessage = String.format("챌린지 ID %d에 대한 피드백 등록 성공: %s", id, newFeedback.getFeedback());
         return ResponseEntity.ok(responseMessage);
     }
 
@@ -279,7 +245,7 @@ public class ChallengeController {
 
 
     // 챌린지 규칙 설정
-    // TODO: 규칙 관련 DTO 만드는 것도 고려를 해봐야겠다.
+    // TODO: 규칙 관련 DTO 만들어야하나? 그런데 ChallengeDto에 있는 Description에 다 적으면 될 거 같은데?
     @PostMapping("/{id}/rules")
     public ResponseEntity<String> setChallengeRules(@PathVariable Long id, @RequestBody String rules) {
         // 임의의 규칙 설정 데이터
@@ -292,6 +258,7 @@ public class ChallengeController {
 
 
     // 챌린지 규칙 조회
+    // TODO: 이것도 비슷하지 않나.. 챌린지 관련 Dto에 다 적어야 할 거 같은데
     @GetMapping("/{id}/rules")
     public ResponseEntity<String> getChallengeRules(@PathVariable Long id) {
         // 임의의 챌린지 규칙 데이터
@@ -314,31 +281,12 @@ public class ChallengeController {
                 .endDate("2023-12-20")
                 .category("업데이트된 카테고리")
                 .difficulty("상")
-                .isPublic(false)
                 .createdBy("새로운 생성자")
                 .build();
 
         String responseMessage = String.format("챌린지 ID %d 설정 업데이트 성공: %s", id, updatedSettings.getTitle());
         return ResponseEntity.ok(responseMessage);
     }
-
-
-    // 챌린지 진행 상황 보고
-    @PostMapping("/{id}/progress/report")
-    public ResponseEntity<String> reportChallengeProgress(@PathVariable Long id, @RequestBody ChallengeProgressReportDto progressReportDto) {
-        // 임의의 진행 상황 보고 데이터
-        ChallengeProgressReportDto newReport = ChallengeProgressReportDto.builder()
-                .challengeId(id)
-                .progressDetails("이번 주에는 3번 운동을 완료했습니다.")
-                .reportDate("2023-11-15")
-                .progressPercentage(75.0) // 진행률 75%
-                .build();
-
-        String responseMessage = String.format("챌린지 ID %d 진행 상황 보고: 진행률 - %s%%", id, newReport.getProgressPercentage());
-        return ResponseEntity.ok(responseMessage);
-    }
-
-
 
     // 챌린지 리더보드 조회
     @GetMapping("/{id}/leaderboard")
@@ -366,105 +314,6 @@ public class ChallengeController {
         );
 
         return ResponseEntity.ok(leaderboard);
-    }
-
-    // TODO: 딱히 필요 없어서 제거할 거 같다.
-//    // 참여자 필터링 및 관리
-//    @PostMapping("/{id}/participants/filter")
-//    public ResponseEntity<String> filterParticipants(@PathVariable Long id, @RequestBody ParticipantFilterCriteriaDto filterCriteriaDto) {
-//        // 임의의 참여자 필터링 데이터
-//        ParticipantFilterCriteriaDto criteria = ParticipantFilterCriteriaDto.builder()
-//                .challengeId(id) // 챌린지 ID
-//                .filterType("Active") // 필터 유형 (예: "Active", "Completed", "Dropped")
-//                .build();
-//
-//        String responseMessage = String.format("챌린지 ID %d 참여자 필터링: 필터 유형 - %s", id, criteria.getFilterType());
-//        return ResponseEntity.ok(responseMessage);
-//    }
-
-
-    // 챌린지 피드백 목록 조회
-    @GetMapping("/{id}/feedback")
-    public ResponseEntity<List<ChallengeFeedbackDto>> getChallengeFeedback(@PathVariable Long id) {
-        // 임의의 챌린지 피드백 목록 생성
-        List<ChallengeFeedbackDto> feedbackList = Arrays.asList(
-                ChallengeFeedbackDto.builder()
-                        .userId(1L)
-                        .challengeId(id)
-                        .feedback("정말 유익한 챌린지였습니다!")
-                        .createdAt("2023-11-01")
-                        .build(),
-                ChallengeFeedbackDto.builder()
-                        .userId(2L)
-                        .challengeId(id)
-                        .feedback("좋은 경험이었지만, 난이도 조정이 필요해 보입니다.")
-                        .createdAt("2023-11-02")
-                        .build()
-        );
-
-        return ResponseEntity.ok(feedbackList);
-    }
-
-
-    // 챌린지에 대한 피드백 제공
-    @PostMapping("/{id}/feedback")
-    public ResponseEntity<String> provideFeedbackToChallenge(@PathVariable Long id, @RequestBody ChallengeFeedbackDto challengeFeedbackDto) {
-        // 임의의 피드백 데이터 생성
-        ChallengeFeedbackDto newFeedback = ChallengeFeedbackDto.builder()
-                .userId(123L) // 사용자 ID
-                .challengeId(id) // 챌린지 ID
-                .feedback("이 챌린지는 매우 도전적이고 유익했습니다.") // 피드백 내용
-                .createdAt("2023-11-10") // 피드백 작성 시간
-                .build();
-
-        String responseMessage = String.format("챌린지 ID %d에 대한 피드백 제공 성공: %s", id, newFeedback.getFeedback());
-        return ResponseEntity.ok(responseMessage);
-    }
-
-
-    // TODO: DTO 관련 처리로 바꾸기
-    // 챌린지 관련 분석 데이터 조회
-    @GetMapping("/{id}/analytics")
-    public ResponseEntity<String> getChallengeAnalytics(@PathVariable Long id) {
-        // 임의의 챌린지 분석 데이터 생성
-        String analyticsData = String.format("챌린지 ID %d에 대한 분석 데이터:\n" +
-                        "- 참여자 수: %d\n" +
-                        "- 평균 진행률: %.2f%%\n" +
-                        "- 가장 인기 있는 태그: %s\n" +
-                        "- 총 피드백 수: %d",
-                id, 50, 75.5, "건강", 25);
-
-        return ResponseEntity.ok(analyticsData);
-    }
-
-
-    // TODO: DTO 관련 처리로 바꾸기
-    // 챌린지 보고서 및 분석
-    @GetMapping("/{id}/reports")
-    public ResponseEntity<String> getChallengeReports(@PathVariable Long id) {
-        // 임의의 챌린지 보고서 데이터 생성
-        String reportsData = String.format("챌린지 ID %d에 대한 보고서:\n" +
-                        "- 최고 성과자: %s\n" +
-                        "- 평균 일일 진행 시간: %.1f 시간\n" +
-                        "- 가장 활발한 토론 주제: %s\n" +
-                        "- 챌린지 완료율: %.2f%%",
-                id, "User123", 2.5, "건강한 생활 습관", 80.0);
-
-        return ResponseEntity.ok(reportsData);
-    }
-
-
-    // TODO: DTO 관련 처리로 바꾸기
-    // 챌린지 보고서 생성
-    @PostMapping("/{id}/reports/generate")
-    public ResponseEntity<String> generateChallengeReport(@PathVariable Long id) {
-        // 임의의 챌린지 보고서 생성 데이터
-        String reportDetails = String.format("챌린지 ID %d에 대한 보고서 생성 요청:\n" +
-                        "- 요청한 데이터 포인트: %s\n" +
-                        "- 보고서 생성 예상 시간: %s",
-                id, "참여자 통계, 진행률, 피드백 요약", "약 30분");
-
-        return ResponseEntity.ok(reportDetails);
     }
 
 
