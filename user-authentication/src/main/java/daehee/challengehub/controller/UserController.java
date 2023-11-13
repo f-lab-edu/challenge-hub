@@ -45,7 +45,15 @@ public class UserController {
         return ResponseEntity.ok(responseMessage);
     }
 
+<<<<<<< HEAD
     // 이메일 인증
+=======
+    @PostMapping("/users")
+    public ResponseEntity<String> signup() {
+        return ResponseEntity.ok(userService.signup());
+    }
+
+>>>>>>> 1d47c3a (UPDATE : Controller 스켈레톤 코드 수정 중)
     @GetMapping("/users/verify/{token}")
     public ResponseEntity<String> verifyEmail(@PathVariable String token) {
         // 임의의 토큰 값 설정
@@ -64,8 +72,11 @@ public class UserController {
         }
     }
 
+<<<<<<< HEAD
 
     // 소셜 계정으로 회원가입
+=======
+>>>>>>> 1d47c3a (UPDATE : Controller 스켈레톤 코드 수정 중)
     @PostMapping("/users/social")
     public ResponseEntity<String> signupWithSocial() {
         // 임의의 소셜 계정 정보 생성
@@ -91,7 +102,10 @@ public class UserController {
         return ResponseEntity.ok(responseMessage);
     }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 1d47c3a (UPDATE : Controller 스켈레톤 코드 수정 중)
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody UserLoginDto userLoginDto) {
         // 임의의 로그인 데이터 생성
@@ -112,8 +126,11 @@ public class UserController {
         return ResponseEntity.ok(responseMessage);
     }
 
+<<<<<<< HEAD
 
     // 소셜 로그인
+=======
+>>>>>>> 1d47c3a (UPDATE : Controller 스켈레톤 코드 수정 중)
     @PostMapping("/login/social")
     public ResponseEntity<String> loginWithSocial(@RequestBody UserSocialLoginDto userSocialLoginDto) {
         // 임의의 소셜 로그인 데이터 생성
@@ -132,8 +149,11 @@ public class UserController {
         return ResponseEntity.ok(responseMessage);
     }
 
+<<<<<<< HEAD
 
     // 2단계 인증
+=======
+>>>>>>> 1d47c3a (UPDATE : Controller 스켈레톤 코드 수정 중)
     @PostMapping("/login/2fa")
     public ResponseEntity<String> twoFactorAuthentication(@RequestBody UserLoginDto userLoginDto) {
         // 임의의 2단계 인증 데이터 생성
@@ -152,8 +172,11 @@ public class UserController {
         return ResponseEntity.ok(responseMessage);
     }
 
+<<<<<<< HEAD
 
     // 비밀번호 재설정
+=======
+>>>>>>> 1d47c3a (UPDATE : Controller 스켈레톤 코드 수정 중)
     @PostMapping("/password/reset")
     public ResponseEntity<String> resetPassword(@RequestBody PasswordChangeDto passwordChangeDto) {
         // 성공적인 비밀번호 변경 시나리오
@@ -177,8 +200,11 @@ public class UserController {
         return ResponseEntity.ok(isSuccessful ? successMessage : failureMessage);
     }
 
+<<<<<<< HEAD
 
     // 프로필 조회
+=======
+>>>>>>> 1d47c3a (UPDATE : Controller 스켈레톤 코드 수정 중)
     @GetMapping("/profile")
     public ResponseEntity<?> getProfile() {
         // 성공적인 프로필 조회 시나리오
@@ -197,8 +223,11 @@ public class UserController {
         return isSuccessful ? ResponseEntity.ok(successfulProfile) : ResponseEntity.badRequest().body(failureMessage);
     }
 
+<<<<<<< HEAD
 
     // 프로필 업데이트
+=======
+>>>>>>> 1d47c3a (UPDATE : Controller 스켈레톤 코드 수정 중)
     @PutMapping("/profile")
     public ResponseEntity<String> updateProfile(@RequestBody UserProfileDto userProfileDto) {
         // 임의의 유저 프로필 업데이트 데이터 생성
@@ -213,7 +242,10 @@ public class UserController {
         return ResponseEntity.ok(responseMessage);
     }
 
+<<<<<<< HEAD
     // 비밀번호 변경
+=======
+>>>>>>> 1d47c3a (UPDATE : Controller 스켈레톤 코드 수정 중)
     @PutMapping("/profile/password")
     public ResponseEntity<String> changePassword(@RequestBody PasswordChangeDto passwordChangeDto) {
         PasswordChangeDto newPasswordData = PasswordChangeDto.builder()
@@ -225,6 +257,7 @@ public class UserController {
         return ResponseEntity.ok(responseMessage);
     }
 
+<<<<<<< HEAD
     // 프로필 이미지 업로드
     @PostMapping("/profile/avatar")
     public ResponseEntity<String> uploadAvatar() {
@@ -254,4 +287,15 @@ public class UserController {
         return ResponseEntity.ok(achievements);
     }
 
+=======
+    @PostMapping("/profile/avatar")
+    public ResponseEntity<String> uploadAvatar() {
+        return ResponseEntity.ok(userService.uploadAvatar());
+    }
+
+    @GetMapping("/profile/achievements")
+    public ResponseEntity<String> getAchievements() {
+        return ResponseEntity.ok(userService.getAchievements());
+    }
+>>>>>>> 1d47c3a (UPDATE : Controller 스켈레톤 코드 수정 중)
 }
