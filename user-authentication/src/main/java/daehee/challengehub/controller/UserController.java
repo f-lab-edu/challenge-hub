@@ -92,6 +92,7 @@ public class UserController {
     }
 
 
+    // 이메일 로그인
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody UserLoginDto userLoginDto) {
         // 임의의 로그인 데이터 생성
@@ -99,7 +100,6 @@ public class UserController {
                 .email("user@example.com")
                 .password("password123")
                 .rememberMe(true)
-                .twoFactorAuthCode("2FA123")
                 .build();
 
         String responseMessage;
@@ -127,26 +127,6 @@ public class UserController {
             responseMessage = "소셜 로그인 성공: 프로바이더 - " + socialLoginUser.getProvider();
         } else {
             responseMessage = "소셜 로그인 실패: 잘못된 프로바이더 또는 토큰";
-        }
-
-        return ResponseEntity.ok(responseMessage);
-    }
-
-
-    // 2단계 인증
-    @PostMapping("/login/2fa")
-    public ResponseEntity<String> twoFactorAuthentication(@RequestBody UserLoginDto userLoginDto) {
-        // 임의의 2단계 인증 데이터 생성
-        UserLoginDto twoFaUser = UserLoginDto.builder()
-                .email("2fauser@example.com")
-                .twoFactorAuthCode("2FA123456")
-                .build();
-
-        String responseMessage;
-        if ("2FA123456".equals(twoFaUser.getTwoFactorAuthCode())) {
-            responseMessage = "2단계 인증 성공: 이메일 - " + twoFaUser.getEmail();
-        } else {
-            responseMessage = "2단계 인증 실패: 잘못된 인증 코드";
         }
 
         return ResponseEntity.ok(responseMessage);
