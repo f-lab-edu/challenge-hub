@@ -166,7 +166,6 @@ public class UserController {
                 .username("sampleUser")
                 .email("user@example.com")
                 .bio("Sample bio")
-                .location("Sample location")
                 .build();
 
         // 실패한 프로필 조회 시나리오 (예: 프로필이 존재하지 않음)
@@ -186,7 +185,6 @@ public class UserController {
                 .username("updatedUser")
                 .email("updated@example.com")
                 .bio("Updated bio")
-                .location("Updated location")
                 .build();
 
         String responseMessage = "프로필 업데이트 성공: " + updatedProfile.getUsername();
