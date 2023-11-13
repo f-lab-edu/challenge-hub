@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class UserLoginDto {
+<<<<<<< HEAD
     private String email;
     private String password;
 
@@ -24,4 +25,9 @@ public class UserLoginDto {
     }
 
     // Getter, Setter는 Lombok의 @Data 어노테이션으로 자동 생성됩니다.
+=======
+    private final String email;
+    private final String password;
+    private final boolean rememberMe;
+>>>>>>> 915ae7e (DELETE : UserController에서 2단계 인증 기능 삭제)
 }
