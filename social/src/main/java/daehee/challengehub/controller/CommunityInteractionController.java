@@ -265,23 +265,4 @@ public class CommunityInteractionController {
         String responseMessage = String.format("포스트 ID %d에 좋아요 성공", postId);
         return ResponseEntity.ok(responseMessage);
     }
-
-
-    // 사용자들의 챌린지나 활동에서의 성취 공유
-    @PostMapping("/community/achievements")
-    public ResponseEntity<String> shareUserAchievement(@RequestBody AchievementDto achievementDto) {
-        // 임의의 사용자 성취 데이터 생성
-        AchievementDto userAchievement = AchievementDto.builder()
-                .userId(achievementDto.getUserId()) // 사용자 ID
-                .challengeId(achievementDto.getChallengeId()) // 챌린지 ID
-                .achievementDetails("새로운 챌린지 완료!") // 성취 내용
-                .achievedDate("2023-11-15") // 성취한 날짜
-                .build();
-
-        String responseMessage = String.format("사용자 ID %d: '%s' 성취 공유 성공",
-                userAchievement.getUserId(),
-                userAchievement.getAchievementDetails());
-        return ResponseEntity.ok(responseMessage);
-    }
-
 }
