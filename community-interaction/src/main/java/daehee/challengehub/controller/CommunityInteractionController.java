@@ -1,6 +1,7 @@
 package daehee.challengehub.controller;
 
 import daehee.challengehub.model.*;
+import daehee.challengehub.network.model.FollowDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,43 +47,6 @@ public class CommunityInteractionController {
         return ResponseEntity.ok(friendsList);
     }
 
-
-    // 사용자 팔로우
-    @PostMapping("/follow/{userId}")
-    public ResponseEntity<String> followUser(@PathVariable Long userId) {
-        FollowDto newFollow = FollowDto.builder()
-                .followerId(123L)
-                .followingId(456L)
-                .followDate("2023-11-15")
-                .isMutual(true)
-                .build();
-
-        String responseMessage = String.format("사용자 %d 팔로우 성공. 상호 팔로우 상태: %s",
-                userId, newFollow.isMutual() ? "예" : "아니오");
-        return ResponseEntity.ok(responseMessage);
-    }
-
-
-    // 팔로워 목록 조회
-    @GetMapping("/followers")
-    public ResponseEntity<List<FollowDto>> getFollowersList() {
-        List<FollowDto> followersList = Arrays.asList(
-                FollowDto.builder()
-                        .followerId(123L)
-                        .followingId(456L)
-                        .followDate("2023-01-01")
-                        .isMutual(true)
-                        .build(),
-                FollowDto.builder()
-                        .followerId(789L)
-                        .followingId(456L)
-                        .followDate("2023-02-01")
-                        .isMutual(false)
-                        .build()
-        );
-
-        return ResponseEntity.ok(followersList);
-    }
 
 
     // 다른 사용자의 프로필 조회
