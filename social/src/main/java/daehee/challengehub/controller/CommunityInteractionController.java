@@ -141,6 +141,7 @@ public class CommunityInteractionController {
     public ResponseEntity<String> likeCommunityPost(@PathVariable Long postId) {
         return ResponseEntity.ok(communityService.likeCommunityPost(postId));
     }
+<<<<<<< HEAD:community-interaction/src/main/java/daehee/challengehub/controller/CommunityInteractionController.java
 
     @PostMapping("/community/events")
     public ResponseEntity<String> createCommunityEvent(@RequestBody String eventDetails) {
@@ -151,4 +152,6 @@ public class CommunityInteractionController {
     public ResponseEntity<String> shareUserAchievement(@RequestBody Long userId, @RequestBody String achievementDetails) {
         return ResponseEntity.ok(communityService.shareUserAchievement(userId, achievementDetails));
     }
+=======
+>>>>>>> 71293d4 (UPDATE : 서브 모듈 이름 변경):social/src/main/java/daehee/challengehub/controller/CommunityInteractionController.java
 }
