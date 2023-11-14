@@ -138,63 +138,10 @@ public class CommunityInteractionController {
     }
 
 
-    // TODO: FriendRequestDto 구현해야할 듯, Friend 관련 컨트롤러도 분리가 필요해보임
-    // 친구 요청 목록 조회
-//    @GetMapping("/friends/requests")
-//    public ResponseEntity<List<FriendRequestDto>> getFriendRequests() {
-//        // 임의의 친구 요청 데이터 생성
-//        List<FriendRequestDto> friendRequests = Arrays.asList(
-//                FriendRequestDto.builder()
-//                        .requesterId(101L) // 요청자 ID
-//                        .requestedId(202L) // 요청 받은 사용자 ID
-//                        .requestDate("2023-11-10") // 요청 날짜
-//                        .status("대기 중") // 요청 상태
-//                        .build(),
-//                FriendRequestDto.builder()
-//                        .requesterId(103L) // 다른 요청자 ID
-//                        .requestedId(202L) // 같은 요청 받은 사용자 ID
-//                        .requestDate("2023-11-09") // 요청 날짜
-//                        .status("대기 중") // 요청 상태
-//                        .build()
-//        );
-//        return ResponseEntity.ok(friendRequests);
-//    }
-
-    // TODO: FriendDto 확장해서 구현해야할 듯, Friend 관련 컨트롤러도 분리가 필요해보임
-//    // 친구 요청 응답
-//    @PostMapping("/friends/respond")
-//    public ResponseEntity<String> respondToFriendRequest(@RequestBody Long requestId, @RequestParam Boolean accept) {
-//        return ResponseEntity.ok(communityService.respondToFriendRequest(requestId, accept));
-//    }
 
 
-    // 커뮤니티 피드 조회
-    @GetMapping("/community/feed")
-    public ResponseEntity<List<CommunityPostDto>> getCommunityFeed() {
-        // 임의의 커뮤니티 피드 데이터 생성
-        List<CommunityPostDto> communityFeed = Arrays.asList(
-                CommunityPostDto.builder()
-                        .postId(1L)
-                        .authorId(100L)
-                        .postContent("첫 번째 커뮤니티 포스트 내용")
-                        .postTitle("첫 번째 커뮤니티 포스트")
-                        .creationDate("2023-11-10")
-                        .lastEdited("2023-11-10")
-                        .likeCount(15)
-                        .commentCount(4)
-                        .build(),
-                CommunityPostDto.builder()
-                        .postId(2L)
-                        .authorId(101L)
-                        .postContent("두 번째 커뮤니티 포스트 내용")
-                        .postTitle("두 번째 커뮤니티 포스트")
-                        .creationDate("2023-11-11")
-                        .lastEdited("2023-11-11")
-                        .likeCount(10)
-                        .commentCount(2)
-                        .build()
-        );
 
+<<<<<<< HEAD:community-interaction/src/main/java/daehee/challengehub/controller/CommunityInteractionController.java
         return ResponseEntity.ok(communityFeed);
     }
 
@@ -284,4 +231,6 @@ public class CommunityInteractionController {
         return ResponseEntity.ok(responseMessage);
     }
 
+=======
+>>>>>>> a1676ae (ADD: CommunityController.java 작성 완료):social/src/main/java/daehee/challengehub/controller/CommunityInteractionController.java
 }
