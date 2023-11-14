@@ -1,4 +1,4 @@
-package daehee.challengehub.model;
+package daehee.challengehub.authentication.model;
 
 import lombok.Getter;
 import lombok.Builder;
