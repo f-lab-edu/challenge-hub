@@ -1,6 +1,7 @@
 package daehee.challengehub.message.controller;
 
-import org.springframework.http.HttpStatus;
+import daehee.challengehub.message.model.ChatRoomDto;
+import daehee.challengehub.message.model.MessageDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,13 +10,19 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.Arrays;
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/message")
 public class MessageController {
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 5090928 (ADD: MessageController.java 작성 완료)
     // 다른 사용자에게 개인 메시지 전송
     @PostMapping("/user/{userId}")
     public ResponseEntity<MessageDto> sendMessage(@PathVariable Long userId, @RequestBody String messageContent) {
@@ -23,8 +30,13 @@ public class MessageController {
         MessageDto message = MessageDto.builder()
                 .messageId(1L)
                 .senderId(123L)
+<<<<<<< HEAD
                 .receiverId(456L)
                 .messageContent("안녕하세요. 만나서 반갑습니다.")
+=======
+                .receiverId(userId)
+                .messageContent(messageContent)
+>>>>>>> 5090928 (ADD: MessageController.java 작성 완료)
                 .sentTime("2023-04-05T15:00:00Z")
                 .isRead(false)
                 .build();
@@ -40,16 +52,27 @@ public class MessageController {
                 MessageDto.builder()
                         .messageId(1L)
                         .senderId(123L)
+<<<<<<< HEAD
                         .receiverId(456L)
                         .messageContent("안녕하세요.")
+=======
+                        .receiverId(userId)
+                        .messageContent("Hello!")
+>>>>>>> 5090928 (ADD: MessageController.java 작성 완료)
                         .sentTime("2023-04-05T15:00:00Z")
                         .isRead(true)
                         .build(),
                 MessageDto.builder()
                         .messageId(2L)
+<<<<<<< HEAD
                         .senderId(789L)
                         .receiverId(123L)
                         .messageContent("만나서 반갑습니다.")
+=======
+                        .senderId(userId)
+                        .receiverId(123L)
+                        .messageContent("Hi there!")
+>>>>>>> 5090928 (ADD: MessageController.java 작성 완료)
                         .sentTime("2023-04-05T16:00:00Z")
                         .isRead(false)
                         .build()
@@ -84,5 +107,8 @@ public class MessageController {
         );
         return ResponseEntity.ok(chatRooms);
     }
+<<<<<<< HEAD
 >>>>>>> 4ef1344 (UPDATE : 서브 모듈에서 User쪽 컨트롤러 코드 수정)
+=======
+>>>>>>> 5090928 (ADD: MessageController.java 작성 완료)
 }
