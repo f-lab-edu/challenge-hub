@@ -33,7 +33,7 @@ public class NetworkController {
                 .build();
 
         String responseMessage = String.format("사용자 %d 팔로우 성공. 상호 팔로우 상태: %s",
-                userId, newFollow.isMutual() ? "예" : "아니오");
+                newFollow.getFollowingId(), newFollow.isMutual() ? "예" : "아니오");
         return ResponseEntity.ok(responseMessage);
     }
 
@@ -69,6 +69,7 @@ public class NetworkController {
     // 사용자 언팔로우
     @DeleteMapping("/follow/{userId}")
     public ResponseEntity<String> unfollowUser(@PathVariable Long userId) {
+        userId = 1L;
         return ResponseEntity.ok("사용자 ID " + userId + " 언팔로우 성공");
     }
 
@@ -121,6 +122,7 @@ public class NetworkController {
     // 팔로우 요청 응답
     @PostMapping("/follow/respond")
     public ResponseEntity<String> respondToFollowRequest(@RequestBody FollowRequestDto requestDto) {
-        return ResponseEntity.ok("팔로우 요청 ID " + requestDto.getRequestId() + "에 대한 응답 처리 완료");
+        Long requestId = 3L;
+        return ResponseEntity.ok("팔로우 요청 ID " + requestId + "에 대한 응답 처리 완료");
     }
 }
