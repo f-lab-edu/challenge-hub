@@ -37,8 +37,8 @@ public class NetworkController {
         return ResponseEntity.ok(responseMessage);
     }
 
-    // 팔로워 목록 조회
-    @GetMapping("/followers")
+    // 내가 팔로우하는 사용자 목록 조회
+    @GetMapping("/following")
     public ResponseEntity<List<FollowDto>> getFollowersList() {
         List<FollowDto> followersList = Arrays.asList(
                 FollowDto.builder()

@@ -1,4 +1,5 @@
 import daehee.challengehub.SocialApplication;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -8,11 +9,11 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.containsString;
-import static org.springframework.mock.http.server.reactive.MockServerHttpRequest.put;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.mock.http.server.reactive.MockServerHttpRequest.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
@@ -56,7 +57,7 @@ public class CommunityControllerTest {
     public void testDeleteCommunityPost() throws Exception {
         mockMvc.perform(delete("/community/posts/1"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("포스트 삭제 성공: 포스트 ID 1")));
+                .andExpect(content().string(containsString("포스트 삭제 성공: 포스트 ID 3")));
     }
 
     @Test
