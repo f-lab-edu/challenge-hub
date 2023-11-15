@@ -1,10 +1,11 @@
 package daehee.challengehub.controller;
 
-import daehee.challengehub.authentication.model.PasswordChangeDto;
 import daehee.challengehub.model.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,7 +15,6 @@ import java.util.List;
 
 @RestController
 public class UserController {
-<<<<<<< HEAD:user-authentication/src/main/java/daehee/challengehub/controller/UserController.java
 
     // 회원가입
     @PostMapping("/users")
@@ -158,8 +158,6 @@ public class UserController {
     }
 
 
-=======
->>>>>>> 8be863c (ADD : AuthenticationController.java 작성 완료):user/src/main/java/daehee/challengehub/controller/UserController.java
     // 프로필 조회
     @GetMapping("/profile")
     public ResponseEntity<?> getProfile() {

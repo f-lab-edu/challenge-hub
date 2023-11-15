@@ -1,4 +1,4 @@
-package daehee.challengehub.authentication.model;
+package daehee.challengehub.model;
 
 public class UserSocialLoginDto {
 <<<<<<< HEAD
