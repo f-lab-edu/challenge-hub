@@ -75,19 +75,12 @@ public class AuthenticationController {
                 .token("sampleToken")
                 .build();
 
-        // TODO: 임의의 값을 내가 다시 넣어서 시나리오 완성 시키기
-        String responseMessage;
-        switch (newUser.getToken()) {
-            case "validToken":
-                responseMessage = String.format("소셜 계정(%s)으로 회원가입 성공. 토큰: %s",
-                        newUser.getProvider(), newUser.getToken());
-                break;
-            case "expiredToken":
-                responseMessage = "소셜 로그인 실패: 만료된 토큰";
-                break;
-            default:
-                responseMessage = "소셜 로그인 실패: 잘못된 토큰";
-        }
+        String responseMessage = switch (newUser.getToken()) {
+            case "validToken" -> String.format("소셜 계정(%s)으로 회원가입 성공. 토큰: %s",
+                    newUser.getProvider(), newUser.getToken());
+            case "expiredToken" -> "소셜 로그인 실패: 만료된 토큰";
+            default -> "소셜 로그인 실패: 잘못된 토큰";
+        };
 
         return ResponseEntity.ok(responseMessage);
     }
@@ -117,7 +110,6 @@ public class AuthenticationController {
     // 소셜 로그인
     @PostMapping("/login/social")
     public ResponseEntity<String> loginWithSocial(@RequestBody UserSocialLoginDto userSocialLoginDto) {
-        // 임의의 소셜 로그인 데이터 생성
         UserSocialLoginDto socialLoginUser = UserSocialLoginDto.builder()
                 .provider("Facebook")
                 .token("sampleTokenFacebook123")

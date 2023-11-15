@@ -81,7 +81,8 @@ public class ProfileController {
         return ResponseEntity.ok(responseMessage);
     }
 
-    // 프로필 이미지 업로드, TODO: 여기는 어떻게 구현해야할 지 다시 생각해보기
+    // 프로필 이미지 업로드
+    // TODO: 여기는 어떻게 구현해야할 지 다시 생각해보기 -> 데이터베이스에 이미지 URL을 넣어서 가져올 수도 있고 아예 파일 업로드를 해도 되는데, 전자가 나으려나?
     @PostMapping("/user/avatar")
     public ResponseEntity<String> uploadAvatar(@RequestParam("file") MultipartFile file) {
 //        ProfileImageUploadDto newAvatar = ProfileImageUploadDto.builder()
