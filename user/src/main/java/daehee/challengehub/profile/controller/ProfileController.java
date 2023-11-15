@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/profile")
@@ -86,7 +88,7 @@ public class ProfileController {
         Map<String, String> response = new HashMap<>();
         response.put("message", "비밀번호 변경 성공");
         response.put("newPassword", newPasswordData.getNewPassword());
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(response.toString());
     }
 
     // 프로필 이미지 업로드
@@ -135,6 +137,6 @@ public class ProfileController {
 
         Map<String, Object> response = new HashMap<>();
         response.put("achievements", achievements);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok((List<AchievementDto>) response);
     }
 }

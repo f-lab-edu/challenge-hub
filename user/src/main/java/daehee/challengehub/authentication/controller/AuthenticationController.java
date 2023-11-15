@@ -13,12 +13,15 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/auth")
 public class AuthenticationController {
     // 회원가입
     @PostMapping("/users")
-    public ResponseEntity<String> signup(@RequestBody UserSignupDto userSignupDto) {
+    public ResponseEntity<Map<String, Object>> signup(@RequestBody UserSignupDto userSignupDto) {
         // 시나리오 1: 표준 회원가입1
         UserSignupDto standardUser = UserSignupDto.builder()
                 .username("standardUser")
@@ -49,7 +52,7 @@ public class AuthenticationController {
 
     // 이메일 인증
     @GetMapping("/users/verify/{token}")
-    public ResponseEntity<String> verifyEmail(@PathVariable String token) {
+    public ResponseEntity<Map<String, String>> verifyEmail(@PathVariable String token) {
         Map<String, String> response = new HashMap<>();
         String fakeValidToken = "validToken123";
         String fakeExpiredToken = "expiredToken123";
