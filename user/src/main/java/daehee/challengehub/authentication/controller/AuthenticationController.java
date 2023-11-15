@@ -50,6 +50,7 @@ public class AuthenticationController {
     @GetMapping("/users/verify/{token}")
     public ResponseEntity<String> verifyEmail(@PathVariable String token) {
         // 임의의 토큰 값 설정
+        token = "validToken123";
         String fakeValidToken = "validToken123";
         String fakeExpiredToken = "expiredToken123";
         String fakeInvalidToken = "invalidToken123";
