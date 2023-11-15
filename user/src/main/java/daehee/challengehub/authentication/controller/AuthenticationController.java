@@ -40,55 +40,66 @@ public class AuthenticationController {
                 .password("guestPassword")
                 .build();
 
-        String responseMessage = String.format("회원가입 성공: %s, %s, %s",
-                standardUser.getUsername(), adminUser.getUsername(), guestUser.getUsername());
-        return ResponseEntity.ok(responseMessage);
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "회원가입 성공");
+        response.put("user", standardUser);
+        return ResponseEntity.ok(response);
     }
 
 
     // 이메일 인증
     @GetMapping("/users/verify/{token}")
     public ResponseEntity<String> verifyEmail(@PathVariable String token) {
-        // 임의의 토큰 값 설정
-        token = "validToken123";
+        Map<String, String> response = new HashMap<>();
         String fakeValidToken = "validToken123";
         String fakeExpiredToken = "expiredToken123";
         String fakeInvalidToken = "invalidToken123";
 
         if (token.equals(fakeValidToken)) {
-            return ResponseEntity.ok("이메일 인증 성공. 토큰: " + token);
+            response.put("message", "이메일 인증 성공");
+            response.put("token", fakeValidToken);
+            return ResponseEntity.ok(response);
         } else if (token.equals(fakeExpiredToken)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("인증 실패: 만료된 토큰");
+            response.put("error", "인증 실패: 만료된 토큰");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         } else if (token.equals(fakeInvalidToken)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("인증 실패: 잘못된 토큰");
+            response.put("error", "인증 실패: 잘못된 토큰");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("인증 실패: 알 수 없는 오류");
+            response.put("error", "인증 실패: 알 수 없는 오류");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
 
 
     // 소셜 계정으로 회원가입
     @PostMapping("/users/social")
-    public ResponseEntity<String> signupWithSocial() {
+    public ResponseEntity<Map<String, String>> signupWithSocial() {
         // 임의의 소셜 계정 정보 생성
         UserSocialLoginDto newUser = UserSocialLoginDto.builder()
                 .provider("Google")
                 .token("validToken")
                 .build();
 
-        String responseMessage = switch (newUser.getToken()) {
-            case "validToken" -> "소셜 계정으로 회원가입 성공";
-            case "expiredToken" -> "소셜 로그인 실패: 만료된 토큰";
-            default -> "소셜 로그인 실패: 잘못된 토큰";
-        };
+        Map<String, String> response = new HashMap<>();
+        switch (newUser.getToken()) {
+            case "validToken":
+                response.put("message", "소셜 계정으로 회원가입 성공");
+                break;
+            case "expiredToken":
+                response.put("error", "소셜 로그인 실패: 만료된 토큰");
+                break;
+            default:
+                response.put("error", "소셜 로그인 실패: 잘못된 토큰");
+                break;
+        }
 
-        return ResponseEntity.ok(responseMessage);
+        return ResponseEntity.ok(response);
     }
-
 
     // 이메일 로그인
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody UserLoginDto userLoginDto) {
+    public ResponseEntity<Map<String, String>> login(@RequestBody UserLoginDto userLoginDto) {
         // 임의의 로그인 데이터 생성
         UserLoginDto loginUser = UserLoginDto.builder()
                 .email("user@example.com")
@@ -96,57 +107,58 @@ public class AuthenticationController {
                 .rememberMe(true)
                 .build();
 
-        String responseMessage;
+        Map<String, String> response = new HashMap<>();
         if ("user@example.com".equals(loginUser.getEmail()) && "password123".equals(loginUser.getPassword())) {
-            responseMessage = "로그인 성공: " + loginUser.getEmail();
+            response.put("message", "로그인 성공");
+            response.put("userEmail", loginUser.getEmail());
         } else {
-            responseMessage = "로그인 실패: 잘못된 이메일 또는 비밀번호";
+            response.put("error", "로그인 실패: 잘못된 이메일 또는 비밀번호");
         }
 
-        return ResponseEntity.ok(responseMessage);
+        return ResponseEntity.ok(response);
     }
+
 
 
     // 소셜 로그인
     @PostMapping("/login/social")
-    public ResponseEntity<String> loginWithSocial(@RequestBody UserSocialLoginDto userSocialLoginDto) {
+    public ResponseEntity<Map<String, String>> loginWithSocial(@RequestBody UserSocialLoginDto userSocialLoginDto) {
         UserSocialLoginDto socialLoginUser = UserSocialLoginDto.builder()
                 .provider("Facebook")
                 .token("sampleTokenFacebook123")
                 .build();
 
-        String responseMessage;
+        Map<String, String> response = new HashMap<>();
         if ("Facebook".equals(socialLoginUser.getProvider()) && "sampleTokenFacebook123".equals(socialLoginUser.getToken())) {
-            responseMessage = "소셜 로그인 성공: 프로바이더 - " + socialLoginUser.getProvider();
+            response.put("message", "소셜 로그인 성공");
+            response.put("token", socialLoginUser.getToken());
         } else {
-            responseMessage = "소셜 로그인 실패: 잘못된 프로바이더 또는 토큰";
+            response.put("error", "소셜 로그인 실패: 잘못된 프로바이더 또는 토큰");
         }
 
-        return ResponseEntity.ok(responseMessage);
+        return ResponseEntity.ok(response);
     }
 
 
     // 비밀번호 재설정
     @PostMapping("/password/reset")
-    public ResponseEntity<String> resetPassword(@RequestBody PasswordChangeDto passwordChangeDto) {
-        // 성공적인 비밀번호 변경 시나리오
+    public ResponseEntity<Map<String, String>> resetPassword(@RequestBody PasswordChangeDto passwordChangeDto) {
         PasswordChangeDto successfulChange = PasswordChangeDto.builder()
                 .currentPassword("currentPassword123")
                 .newPassword("newPassword456")
                 .build();
 
-        String successMessage = "비밀번호 재설정 성공: 새 비밀번호 - " + successfulChange.getNewPassword();
+        Map<String, String> response = new HashMap<>();
+        boolean isSuccessful = true; // 임의로 성공/실패 시나리오 선택
 
-        // 실패한 비밀번호 변경 시나리오 (예: 현재 비밀번호 불일치)
-        PasswordChangeDto failedChange = PasswordChangeDto.builder()
-                .currentPassword("wrongCurrentPassword")
-                .newPassword("newPassword789")
-                .build();
+        if (isSuccessful) {
+            response.put("message", "비밀번호 재설정 성공");
+            response.put("newPassword", successfulChange.getNewPassword());
+        } else {
+            response.put("error", "비밀번호 재설정 실패: 현재 비밀번호 불일치");
+        }
 
-        String failureMessage = "비밀번호 재설정 실패: 현재 비밀번호 불일치";
-
-        // 임의로 성공 또는 실패 시나리오 선택
-        boolean isSuccessful = true; // 이 값을 변경하여 성공/실패 시나리오 선택
-        return ResponseEntity.ok(isSuccessful ? successMessage : failureMessage);
+        return ResponseEntity.ok(response);
     }
+
 }

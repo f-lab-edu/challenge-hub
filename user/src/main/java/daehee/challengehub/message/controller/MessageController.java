@@ -20,7 +20,7 @@ public class MessageController {
 
     // 다른 사용자에게 개인 메시지 전송
     @PostMapping("/user/{userId}")
-    public ResponseEntity<MessageDto> sendMessage(@PathVariable Long userId, @RequestBody String messageContent) {
+    public ResponseEntity<Map<String, Object>> sendMessage(@PathVariable Long userId, @RequestBody String messageContent) {
         // 임의의 메시지 데이터 생성
         MessageDto message = MessageDto.builder()
                 .messageId(1L)
@@ -31,12 +31,16 @@ public class MessageController {
                 .isRead(false)
                 .build();
 
-        return ResponseEntity.ok(message);
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "메시지 전송 성공");
+        response.put("sentMessage", message);
+        return ResponseEntity.ok(response);
     }
+
 
     // 다른 사용자와 나눈 메시지 목록 조회
     @GetMapping("/user/{userId}/messages")
-    public ResponseEntity<List<MessageDto>> getMessageHistory(@PathVariable Long userId) {
+    public ResponseEntity<Map<String, Object>> getMessageHistory(@PathVariable Long userId) {
         // 임의의 메시지 목록 데이터 생성
         List<MessageDto> messages = Arrays.asList(
                 MessageDto.builder()
@@ -57,12 +61,16 @@ public class MessageController {
                         .build()
         );
 
-        return ResponseEntity.ok(messages);
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "메시지 목록 조회 성공");
+        response.put("messages", messages);
+        return ResponseEntity.ok(response);
     }
+
 
     // 사용자가 참여하고 있는 채팅방 목록 조회
     @GetMapping("/user/rooms")
-    public ResponseEntity<List<ChatRoomDto>> getChatRooms() {
+    public ResponseEntity<Map<String, Object>> getChatRooms() {
         // Builder 패턴을 사용한 채팅방 목록 데이터 생성
         List<ChatRoomDto> chatRooms = Arrays.asList(
                 ChatRoomDto.builder()
@@ -84,6 +92,10 @@ public class MessageController {
                         .roomImageUrl(null)
                         .build()
         );
-        return ResponseEntity.ok(chatRooms);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "채팅방 목록 조회 성공");
+        response.put("chatRooms", chatRooms);
+        return ResponseEntity.ok(response);
     }
 }

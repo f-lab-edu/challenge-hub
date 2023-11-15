@@ -17,47 +17,51 @@ import java.util.List;
 public class ProfileController {
     // 현재 로그인한 사용자의 프로필 조회
     @GetMapping("/user")
-    public ResponseEntity<?> getProfile() {
-        // 성공적인 프로필 조회 시나리오
-        UserProfileDto successfulProfile = UserProfileDto.builder()
-                .username("sampleUser")
-                .nickname("SampleNickname")
-                .email("user@example.com")
-                .bio("Sample bio")
-                .build();
+    public ResponseEntity<Map<String, Object>> getProfile() {
+        Map<String, Object> response = new HashMap<>();
+        boolean isSuccessful = true; // 성공/실패 시나리오 선택
 
-        // 실패한 프로필 조회 시나리오 (예: 프로필이 존재하지 않음)
-        String failureMessage = "프로필 조회 실패: 사용자를 찾을 수 없습니다.";
-
-        // 임의로 성공 또는 실패 시나리오 선택
-        boolean isSuccessful = true; // 이 값을 변경하여 성공/실패 시나리오 선택
-        return isSuccessful ? ResponseEntity.ok(successfulProfile) : ResponseEntity.badRequest().body(failureMessage);
+        if (isSuccessful) {
+            UserProfileDto successfulProfile = UserProfileDto.builder()
+                    .username("sampleUser")
+                    .nickname("SampleNickname")
+                    .email("user@example.com")
+                    .bio("Sample bio")
+                    .build();
+            response.put("message", "프로필 조회 성공");
+            response.put("profile", successfulProfile);
+            return ResponseEntity.ok(response);
+        } else {
+            response.put("error", "프로필 조회 실패: 사용자를 찾을 수 없습니다.");
+            return ResponseEntity.badRequest().body(response);
+        }
     }
 
     // 다른 사용자의 프로필 조회
     @GetMapping("/user/{userId}")
-    public ResponseEntity<?> getUserProfile(@PathVariable Long userId) {
-        boolean userExists = true;
+    public ResponseEntity<Map<String, Object>> getUserProfile(@PathVariable Long userId) {
+        Map<String, Object> response = new HashMap<>();
+        boolean userExists = true; // 사용자 존재 여부
+
         if (userExists) {
-            // 성공 시나리오: 임의의 사용자 프로필 데이터 생성 및 반환
             UserProfileDto userProfile = UserProfileDto.builder()
                     .username("sampleUser")
                     .nickname("SampleNickname")
                     .email("user@example.com")
                     .bio("This is a sample bio.")
                     .build();
-            return ResponseEntity.ok(userProfile);
+            response.put("message", "프로필 조회 성공");
+            response.put("profile", userProfile);
+            return ResponseEntity.ok(response);
         } else {
-            // 실패 시나리오: 사용자가 존재하지 않음
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("프로필 조회 실패: 해당 사용자 ID로 사용자를 찾을 수 없습니다.");
+            response.put("error", "프로필 조회 실패: 해당 사용자 ID로 사용자를 찾을 수 없습니다.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
 
     // 프로필 정보 업데이트
     @PutMapping("/user")
-    public ResponseEntity<String> updateProfile(@RequestBody UserProfileDto userProfileDto) {
-        // 임의의 유저 프로필 업데이트 데이터 생성
+    public ResponseEntity<Map<String, String>> updateProfile(@RequestBody UserProfileDto userProfileDto) {
         UserProfileDto updatedProfile = UserProfileDto.builder()
                 .username("updatedUser")
                 .nickname("UpdatedNickname")
@@ -65,8 +69,10 @@ public class ProfileController {
                 .bio("Updated bio")
                 .build();
 
-        String responseMessage = "프로필 업데이트 성공: " + updatedProfile.getUsername();
-        return ResponseEntity.ok(responseMessage);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "프로필 업데이트 성공");
+        response.put("updatedProfile", updatedProfile.getUsername());
+        return ResponseEntity.ok(response);
     }
 
     // 비밀번호 변경, TODO: 비밀번호 재설정 요청이랑 겹치는데... 지워야하나 그냥 둬야하나
@@ -77,8 +83,10 @@ public class ProfileController {
                 .newPassword("newStrongPassword")
                 .build();
 
-        String responseMessage = "비밀번호 변경 성공: " + newPasswordData.getNewPassword();
-        return ResponseEntity.ok(responseMessage);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "비밀번호 변경 성공");
+        response.put("newPassword", newPasswordData.getNewPassword());
+        return ResponseEntity.ok(response);
     }
 
     // 프로필 이미지 업로드
@@ -125,6 +133,8 @@ public class ProfileController {
                         .build()
         );
 
-        return ResponseEntity.ok(achievements);
+        Map<String, Object> response = new HashMap<>();
+        response.put("achievements", achievements);
+        return ResponseEntity.ok(response);
     }
 }
