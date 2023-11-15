@@ -95,9 +95,11 @@ public class InteractionController {
         return ResponseEntity.ok(participants);
     }
 
-    // 참여자 관리 (예: 참여자 추가 또는 제거), TODO: DELETE 관련 메소드를 따로 만들까...?
+    // 참여자 관리 (예: 참여자 추가 또는 제거)
+    // TODO: 인증이 안되면 자동으로 추방하는 기능도 만들어야할 거 같다.
     @PostMapping("/{id}/participants/manage")
     public ResponseEntity<String> manageParticipants(@PathVariable Long id, @RequestBody ChallengeParticipantDto participantData) {
+        id = 1L;
         String responseMessage = String.format("챌린지 ID %d에 대한 참여자 관리 성공", id);
         return ResponseEntity.ok(responseMessage);
     }
