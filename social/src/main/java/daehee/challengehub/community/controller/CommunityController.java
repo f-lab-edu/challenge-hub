@@ -86,6 +86,7 @@ public class CommunityController {
     // 커뮤니티 포스트 삭제
     @DeleteMapping("/posts/{postId}")
     public ResponseEntity<String> deletePost(@PathVariable Long postId) {
+        postId = 3L;
         String responseMessage = "포스트 삭제 성공: 포스트 ID " + postId;
         return ResponseEntity.ok(responseMessage);
     }
