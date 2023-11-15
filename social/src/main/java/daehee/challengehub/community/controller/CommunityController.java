@@ -69,7 +69,6 @@ public class CommunityController {
     // 커뮤니티 포스트 수정
     @PutMapping("/posts/{postId}")
     public ResponseEntity<CommunityPostDto> updatePost(@PathVariable Long postId, @RequestBody CommunityPostDto postUpdateData) {
-        // 임의의 수정된 포스트 데이터
         CommunityPostDto updatedPost = CommunityPostDto.builder()
                 .postId(1L)
                 .authorId(101L)
@@ -87,11 +86,7 @@ public class CommunityController {
     // 커뮤니티 포스트 삭제
     @DeleteMapping("/posts/{postId}")
     public ResponseEntity<String> deletePost(@PathVariable Long postId) {
-<<<<<<< HEAD
-        // 삭제 과정 시뮬레이션
-=======
         postId = 3L;
->>>>>>> eae27c9 (UPDATE : 서브 모듈에서 Social쪽 컨트롤러 코드 수정)
         String responseMessage = "포스트 삭제 성공: 포스트 ID " + postId;
         return ResponseEntity.ok(responseMessage);
     }
@@ -126,12 +121,13 @@ public class CommunityController {
     }
 
 
-    // 포스트 좋아요, TODO: 좋아요 관련 로직 구현이 단순히 1만 증가한다고 되는건지 다시 검토하기
+    // 포스트 좋아요
+    // TODO: 좋아요 관련 로직 구현이 단순히 1만 증가한다고 되는건지 다시 검토하기
     @PostMapping("/posts/{postId}/like")
     public ResponseEntity<String> likeCommunityPost(@PathVariable Long postId) {
         CommunityPostDto likedPost = CommunityPostDto.builder()
                 .postId(postId)
-                .authorId(101L) // 임의의 작성자 ID
+                .authorId(101L)
                 .postContent("이 포스트는 좋아요를 받았습니다.")
                 .postTitle("좋아요 받은 포스트")
                 .creationDate("2023-11-15")
