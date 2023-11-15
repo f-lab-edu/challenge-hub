@@ -73,12 +73,11 @@ public class AuthenticationController {
         // 임의의 소셜 계정 정보 생성
         UserSocialLoginDto newUser = UserSocialLoginDto.builder()
                 .provider("Google")
-                .token("sampleToken")
+                .token("validToken")
                 .build();
 
         String responseMessage = switch (newUser.getToken()) {
-            case "validToken" -> String.format("소셜 계정(%s)으로 회원가입 성공. 토큰: %s",
-                    newUser.getProvider(), newUser.getToken());
+            case "validToken" -> "소셜 계정으로 회원가입 성공";
             case "expiredToken" -> "소셜 로그인 실패: 만료된 토큰";
             default -> "소셜 로그인 실패: 잘못된 토큰";
         };
