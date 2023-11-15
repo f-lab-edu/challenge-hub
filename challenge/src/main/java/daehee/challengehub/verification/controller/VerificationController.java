@@ -76,6 +76,7 @@ public class VerificationController {
     // 챌린지 인증 삭제
     @DeleteMapping("/{verificationId}")
     public ResponseEntity<String> deleteVerification(@PathVariable Long id, @PathVariable Long verificationId) {
+        verificationId = 1L;
         return ResponseEntity.ok("챌린지 인증 삭제 성공: 인증 ID " + verificationId);
     }
 }
