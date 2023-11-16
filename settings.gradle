@@ -1,0 +1,3 @@
+include ':user-authentication'
+include ':challenge-management'
+include ':community-interaction'
