@@ -18,7 +18,7 @@ import java.util.Map;
 @RequestMapping("/profile")
 public class ProfileController {
     // 사용자의 프로필 조회
-    @GetMapping("/user/{userId}")
+    @GetMapping("/{userId}")
     public Map<String, Object> getProfile(@PathVariable Long userId) {
         Map<String, Object> response = new HashMap<>();
         boolean userExists = true; // 사용자 존재 여부
@@ -44,7 +44,7 @@ public class ProfileController {
     }
 
     // 프로필 정보 업데이트
-    @PutMapping("/user")
+    @PutMapping
     public Map<String, String> updateProfile(@RequestBody UserProfileDto userProfileDto) {
         UserProfileDto updatedProfile = UserProfileDto.builder()
                 .username("updatedUser")
@@ -60,8 +60,8 @@ public class ProfileController {
     }
 
     // 비밀번호 변경, TODO: 비밀번호 재설정 요청이랑 겹치는데... 지워야하나 그냥 둬야하나
-    @PutMapping("/user/password")
-    public ResponseEntity<String> changePassword(@RequestBody PasswordChangeDto passwordChangeDto) {
+    @PutMapping("/password")
+    public String changePassword(@RequestBody PasswordChangeDto passwordChangeDto) {
         PasswordChangeDto newPasswordData = PasswordChangeDto.builder()
                 .currentPassword("oldPassword")
                 .newPassword("newStrongPassword")
@@ -70,12 +70,12 @@ public class ProfileController {
         Map<String, String> response = new HashMap<>();
         response.put("message", "비밀번호 변경 성공");
         response.put("newPassword", newPasswordData.getNewPassword());
-        return ResponseEntity.ok(response.toString());
+        return response.toString();
     }
 
     // 프로필 이미지 업로드
     // TODO: 여기는 어떻게 구현해야할 지 다시 생각해보기 -> 데이터베이스에 이미지 URL을 넣어서 가져올 수도 있고 아예 파일 업로드를 해도 되는데, 전자가 나으려나?
-    @PostMapping("/user/avatar")
+    @PostMapping("/avatar")
     public ResponseEntity<String> uploadAvatar(@RequestParam("file") MultipartFile file) {
 //        ProfileImageUploadDto newAvatar = ProfileImageUploadDto.builder()
 //                .imageFile(file)
@@ -87,8 +87,8 @@ public class ProfileController {
     }
 
     // 달성한 성과 목록 조회
-    @GetMapping("/user/achievements")
-    public ResponseEntity<List<AchievementDto>> getAchievements() {
+    @GetMapping("/achievements")
+    public List<AchievementDto> getAchievements() {
         // 임의의 성과 목록 생성
         List<AchievementDto> achievements = Arrays.asList(
                 AchievementDto.builder()
@@ -119,6 +119,6 @@ public class ProfileController {
 
         Map<String, Object> response = new HashMap<>();
         response.put("achievements", achievements);
-        return ResponseEntity.ok((List<AchievementDto>) response);
+        return (List<AchievementDto>) response;
     }
 }
