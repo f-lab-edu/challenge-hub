@@ -17,53 +17,35 @@ import java.util.Map;
 @RestController
 @RequestMapping("/profile")
 public class ProfileController {
-    // 현재 로그인한 사용자의 프로필 조회
-    @GetMapping("/user")
-    public ResponseEntity<Map<String, Object>> getProfile() {
-        Map<String, Object> response = new HashMap<>();
-        boolean isSuccessful = true; // 성공/실패 시나리오 선택
-
-        if (isSuccessful) {
-            UserProfileDto successfulProfile = UserProfileDto.builder()
-                    .username("sampleUser")
-                    .nickname("SampleNickname")
-                    .email("user@example.com")
-                    .bio("Sample bio")
-                    .build();
-            response.put("message", "프로필 조회 성공");
-            response.put("profile", successfulProfile);
-            return ResponseEntity.ok(response);
-        } else {
-            response.put("error", "프로필 조회 실패: 사용자를 찾을 수 없습니다.");
-            return ResponseEntity.badRequest().body(response);
-        }
-    }
-
-    // 다른 사용자의 프로필 조회
+    // 사용자의 프로필 조회
     @GetMapping("/user/{userId}")
-    public ResponseEntity<Map<String, Object>> getUserProfile(@PathVariable Long userId) {
+    public Map<String, Object> getProfile(@PathVariable Long userId) {
         Map<String, Object> response = new HashMap<>();
         boolean userExists = true; // 사용자 존재 여부
+        Long loggedInUserId = 123L; // 임의의 현재 로그인한 사용자 ID
 
         if (userExists) {
+            // 사용자의 프로필 정보 조회
             UserProfileDto userProfile = UserProfileDto.builder()
                     .username("sampleUser")
                     .nickname("SampleNickname")
                     .email("user@example.com")
                     .bio("This is a sample bio.")
                     .build();
+
             response.put("message", "프로필 조회 성공");
             response.put("profile", userProfile);
-            return ResponseEntity.ok(response);
+            response.put("isCurrentUser", userId.equals(loggedInUserId)); // 현재 로그인한 사용자인지 여부
+            return response;
         } else {
             response.put("error", "프로필 조회 실패: 해당 사용자 ID로 사용자를 찾을 수 없습니다.");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response).getBody();
         }
     }
 
     // 프로필 정보 업데이트
     @PutMapping("/user")
-    public ResponseEntity<Map<String, String>> updateProfile(@RequestBody UserProfileDto userProfileDto) {
+    public Map<String, String> updateProfile(@RequestBody UserProfileDto userProfileDto) {
         UserProfileDto updatedProfile = UserProfileDto.builder()
                 .username("updatedUser")
                 .nickname("UpdatedNickname")
@@ -74,7 +56,7 @@ public class ProfileController {
         Map<String, String> response = new HashMap<>();
         response.put("message", "프로필 업데이트 성공");
         response.put("updatedProfile", updatedProfile.getUsername());
-        return ResponseEntity.ok(response);
+        return response;
     }
 
     // 비밀번호 변경, TODO: 비밀번호 재설정 요청이랑 겹치는데... 지워야하나 그냥 둬야하나

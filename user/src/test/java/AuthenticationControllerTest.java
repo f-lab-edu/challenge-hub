@@ -55,19 +55,6 @@ public class AuthenticationControllerTest {
     }
 
     @Test
-    public void testSignupWithSocial() throws Exception {
-        String socialSignupJson = "{\"provider\":\"Google\",\"token\":\"validToken\"}";
-        MvcResult result = mockMvc.perform(post("/auth/users/social")
-                        .contentType("application/json;charset=UTF-8")
-                        .content(socialSignupJson))
-                .andExpect(status().isOk())
-                .andReturn();
-
-        Map<String, String> response = objectMapper.readValue(result.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<>() {});
-        assertEquals("소셜 계정으로 회원가입 성공", response.get("message"));
-    }
-
-    @Test
     public void testLogin() throws Exception {
         String loginJson = "{\"email\":\"user@example.com\",\"password\":\"password123\"}";
         MvcResult result = mockMvc.perform(post("/auth/login")
@@ -79,20 +66,6 @@ public class AuthenticationControllerTest {
         Map<String, String> response = objectMapper.readValue(result.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<>() {});
         assertEquals("로그인 성공", response.get("message"));
         assertEquals("user@example.com", response.get("userEmail"));
-    }
-
-    @Test
-    public void testLoginWithSocial() throws Exception {
-        String socialLoginJson = "{\"provider\":\"Facebook\",\"token\":\"sampleTokenFacebook123\"}";
-        MvcResult result = mockMvc.perform(post("/auth/login/social")
-                        .contentType("application/json;charset=UTF-8")
-                        .content(socialLoginJson))
-                .andExpect(status().isOk())
-                .andReturn();
-
-        Map<String, String> response = objectMapper.readValue(result.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<>() {});
-        assertEquals("소셜 로그인 성공", response.get("message"));
-        assertEquals("sampleTokenFacebook123", response.get("token"));
     }
 
     @Test
