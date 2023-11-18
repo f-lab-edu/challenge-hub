@@ -3,11 +3,8 @@ package daehee.challengehub.authentication.controller;
 import daehee.challengehub.authentication.model.PasswordChangeDto;
 import daehee.challengehub.authentication.model.UserLoginDto;
 import daehee.challengehub.authentication.model.UserSignupDto;
-import daehee.challengehub.authentication.model.UserSocialLoginDto;
-import daehee.challengehub.exception.EmailVerificationException;
+import daehee.challengehub.exception.UserException;
 import daehee.challengehub.util.ErrorMessages;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -49,11 +46,11 @@ public class AuthenticationController {
         if (token.equals(fakeValidToken)) {
             return Map.of("message", "이메일 인증 성공", "token", fakeValidToken);
         } else if (token.equals(fakeExpiredToken)) {
-            throw new EmailVerificationException(ErrorMessages.TOKEN_EXPIRED);
+            throw new UserException(ErrorMessages.TOKEN_EXPIRED);
         } else if (token.equals(fakeInvalidToken)) {
-            throw new EmailVerificationException(ErrorMessages.TOKEN_INVALID);
+            throw new UserException(ErrorMessages.TOKEN_INVALID);
         } else {
-            throw new EmailVerificationException(ErrorMessages.TOKEN_UNKNOWN_ERROR);
+            throw new UserException(ErrorMessages.TOKEN_UNKNOWN_ERROR);
         }
     }
 

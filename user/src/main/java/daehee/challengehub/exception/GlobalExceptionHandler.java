@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler(EmailVerificationException.class)
-    public ResponseEntity<String> handleEmailVerificationException(EmailVerificationException ex) {
+    @ExceptionHandler(UserException.class)
+    public ResponseEntity<String> handleEmailVerificationException(UserException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 }
