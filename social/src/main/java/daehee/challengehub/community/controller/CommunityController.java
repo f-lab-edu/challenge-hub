@@ -1,7 +1,6 @@
 package daehee.challengehub.community.controller;
 
 import daehee.challengehub.community.model.CommunityPostDto;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -12,14 +11,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/community")
 public class CommunityController {
     // 커뮤니티 피드 조회
     @GetMapping("/feed")
-    public List<CommunityPostDto> getCommunityFeed() {
+    public Map<String, Object> getCommunityFeed() {
         // 임의의 커뮤니티 피드 데이터 생성
         List<CommunityPostDto> communityFeed = Arrays.asList(
                 CommunityPostDto.builder()
@@ -44,13 +45,16 @@ public class CommunityController {
                         .build()
         );
 
-        return communityFeed;
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "커뮤니티 피드 조회 성공");
+        response.put("communityFeed", communityFeed);
+        return response;
     }
 
 
     // 커뮤니티 포스트 작성
     @PostMapping("/posts")
-    public String createCommunityPost(@RequestBody CommunityPostDto communityPostDto) {
+    public Map<String, Object> createCommunityPost(@RequestBody CommunityPostDto communityPostDto) {
         CommunityPostDto newPost = CommunityPostDto.builder()
                 .postId(1L) // 임의의 게시물 ID
                 .authorId(communityPostDto.getAuthorId()) // 작성자 ID
@@ -62,13 +66,15 @@ public class CommunityController {
                 .commentCount(0) // 댓글 수
                 .build();
 
-        String responseMessage = String.format("커뮤니티 포스트 생성 성공: %s", newPost.getPostTitle());
-        return responseMessage;
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", String.format("커뮤니티 포스트 생성 성공: %s", newPost.getPostTitle()));
+        response.put("createdPost", newPost);
+        return response;
     }
 
     // 커뮤니티 포스트 수정
     @PutMapping("/posts/{postId}")
-    public CommunityPostDto updatePost(@PathVariable Long postId, @RequestBody CommunityPostDto postUpdateData) {
+    public Map<String, Object> updatePost(@PathVariable Long postId, @RequestBody CommunityPostDto postUpdateData) {
         CommunityPostDto updatedPost = CommunityPostDto.builder()
                 .postId(1L)
                 .authorId(101L)
@@ -80,20 +86,24 @@ public class CommunityController {
                 .commentCount(5)
                 .build();
 
-        return updatedPost;
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "커뮤니티 포스트 수정 성공");
+        response.put("updatedPost", updatedPost);
+        return response;
     }
 
     // 커뮤니티 포스트 삭제
     @DeleteMapping("/posts/{postId}")
-    public String deletePost(@PathVariable Long postId) {
+    public Map<String, String> deletePost(@PathVariable Long postId) {
         postId = 3L;
-        String responseMessage = "포스트 삭제 성공: 포스트 ID " + postId;
-        return responseMessage;
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "포스트 삭제 성공: 포스트 ID " + postId);
+        return response;
     }
 
     // 커뮤니티 포스트 목록 조회
     @GetMapping("/posts")
-    public List<CommunityPostDto> getCommunityPosts() {
+    public Map<String, Object> getCommunityPosts() {
         List<CommunityPostDto> posts = Arrays.asList(
                 CommunityPostDto.builder()
                         .postId(1L)
@@ -117,14 +127,17 @@ public class CommunityController {
                         .build()
         );
 
-        return posts;
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "커뮤니티 포스트 목록 조회 성공");
+        response.put("posts", posts);
+        return response;
     }
 
 
     // 포스트 좋아요
     // TODO: 좋아요 관련 로직 구현이 단순히 1만 증가한다고 되는건지 다시 검토하기
     @PostMapping("/posts/{postId}/like")
-    public String likeCommunityPost(@PathVariable Long postId) {
+    public Map<String, Object> likeCommunityPost(@PathVariable Long postId) {
         CommunityPostDto likedPost = CommunityPostDto.builder()
                 .postId(postId)
                 .authorId(101L)
@@ -136,7 +149,9 @@ public class CommunityController {
                 .commentCount(5)
                 .build();
 
-        String responseMessage = String.format("포스트 ID %d에 좋아요 성공", postId);
-        return responseMessage;
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", String.format("포스트 ID %d에 좋아요 성공", postId));
+        response.put("likedPost", likedPost);
+        return response;
     }
 }

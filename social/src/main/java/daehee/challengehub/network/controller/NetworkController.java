@@ -1,26 +1,25 @@
 package daehee.challengehub.network.controller;
 
 import daehee.challengehub.network.model.FollowDto;
-import daehee.challengehub.network.model.FollowRequestDto;
 import daehee.challengehub.network.model.FollowersDto;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/network")
 public class NetworkController {
     // 사용자 팔로우
     @PostMapping("/follow/{userId}")
-    public String followUser(@PathVariable Long userId) {
+    public Map<String, Object> followUser(@PathVariable Long userId) {
         FollowDto newFollow = FollowDto.builder()
                 .followerId(123L) // 임의의 팔로워 ID
                 .followingId(456L) // 팔로우 대상 ID
@@ -32,15 +31,16 @@ public class NetworkController {
                 .followingProfileImage("https://example.com/following_image.jpg")
                 .build();
 
-        String responseMessage = String.format("사용자 %d 팔로우 성공. 상호 팔로우 상태: %s",
-                newFollow.getFollowingId(), newFollow.isMutual() ? "예" : "아니오");
-        return responseMessage;
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", String.format("사용자 %d 팔로우 성공. 상호 팔로우 상태: %s", userId, newFollow.isMutual() ? "예" : "아니오"));
+        response.put("followDetails", newFollow);
+        return response;
     }
 
-    // 내가 팔로우하는 사용자 목록 조회
+    // 내가 팔로우 하는 사용자 목록 조회
     @GetMapping("/following")
-    public List<FollowDto> getFollowersList() {
-        List<FollowDto> followersList = Arrays.asList(
+    public Map<String, Object> getFollowings() {
+        List<FollowDto> followingList = Arrays.asList(
                 FollowDto.builder()
                         .followerId(123L)
                         .followingId(456L)
@@ -63,19 +63,24 @@ public class NetworkController {
                         .build()
         );
 
-        return followersList;
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "팔로잉 목록 조회 성공");
+        response.put("followingList", followingList);
+        return response;
     }
 
     // 사용자 언팔로우
     @DeleteMapping("/follow/{userId}")
-    public String unfollowUser(@PathVariable Long userId) {
+    public Map<String, String> unfollowUser(@PathVariable Long userId) {
         userId = 1L;
-        return "사용자 ID " + userId + " 언팔로우 성공";
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "사용자 ID " + userId + " 언팔로우 성공");
+        return response;
     }
 
     // 나를 팔로우하는 사용자 목록 조회
     @GetMapping("/followers")
-    public List<FollowersDto> getFollowers() {
+    public Map<String, Object> getFollowers() {
         List<FollowersDto> followers = Arrays.asList(
                 FollowersDto.builder()
                         .userId(789L)
@@ -91,38 +96,9 @@ public class NetworkController {
                         .build()
         );
 
-        return followers;
-    }
-
-    // 팔로우 요청 목록 조회
-    @GetMapping("/follow/requests")
-    public List<FollowRequestDto> getFollowRequests() {
-        List<FollowRequestDto> requests = Arrays.asList(
-                FollowRequestDto.builder()
-                        .requestId(1L)
-                        .requesterId(111L)
-                        .requestedId(222L)
-                        .requestDate("2023-05-02")
-                        .requesterUsername("requester1")
-                        .requesterProfileImage("https://example.com/requester1.jpg")
-                        .build(),
-                FollowRequestDto.builder()
-                        .requestId(2L)
-                        .requesterId(333L)
-                        .requestedId(444L)
-                        .requestDate("2023-05-03")
-                        .requesterUsername("requester2")
-                        .requesterProfileImage("https://example.com/requester2.jpg")
-                        .build()
-        );
-
-        return requests;
-    }
-
-    // 팔로우 요청 응답
-    @PostMapping("/follow/respond")
-    public String respondToFollowRequest(@RequestBody FollowRequestDto requestDto) {
-        Long requestId = 3L;
-        return "팔로우 요청 ID " + requestId + "에 대한 응답 처리 완료";
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "팔로워 목록 조회 성공");
+        response.put("followers", followers);
+        return response;
     }
 }
