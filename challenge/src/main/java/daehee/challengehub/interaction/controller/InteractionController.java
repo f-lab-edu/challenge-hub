@@ -18,7 +18,7 @@ import java.util.List;
 public class InteractionController {
     // 챌린지에 대한 댓글 작성
     @PostMapping("/{id}/comments")
-    public ResponseEntity<ChallengeCommentDto> postComment(@PathVariable Long id, @RequestBody String commentText) {
+    public ChallengeCommentDto postComment(@PathVariable Long id, @RequestBody String commentText) {
         ChallengeCommentDto newComment = ChallengeCommentDto.builder()
                 .commentId(1L)
                 .challengeId(3L)
@@ -27,12 +27,12 @@ public class InteractionController {
                 .postedAt("2023-11-15T12:00:00Z")
                 .build();
 
-        return ResponseEntity.ok(newComment);
+        return newComment;
     }
 
     // 챌린지 댓글 목록 조회
     @GetMapping("/{id}/comments")
-    public ResponseEntity<List<ChallengeCommentDto>> getComments(@PathVariable Long id) {
+    public List<ChallengeCommentDto> getComments(@PathVariable Long id) {
         List<ChallengeCommentDto> comments = Arrays.asList(
                 ChallengeCommentDto.builder()
                         .commentId(1L)
@@ -50,12 +50,12 @@ public class InteractionController {
                         .build()
         );
 
-        return ResponseEntity.ok(comments);
+        return comments;
     }
 
     // 챌린지별 리더보드 조회
     @GetMapping("/{id}/leaderboard")
-    public ResponseEntity<List<ChallengeParticipantDto>> getLeaderboard(@PathVariable Long id) {
+    public List<ChallengeParticipantDto> getLeaderboard(@PathVariable Long id) {
         List<ChallengeParticipantDto> leaderboard = Arrays.asList(
                 ChallengeParticipantDto.builder()
                         .participantId(1L)
@@ -71,12 +71,12 @@ public class InteractionController {
                         .build()
         );
 
-        return ResponseEntity.ok(leaderboard);
+        return leaderboard;
     }
 
     // 참여자 상세 정보 조회
     @GetMapping("/{id}/participants/details")
-    public ResponseEntity<List<ChallengeParticipantDto>> getParticipantDetails(@PathVariable Long id) {
+    public List<ChallengeParticipantDto> getParticipantDetails(@PathVariable Long id) {
         List<ChallengeParticipantDto> participants = Arrays.asList(
                 ChallengeParticipantDto.builder()
                         .participantId(1L)
@@ -92,15 +92,15 @@ public class InteractionController {
                         .build()
         );
 
-        return ResponseEntity.ok(participants);
+        return participants;
     }
 
     // 참여자 관리 (예: 참여자 추가 또는 제거)
     // TODO: 인증이 안되면 자동으로 추방하는 기능도 만들어야할 거 같다.
     @PostMapping("/{id}/participants/manage")
-    public ResponseEntity<String> manageParticipants(@PathVariable Long id, @RequestBody ChallengeParticipantDto participantData) {
+    public String manageParticipants(@PathVariable Long id, @RequestBody ChallengeParticipantDto participantData) {
         id = 1L;
         String responseMessage = String.format("챌린지 ID %d에 대한 참여자 관리 성공", id);
-        return ResponseEntity.ok(responseMessage);
+        return responseMessage;
     }
 }

@@ -22,7 +22,7 @@ import java.util.List;
 public class ManagementController {
     // 챌린지 생성
     @PostMapping
-    public ResponseEntity<ChallengeDto> createChallenge(@RequestBody ChallengeDto challengeData) {
+    public ChallengeDto createChallenge(@RequestBody ChallengeDto challengeData) {
         ChallengeDto newChallenge = ChallengeDto.builder()
                 .challengeId(1L)
                 .title("새로운 챌린지")
@@ -36,12 +36,12 @@ public class ManagementController {
                 .lastModified("2023-11-15")
                 .build();
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(newChallenge);
+        return newChallenge;
     }
 
     // 챌린지 목록 조회
     @GetMapping
-    public ResponseEntity<List<ChallengeDto>> getAllChallenges() {
+    public List<ChallengeDto> getAllChallenges() {
         List<ChallengeDto> challenges = Arrays.asList(
                 ChallengeDto.builder()
                         .challengeId(1L)
@@ -69,12 +69,12 @@ public class ManagementController {
                         .build()
         );
 
-        return ResponseEntity.ok(challenges);
+        return challenges;
     }
 
     // 특정 챌린지 상세 조회
     @GetMapping("/{id}")
-    public ResponseEntity<ChallengeDto> getChallengeById(@PathVariable Long id) {
+    public ChallengeDto getChallengeById(@PathVariable Long id) {
         ChallengeDto challenge = ChallengeDto.builder()
                 .challengeId(1L)
                 .title("30일 동안 매일 매일 런닝하기")
@@ -88,12 +88,12 @@ public class ManagementController {
                 .lastModified("2023-11-09")
                 .build();
 
-        return ResponseEntity.ok(challenge);
+        return challenge;
     }
 
     // 챌린지 수정
     @PutMapping("/{id}")
-    public ResponseEntity<ChallengeDto> updateChallenge(@PathVariable Long id, @RequestBody ChallengeDto challengeData) {
+    public ChallengeDto updateChallenge(@PathVariable Long id, @RequestBody ChallengeDto challengeData) {
         ChallengeDto updatedChallenge = ChallengeDto.builder()
                 .challengeId(1L)
                 .title("수정된 챌린지 제목")
@@ -107,22 +107,22 @@ public class ManagementController {
                 .lastModified("2023-11-15") // 가정된 수정 날짜
                 .build();
 
-        return ResponseEntity.ok(updatedChallenge);
+        return updatedChallenge;
     }
 
     // 챌린지 삭제
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteChallenge(@PathVariable Long id) {
+    public String deleteChallenge(@PathVariable Long id) {
         id = 1L;
-        return ResponseEntity.ok("챌린지 삭제 성공: 챌린지 ID " + id);
+        return "챌린지 삭제 성공: 챌린지 ID " + id;
     }
 
     // 챌린지 참여
     @PostMapping("/{id}/participation")
-    public ResponseEntity<String> participateInChallenge(@PathVariable Long id) {
+    public String participateInChallenge(@PathVariable Long id) {
         id = 1L;
         String responseMessage = "챌린지 참여 성공: 챌린지 ID " + id;
-        return ResponseEntity.ok(responseMessage);
+        return responseMessage;
     }
 
     // 챌린지 태그 추가
@@ -138,43 +138,29 @@ public class ManagementController {
 
     // 챌린지 태그 제거
     @DeleteMapping("/{id}/tags/{tagId}")
-    public ResponseEntity<String> removeTagFromChallenge(@PathVariable Long id, @PathVariable Long tagId) {
+    public String removeTagFromChallenge(@PathVariable Long id, @PathVariable Long tagId) {
         id = 1L;
         tagId = 2L;
-        return ResponseEntity.ok("태그 삭제 성공: 태그 ID " + tagId + " 챌린지 ID " + id);
+        return "태그 삭제 성공: 태그 ID " + tagId + " 챌린지 ID " + id;
     }
 
     // 챌린지 이미지 업로드
     @PostMapping("/{id}/images")
-    public ResponseEntity<ChallengeImageDto> uploadImageToChallenge(@PathVariable Long id, @RequestBody ChallengeImageDto imageData) {
+    public ChallengeImageDto uploadImageToChallenge(@PathVariable Long id, @RequestBody ChallengeImageDto imageData) {
         ChallengeImageDto newImage = ChallengeImageDto.builder()
                 .imageId(1L) // 임의의 이미지 ID
                 .imageUrl("https://example.com/new_image.jpg")
                 .build();
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(newImage);
+        return newImage;
     }
 
     // 챌린지 이미지 삭제
     @DeleteMapping("/{id}/images/{imageId}")
-    public ResponseEntity<String> removeImageFromChallenge(@PathVariable Long id, @PathVariable Long imageId) {
+    public String removeImageFromChallenge(@PathVariable Long id, @PathVariable Long imageId) {
         id = 1L;
         imageId = 2L;
-        return ResponseEntity.ok("이미지 삭제 성공: 이미지 ID " + imageId + " 챌린지 ID " + id);
-    }
-
-    // 챌린지 규칙 설정, TODO: 구현을 해야하나
-    @PostMapping("/{id}/rules")
-    public ResponseEntity<String> setChallengeRules(@PathVariable Long id, @RequestBody String rules) {
-        id = 1L;
-        return ResponseEntity.ok("챌린지 규칙 설정 완료: 챌린지 ID " + id);
-    }
-
-    // 챌린지 규칙 조회, TODO: 구현을 해야하나
-    @GetMapping("/{id}/rules")
-    public ResponseEntity<String> getChallengeRules(@PathVariable Long id) {
-        id = 1L;
-        return ResponseEntity.ok("챌린지 규칙: 챌린지 ID " + id + "의 규칙 내용");
+        return "이미지 삭제 성공: 이미지 ID " + imageId + " 챌린지 ID " + id;
     }
 }
 
