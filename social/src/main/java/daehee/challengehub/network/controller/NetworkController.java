@@ -20,7 +20,7 @@ import java.util.List;
 public class NetworkController {
     // 사용자 팔로우
     @PostMapping("/follow/{userId}")
-    public ResponseEntity<String> followUser(@PathVariable Long userId) {
+    public String followUser(@PathVariable Long userId) {
         FollowDto newFollow = FollowDto.builder()
                 .followerId(123L) // 임의의 팔로워 ID
                 .followingId(456L) // 팔로우 대상 ID
@@ -34,12 +34,12 @@ public class NetworkController {
 
         String responseMessage = String.format("사용자 %d 팔로우 성공. 상호 팔로우 상태: %s",
                 newFollow.getFollowingId(), newFollow.isMutual() ? "예" : "아니오");
-        return ResponseEntity.ok(responseMessage);
+        return responseMessage;
     }
 
     // 내가 팔로우하는 사용자 목록 조회
     @GetMapping("/following")
-    public ResponseEntity<List<FollowDto>> getFollowersList() {
+    public List<FollowDto> getFollowersList() {
         List<FollowDto> followersList = Arrays.asList(
                 FollowDto.builder()
                         .followerId(123L)
@@ -63,19 +63,19 @@ public class NetworkController {
                         .build()
         );
 
-        return ResponseEntity.ok(followersList);
+        return followersList;
     }
 
     // 사용자 언팔로우
     @DeleteMapping("/follow/{userId}")
-    public ResponseEntity<String> unfollowUser(@PathVariable Long userId) {
+    public String unfollowUser(@PathVariable Long userId) {
         userId = 1L;
-        return ResponseEntity.ok("사용자 ID " + userId + " 언팔로우 성공");
+        return "사용자 ID " + userId + " 언팔로우 성공";
     }
 
     // 나를 팔로우하는 사용자 목록 조회
     @GetMapping("/followers")
-    public ResponseEntity<List<FollowersDto>> getFollowers() {
+    public List<FollowersDto> getFollowers() {
         List<FollowersDto> followers = Arrays.asList(
                 FollowersDto.builder()
                         .userId(789L)
@@ -91,12 +91,12 @@ public class NetworkController {
                         .build()
         );
 
-        return ResponseEntity.ok(followers);
+        return followers;
     }
 
     // 팔로우 요청 목록 조회
     @GetMapping("/follow/requests")
-    public ResponseEntity<List<FollowRequestDto>> getFollowRequests() {
+    public List<FollowRequestDto> getFollowRequests() {
         List<FollowRequestDto> requests = Arrays.asList(
                 FollowRequestDto.builder()
                         .requestId(1L)
@@ -116,13 +116,13 @@ public class NetworkController {
                         .build()
         );
 
-        return ResponseEntity.ok(requests);
+        return requests;
     }
 
     // 팔로우 요청 응답
     @PostMapping("/follow/respond")
-    public ResponseEntity<String> respondToFollowRequest(@RequestBody FollowRequestDto requestDto) {
+    public String respondToFollowRequest(@RequestBody FollowRequestDto requestDto) {
         Long requestId = 3L;
-        return ResponseEntity.ok("팔로우 요청 ID " + requestId + "에 대한 응답 처리 완료");
+        return "팔로우 요청 ID " + requestId + "에 대한 응답 처리 완료";
     }
 }

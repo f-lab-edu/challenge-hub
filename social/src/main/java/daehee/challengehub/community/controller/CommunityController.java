@@ -19,7 +19,7 @@ import java.util.List;
 public class CommunityController {
     // 커뮤니티 피드 조회
     @GetMapping("/feed")
-    public ResponseEntity<List<CommunityPostDto>> getCommunityFeed() {
+    public List<CommunityPostDto> getCommunityFeed() {
         // 임의의 커뮤니티 피드 데이터 생성
         List<CommunityPostDto> communityFeed = Arrays.asList(
                 CommunityPostDto.builder()
@@ -44,13 +44,13 @@ public class CommunityController {
                         .build()
         );
 
-        return ResponseEntity.ok(communityFeed);
+        return communityFeed;
     }
 
 
     // 커뮤니티 포스트 작성
     @PostMapping("/posts")
-    public ResponseEntity<String> createCommunityPost(@RequestBody CommunityPostDto communityPostDto) {
+    public String createCommunityPost(@RequestBody CommunityPostDto communityPostDto) {
         CommunityPostDto newPost = CommunityPostDto.builder()
                 .postId(1L) // 임의의 게시물 ID
                 .authorId(communityPostDto.getAuthorId()) // 작성자 ID
@@ -63,12 +63,12 @@ public class CommunityController {
                 .build();
 
         String responseMessage = String.format("커뮤니티 포스트 생성 성공: %s", newPost.getPostTitle());
-        return ResponseEntity.ok(responseMessage);
+        return responseMessage;
     }
 
     // 커뮤니티 포스트 수정
     @PutMapping("/posts/{postId}")
-    public ResponseEntity<CommunityPostDto> updatePost(@PathVariable Long postId, @RequestBody CommunityPostDto postUpdateData) {
+    public CommunityPostDto updatePost(@PathVariable Long postId, @RequestBody CommunityPostDto postUpdateData) {
         CommunityPostDto updatedPost = CommunityPostDto.builder()
                 .postId(1L)
                 .authorId(101L)
@@ -80,20 +80,20 @@ public class CommunityController {
                 .commentCount(5)
                 .build();
 
-        return ResponseEntity.ok(updatedPost);
+        return updatedPost;
     }
 
     // 커뮤니티 포스트 삭제
     @DeleteMapping("/posts/{postId}")
-    public ResponseEntity<String> deletePost(@PathVariable Long postId) {
+    public String deletePost(@PathVariable Long postId) {
         postId = 3L;
         String responseMessage = "포스트 삭제 성공: 포스트 ID " + postId;
-        return ResponseEntity.ok(responseMessage);
+        return responseMessage;
     }
 
     // 커뮤니티 포스트 목록 조회
     @GetMapping("/posts")
-    public ResponseEntity<List<CommunityPostDto>> getCommunityPosts() {
+    public List<CommunityPostDto> getCommunityPosts() {
         List<CommunityPostDto> posts = Arrays.asList(
                 CommunityPostDto.builder()
                         .postId(1L)
@@ -117,14 +117,14 @@ public class CommunityController {
                         .build()
         );
 
-        return ResponseEntity.ok(posts);
+        return posts;
     }
 
 
     // 포스트 좋아요
     // TODO: 좋아요 관련 로직 구현이 단순히 1만 증가한다고 되는건지 다시 검토하기
     @PostMapping("/posts/{postId}/like")
-    public ResponseEntity<String> likeCommunityPost(@PathVariable Long postId) {
+    public String likeCommunityPost(@PathVariable Long postId) {
         CommunityPostDto likedPost = CommunityPostDto.builder()
                 .postId(postId)
                 .authorId(101L)
@@ -137,6 +137,6 @@ public class CommunityController {
                 .build();
 
         String responseMessage = String.format("포스트 ID %d에 좋아요 성공", postId);
-        return ResponseEntity.ok(responseMessage);
+        return responseMessage;
     }
 }
