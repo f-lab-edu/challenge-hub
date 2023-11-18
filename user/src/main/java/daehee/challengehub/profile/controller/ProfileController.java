@@ -2,7 +2,6 @@ package daehee.challengehub.profile.controller;
 
 import daehee.challengehub.profile.model.AchievementDto;
 import daehee.challengehub.profile.model.PasswordChangeDto;
-import daehee.challengehub.profile.model.ProfileImageUploadDto;
 import daehee.challengehub.profile.model.UserProfileDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -61,7 +60,7 @@ public class ProfileController {
 
     // 비밀번호 변경, TODO: 비밀번호 재설정 요청이랑 겹치는데... 지워야하나 그냥 둬야하나
     @PutMapping("/password")
-    public String changePassword(@RequestBody PasswordChangeDto passwordChangeDto) {
+    public Map<String, String> changePassword(@RequestBody PasswordChangeDto passwordChangeDto) {
         PasswordChangeDto newPasswordData = PasswordChangeDto.builder()
                 .currentPassword("oldPassword")
                 .newPassword("newStrongPassword")
@@ -70,7 +69,7 @@ public class ProfileController {
         Map<String, String> response = new HashMap<>();
         response.put("message", "비밀번호 변경 성공");
         response.put("newPassword", newPasswordData.getNewPassword());
-        return response.toString();
+        return response;
     }
 
     // 프로필 이미지 업로드
@@ -88,7 +87,7 @@ public class ProfileController {
 
     // 달성한 성과 목록 조회
     @GetMapping("/achievements")
-    public List<AchievementDto> getAchievements() {
+    public Map<String, Object> getAchievements() {
         // 임의의 성과 목록 생성
         List<AchievementDto> achievements = Arrays.asList(
                 AchievementDto.builder()
@@ -118,7 +117,8 @@ public class ProfileController {
         );
 
         Map<String, Object> response = new HashMap<>();
+        response.put("message", "성과 목록 조회 성공");
         response.put("achievements", achievements);
-        return (List<AchievementDto>) response;
+        return response;
     }
 }

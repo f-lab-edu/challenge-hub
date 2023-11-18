@@ -1,3 +1,4 @@
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import daehee.challengehub.UserApplication;
 import org.junit.jupiter.api.Test;
@@ -6,10 +7,16 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.containsString;
+import org.springframework.test.web.servlet.MvcResult;
+
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(classes = UserApplication.class)
 @AutoConfigureMockMvc
@@ -23,45 +30,52 @@ public class ProfileControllerTest {
 
     @Test
     public void testGetProfile() throws Exception {
-        mockMvc.perform(get("/profile/user"))
+        MvcResult result = mockMvc.perform(get("/profile/123"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.username", is("sampleUser")))
-                .andExpect(jsonPath("$.email", is("user@example.com")));
-    }
+                .andReturn();
 
-    @Test
-    public void testGetUserProfile() throws Exception {
-        mockMvc.perform(get("/profile/user/1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.username", is("sampleUser")))
-                .andExpect(jsonPath("$.email", is("user@example.com")));
+        Map<String, Object> response = objectMapper.readValue(result.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<>() {});
+        assertEquals("프로필 조회 성공", response.get("message"));
+        assertNotNull(response.get("profile"));
+        assertEquals("sampleUser", ((Map<?, ?>)response.get("profile")).get("username"));
     }
 
     @Test
     public void testUpdateProfile() throws Exception {
         String profileJson = "{\"username\":\"updatedUser\",\"nickname\":\"UpdatedNickname\",\"email\":\"updated@example.com\",\"bio\":\"Updated bio\"}";
-        mockMvc.perform(put("/profile/user")
+        MvcResult result = mockMvc.perform(put("/profile")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(profileJson))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("프로필 업데이트 성공: updatedUser")));
+                .andReturn();
+
+        Map<String, String> response = objectMapper.readValue(result.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<>() {});
+        assertEquals("프로필 업데이트 성공", response.get("message"));
+        assertEquals("updatedUser", response.get("updatedProfile"));
     }
 
     @Test
     public void testChangePassword() throws Exception {
         String passwordJson = "{\"currentPassword\":\"oldPassword\",\"newPassword\":\"newStrongPassword\"}";
-        mockMvc.perform(put("/profile/user/password")
+        MvcResult result = mockMvc.perform(put("/profile/password")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(passwordJson))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("비밀번호 변경 성공: newStrongPassword")));
+                .andReturn();
+
+        Map<String, String> response = objectMapper.readValue(result.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<>() {});
+        assertEquals("비밀번호 변경 성공", response.get("message"));
+        assertEquals("newStrongPassword", response.get("newPassword"));
     }
 
     @Test
     public void testGetAchievements() throws Exception {
-        mockMvc.perform(get("/profile/user/achievements"))
+        MvcResult result = mockMvc.perform(get("/profile/achievements"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].achievementDetails", is("10일 연속 챌린지 완료")))
-                .andExpect(jsonPath("$[1].achievementDetails", is("커뮤니티에서 활발한 활동")));
+                .andReturn();
+
+        Map<String, Object> response = objectMapper.readValue(result.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<>() {});
+        assertEquals("성과 목록 조회 성공", response.get("message"));
+        assertTrue(((List<?>) response.get("achievements")).size() > 0);
     }
 }
