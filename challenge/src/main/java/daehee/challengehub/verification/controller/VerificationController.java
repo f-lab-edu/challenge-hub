@@ -1,8 +1,6 @@
 package daehee.challengehub.verification.controller;
 
 import daehee.challengehub.verification.model.ChallengeVerificationDto;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,14 +11,16 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/challenges/{id}/verification")
 public class VerificationController {
     // 챌린지 인증 업로드
     @PostMapping
-    public ChallengeVerificationDto uploadVerification(@PathVariable Long id, @RequestBody ChallengeVerificationDto verificationData) {
+    public Map<String, Object> uploadVerification(@PathVariable Long id, @RequestBody ChallengeVerificationDto verificationData) {
         ChallengeVerificationDto newVerification = ChallengeVerificationDto.builder()
                 .verificationId(1L)
                 .challengeId(3L)
@@ -30,12 +30,15 @@ public class VerificationController {
                 .submittedAt("2023-11-15")
                 .build();
 
-        return newVerification;
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "챌린지 인증 업로드 성공");
+        response.put("newVerification", newVerification);
+        return response;
     }
 
     // 챌린지 인증 내역 조회
     @GetMapping
-    public List<ChallengeVerificationDto> getVerifications(@PathVariable Long id) {
+    public Map<String, Object> getVerifications(@PathVariable Long id) {
         List<ChallengeVerificationDto> verifications = Arrays.asList(
                 ChallengeVerificationDto.builder()
                         .verificationId(1L)
@@ -55,12 +58,15 @@ public class VerificationController {
                         .build()
         );
 
-        return verifications;
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "챌린지 인증 내역 조회 성공");
+        response.put("verifications", verifications);
+        return response;
     }
 
     // 챌린지 인증 수정
     @PutMapping("/{verificationId}")
-    public ChallengeVerificationDto updateVerification(@PathVariable Long id, @PathVariable Long verificationId) {
+    public Map<String, Object> updateVerification(@PathVariable Long id, @PathVariable Long verificationId) {
         ChallengeVerificationDto updatedVerification = ChallengeVerificationDto.builder()
                 .verificationId(1L)
                 .challengeId(3L)
@@ -70,13 +76,18 @@ public class VerificationController {
                 .submittedAt("2023-11-16")
                 .build();
 
-        return updatedVerification;
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "챌린지 인증 수정 성공");
+        response.put("updatedVerification", updatedVerification);
+        return response;
     }
 
     // 챌린지 인증 삭제
     @DeleteMapping("/{verificationId}")
-    public String deleteVerification(@PathVariable Long id, @PathVariable Long verificationId) {
+    public Map<String, String> deleteVerification(@PathVariable Long id, @PathVariable Long verificationId) {
         verificationId = 1L;
-        return "챌린지 인증 삭제 성공: 인증 ID " + verificationId;
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "챌린지 인증 삭제 성공: 인증 ID " + verificationId);
+        return response;
     }
 }

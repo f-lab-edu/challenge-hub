@@ -2,7 +2,6 @@ package daehee.challengehub.interaction.controller;
 
 import daehee.challengehub.interaction.model.ChallengeCommentDto;
 import daehee.challengehub.interaction.model.ChallengeParticipantDto;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,14 +10,16 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/challenges")
 public class InteractionController {
     // 챌린지에 대한 댓글 작성
     @PostMapping("/{id}/comments")
-    public ChallengeCommentDto postComment(@PathVariable Long id, @RequestBody String commentText) {
+    public Map<String, Object> postComment(@PathVariable Long id, @RequestBody String commentText) {
         ChallengeCommentDto newComment = ChallengeCommentDto.builder()
                 .commentId(1L)
                 .challengeId(3L)
@@ -27,12 +28,15 @@ public class InteractionController {
                 .postedAt("2023-11-15T12:00:00Z")
                 .build();
 
-        return newComment;
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "댓글 작성 성공");
+        response.put("comment", newComment);
+        return response;
     }
 
     // 챌린지 댓글 목록 조회
     @GetMapping("/{id}/comments")
-    public List<ChallengeCommentDto> getComments(@PathVariable Long id) {
+    public Map<String, Object> getComments(@PathVariable Long id) {
         List<ChallengeCommentDto> comments = Arrays.asList(
                 ChallengeCommentDto.builder()
                         .commentId(1L)
@@ -50,12 +54,15 @@ public class InteractionController {
                         .build()
         );
 
-        return comments;
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "댓글 목록 조회 성공");
+        response.put("comments", comments);
+        return response;
     }
 
     // 챌린지별 리더보드 조회
     @GetMapping("/{id}/leaderboard")
-    public List<ChallengeParticipantDto> getLeaderboard(@PathVariable Long id) {
+    public Map<String, Object> getLeaderboard(@PathVariable Long id) {
         List<ChallengeParticipantDto> leaderboard = Arrays.asList(
                 ChallengeParticipantDto.builder()
                         .participantId(1L)
@@ -71,12 +78,15 @@ public class InteractionController {
                         .build()
         );
 
-        return leaderboard;
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "리더보드 조회 성공");
+        response.put("leaderboard", leaderboard);
+        return response;
     }
 
     // 참여자 상세 정보 조회
     @GetMapping("/{id}/participants/details")
-    public List<ChallengeParticipantDto> getParticipantDetails(@PathVariable Long id) {
+    public Map<String, Object> getParticipantDetails(@PathVariable Long id) {
         List<ChallengeParticipantDto> participants = Arrays.asList(
                 ChallengeParticipantDto.builder()
                         .participantId(1L)
@@ -92,15 +102,19 @@ public class InteractionController {
                         .build()
         );
 
-        return participants;
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "참여자 상세 정보 조회 성공");
+        response.put("participants", participants);
+        return response;
     }
 
     // 참여자 관리 (예: 참여자 추가 또는 제거)
     // TODO: 인증이 안되면 자동으로 추방하는 기능도 만들어야할 거 같다.
     @PostMapping("/{id}/participants/manage")
-    public String manageParticipants(@PathVariable Long id, @RequestBody ChallengeParticipantDto participantData) {
+    public Map<String, String> manageParticipants(@PathVariable Long id, @RequestBody ChallengeParticipantDto participantData) {
         id = 1L;
-        String responseMessage = String.format("챌린지 ID %d에 대한 참여자 관리 성공", id);
-        return responseMessage;
+        Map<String, String> response = new HashMap<>();
+        response.put("message", String.format("챌린지 ID %d에 대한 참여자 관리 성공", id));
+        return response;
     }
 }

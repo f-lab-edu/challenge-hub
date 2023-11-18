@@ -3,8 +3,6 @@ package daehee.challengehub.management.controller;
 import daehee.challengehub.management.model.ChallengeDto;
 import daehee.challengehub.management.model.ChallengeImageDto;
 import daehee.challengehub.management.model.ChallengeTagDto;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,14 +13,16 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/challenges")
 public class ManagementController {
     // 챌린지 생성
     @PostMapping
-    public ChallengeDto createChallenge(@RequestBody ChallengeDto challengeData) {
+    public Map<String, Object> createChallenge(@RequestBody ChallengeDto challengeData) {
         ChallengeDto newChallenge = ChallengeDto.builder()
                 .challengeId(1L)
                 .title("새로운 챌린지")
@@ -36,12 +36,15 @@ public class ManagementController {
                 .lastModified("2023-11-15")
                 .build();
 
-        return newChallenge;
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "챌린지 생성 성공");
+        response.put("createdChallenge", newChallenge);
+        return response;
     }
 
     // 챌린지 목록 조회
     @GetMapping
-    public List<ChallengeDto> getAllChallenges() {
+    public Map<String, Object> getAllChallenges() {
         List<ChallengeDto> challenges = Arrays.asList(
                 ChallengeDto.builder()
                         .challengeId(1L)
@@ -69,12 +72,15 @@ public class ManagementController {
                         .build()
         );
 
-        return challenges;
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "챌린지 목록 조회 성공");
+        response.put("challenges", challenges);
+        return response;
     }
 
     // 특정 챌린지 상세 조회
     @GetMapping("/{id}")
-    public ChallengeDto getChallengeById(@PathVariable Long id) {
+    public Map<String, Object> getChallengeById(@PathVariable Long id) {
         ChallengeDto challenge = ChallengeDto.builder()
                 .challengeId(1L)
                 .title("30일 동안 매일 매일 런닝하기")
@@ -88,12 +94,15 @@ public class ManagementController {
                 .lastModified("2023-11-09")
                 .build();
 
-        return challenge;
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "챌린지 상세 조회 성공");
+        response.put("challenge", challenge);
+        return response;
     }
 
     // 챌린지 수정
     @PutMapping("/{id}")
-    public ChallengeDto updateChallenge(@PathVariable Long id, @RequestBody ChallengeDto challengeData) {
+    public Map<String, Object> updateChallenge(@PathVariable Long id, @RequestBody ChallengeDto challengeData) {
         ChallengeDto updatedChallenge = ChallengeDto.builder()
                 .challengeId(1L)
                 .title("수정된 챌린지 제목")
@@ -107,60 +116,76 @@ public class ManagementController {
                 .lastModified("2023-11-15") // 가정된 수정 날짜
                 .build();
 
-        return updatedChallenge;
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "챌린지 수정 성공");
+        response.put("updatedChallenge", updatedChallenge);
+        return response;
     }
 
     // 챌린지 삭제
     @DeleteMapping("/{id}")
-    public String deleteChallenge(@PathVariable Long id) {
+    public Map<String, String> deleteChallenge(@PathVariable Long id) {
         id = 1L;
-        return "챌린지 삭제 성공: 챌린지 ID " + id;
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "챌린지 삭제 성공: 챌린지 ID " + id);
+        return response;
     }
 
     // 챌린지 참여
     @PostMapping("/{id}/participation")
-    public String participateInChallenge(@PathVariable Long id) {
+    public Map<String, String> participateInChallenge(@PathVariable Long id) {
         id = 1L;
-        String responseMessage = "챌린지 참여 성공: 챌린지 ID " + id;
-        return responseMessage;
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "챌린지 참여 성공: 챌린지 ID " + id);
+        return response;
     }
 
     // 챌린지 태그 추가
     @PostMapping("/{id}/tags")
-    public ResponseEntity<ChallengeTagDto> addTagToChallenge(@PathVariable Long id, @RequestBody ChallengeTagDto tagData) {
+    public Map<String, Object> addTagToChallenge(@PathVariable Long id, @RequestBody ChallengeTagDto tagData) {
         ChallengeTagDto newTag = ChallengeTagDto.builder()
                 .tagId(1L) // 임의의 태그 ID
                 .tagName("새로운 태그")
                 .build();
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(newTag);
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "태그 추가 성공");
+        response.put("tagDetails", tagData); // tagData는 요청에서 받은 태그 정보
+        return response;
     }
 
     // 챌린지 태그 제거
     @DeleteMapping("/{id}/tags/{tagId}")
-    public String removeTagFromChallenge(@PathVariable Long id, @PathVariable Long tagId) {
+    public Map<String, String> removeTagFromChallenge(@PathVariable Long id, @PathVariable Long tagId) {
         id = 1L;
         tagId = 2L;
-        return "태그 삭제 성공: 태그 ID " + tagId + " 챌린지 ID " + id;
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "태그 삭제 성공: 태그 ID " + tagId + " 챌린지 ID " + id);
+        return response;
     }
 
     // 챌린지 이미지 업로드
     @PostMapping("/{id}/images")
-    public ChallengeImageDto uploadImageToChallenge(@PathVariable Long id, @RequestBody ChallengeImageDto imageData) {
+    public Map<String, Object> uploadImageToChallenge(@PathVariable Long id, @RequestBody ChallengeImageDto imageData) {
         ChallengeImageDto newImage = ChallengeImageDto.builder()
                 .imageId(1L) // 임의의 이미지 ID
                 .imageUrl("https://example.com/new_image.jpg")
                 .build();
 
-        return newImage;
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "이미지 업로드 성공");
+        response.put("imageDetails", imageData); // imageData는 요청에서 받은 이미지 정보
+        return response;
     }
 
     // 챌린지 이미지 삭제
     @DeleteMapping("/{id}/images/{imageId}")
-    public String removeImageFromChallenge(@PathVariable Long id, @PathVariable Long imageId) {
+    public Map<String, String> removeImageFromChallenge(@PathVariable Long id, @PathVariable Long imageId) {
         id = 1L;
         imageId = 2L;
-        return "이미지 삭제 성공: 이미지 ID " + imageId + " 챌린지 ID " + id;
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "이미지 삭제 성공: 이미지 ID " + imageId + " 챌린지 ID " + id);
+        return response;
     }
 }
 
