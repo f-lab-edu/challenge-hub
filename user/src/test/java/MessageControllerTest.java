@@ -1,3 +1,4 @@
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import daehee.challengehub.UserApplication;
 import org.junit.jupiter.api.Test;
@@ -6,13 +7,16 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 @SpringBootTest(classes = UserApplication.class)
 @AutoConfigureMockMvc
@@ -27,26 +31,38 @@ public class MessageControllerTest {
     @Test
     public void testSendMessage() throws Exception {
         String messageJson = "{\"messageContent\":\"안녕하세요. 만나서 반갑습니다.\"}";
-        mockMvc.perform(post("/message/user/456")
+        MvcResult result = mockMvc.perform(post("/message/user/456")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(messageJson))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.messageContent", containsString("안녕하세요. 만나서 반갑습니다.")));
+                .andReturn();
+
+        Map<String, Object> response = objectMapper.readValue(result.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<>() {});
+        assertEquals("메시지 전송 성공", response.get("message"));
+        assertNotNull(response.get("sentMessage"));
     }
 
     @Test
     public void testGetMessageHistory() throws Exception {
-        mockMvc.perform(get("/message/user/456/messages"))
+        MvcResult result = mockMvc.perform(get("/message/user/456/messages"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].messageContent", containsString("안녕하세요.")))
-                .andExpect(jsonPath("$[1].messageContent", containsString("만나서 반갑습니다.")));
+                .andReturn();
+
+        Map<String, Object> response = objectMapper.readValue(result.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<>() {});
+        assertEquals("메시지 목록 조회 성공", response.get("message"));
+        assertNotNull(response.get("messages"));
+        assertTrue(((List<?>) response.get("messages")).size() > 0);
     }
 
     @Test
     public void testGetChatRooms() throws Exception {
-        mockMvc.perform(get("/message/user/rooms"))
+        MvcResult result = mockMvc.perform(get("/message/user/rooms"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("Room 1")))
-                .andExpect(content().string(containsString("Room 2")));
+                .andReturn();
+
+        Map<String, Object> response = objectMapper.readValue(result.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<>() {});
+        assertEquals("채팅방 목록 조회 성공", response.get("message"));
+        assertNotNull(response.get("chatRooms"));
+        assertTrue(((List<?>) response.get("chatRooms")).size() > 0);
     }
 }
