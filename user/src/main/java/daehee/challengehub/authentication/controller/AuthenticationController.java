@@ -4,9 +4,7 @@ import daehee.challengehub.authentication.model.PasswordChangeDto;
 import daehee.challengehub.authentication.model.UserLoginDto;
 import daehee.challengehub.authentication.model.UserSignupDto;
 import daehee.challengehub.constants.ErrorCode;
-import daehee.challengehub.exception.AuthenticationException;
 import daehee.challengehub.exception.CustomException;
-import daehee.challengehub.exception.PasswordException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -71,7 +69,7 @@ public class AuthenticationController {
             response.put("message", "로그인 성공");
             response.put("userEmail", loginUser.getEmail());
         } else {
-            throw new AuthenticationException(ErrorCode.INVALID_CREDENTIALS);
+            throw new CustomException(ErrorCode.INVALID_CREDENTIALS);
         }
 
         return response;
@@ -92,7 +90,7 @@ public class AuthenticationController {
             response.put("message", "비밀번호 재설정 성공");
             response.put("newPassword", successfulChange.getNewPassword());
         } else {
-            throw new PasswordException(ErrorCode.PASSWORD_RESET_FAILED);
+            throw new CustomException(ErrorCode.PASSWORD_RESET_FAILED);
         }
 
         return response;

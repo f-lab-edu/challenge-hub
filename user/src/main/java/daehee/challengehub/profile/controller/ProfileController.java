@@ -1,12 +1,13 @@
 package daehee.challengehub.profile.controller;
 
+import daehee.challengehub.constants.ErrorCode;
 import daehee.challengehub.profile.model.AchievementDto;
 import daehee.challengehub.profile.model.PasswordChangeDto;
 import daehee.challengehub.profile.model.UserProfileDto;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import daehee.challengehub.exception.CustomException;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -37,8 +38,7 @@ public class ProfileController {
             response.put("isCurrentUser", userId.equals(loggedInUserId)); // 현재 로그인한 사용자인지 여부
             return response;
         } else {
-            response.put("error", "프로필 조회 실패: 해당 사용자 ID로 사용자를 찾을 수 없습니다.");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response).getBody();
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
     }
 
