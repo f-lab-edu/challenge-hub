@@ -3,8 +3,10 @@ package daehee.challengehub.authentication.controller;
 import daehee.challengehub.authentication.model.PasswordChangeDto;
 import daehee.challengehub.authentication.model.UserLoginDto;
 import daehee.challengehub.authentication.model.UserSignupDto;
-import daehee.challengehub.exception.UserException;
-import daehee.challengehub.util.ErrorMessages;
+import daehee.challengehub.constants.ErrorCode;
+import daehee.challengehub.exception.AuthenticationException;
+import daehee.challengehub.exception.CustomException;
+import daehee.challengehub.exception.PasswordException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,13 +46,13 @@ public class AuthenticationController {
         String fakeInvalidToken = "invalidToken123";
 
         if (token.equals(fakeValidToken)) {
-            return Map.of("message", "이메일 인증 성공", "token", fakeValidToken);
+            return Map.of("message", "이메일 인증 성공", "token", token);
         } else if (token.equals(fakeExpiredToken)) {
-            throw new UserException(ErrorMessages.TOKEN_EXPIRED);
+            throw new CustomException(ErrorCode.TOKEN_EXPIRED);
         } else if (token.equals(fakeInvalidToken)) {
-            throw new UserException(ErrorMessages.TOKEN_INVALID);
+            throw new CustomException(ErrorCode.TOKEN_INVALID);
         } else {
-            throw new UserException(ErrorMessages.TOKEN_UNKNOWN_ERROR);
+            throw new CustomException(ErrorCode.TOKEN_UNKNOWN_ERROR);
         }
     }
 
@@ -69,7 +71,7 @@ public class AuthenticationController {
             response.put("message", "로그인 성공");
             response.put("userEmail", loginUser.getEmail());
         } else {
-            response.put("error", "로그인 실패: 잘못된 이메일 또는 비밀번호");
+            throw new AuthenticationException(ErrorCode.INVALID_CREDENTIALS);
         }
 
         return response;
@@ -90,7 +92,7 @@ public class AuthenticationController {
             response.put("message", "비밀번호 재설정 성공");
             response.put("newPassword", successfulChange.getNewPassword());
         } else {
-            response.put("error", "비밀번호 재설정 실패: 현재 비밀번호 불일치");
+            throw new PasswordException(ErrorCode.PASSWORD_RESET_FAILED);
         }
 
         return response;
