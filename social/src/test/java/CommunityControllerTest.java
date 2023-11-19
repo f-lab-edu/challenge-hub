@@ -44,7 +44,11 @@ public class CommunityControllerTest {
 
     @Test
     public void testCreateCommunityPost() throws Exception {
-        String postJson = "{\"authorId\":101,\"postContent\":\"새로운 포스트 내용\",\"postTitle\":\"새로운 포스트\"}";
+        String postJson = new JsonBuilder()
+                .add("authorId", 101)
+                .add("postContent", "새로운 포스트 내용")
+                .add("postTitle", "새로운 포스트")
+                .build();
         MvcResult result = mockMvc.perform(post("/community/posts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(postJson))
@@ -57,7 +61,11 @@ public class CommunityControllerTest {
 
     @Test
     public void testUpdateCommunityPost() throws Exception {
-        String updatedPostJson = "{\"authorId\":101,\"postContent\":\"수정된 포스트 내용\",\"postTitle\":\"수정된 포스트\"}";
+        String updatedPostJson = new JsonBuilder()
+                .add("authorId", 101)
+                .add("postContent", "수정된 포스트 내용")
+                .add("postTitle", "수정된 포스트")
+                .build();
         MvcResult result = mockMvc.perform(put("/community/posts/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(updatedPostJson))
@@ -86,7 +94,7 @@ public class CommunityControllerTest {
 
         Map<String, Object> response = objectMapper.readValue(result.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<>() {});
         assertNotNull(response.get("posts"));
-        assertTrue(((List<?>) response.get("posts")).size() > 0);
+        assertFalse(((List<?>) response.get("posts")).isEmpty());
     }
 
     @Test

@@ -47,7 +47,7 @@ public class NetworkControllerTest {
 
         Map<String, Object> response = objectMapper.readValue(result.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<>() {});
         assertNotNull(response.get("followingList"));
-        assertTrue(((List<?>) response.get("followingList")).size() > 0);
+        assertFalse(((List<?>) response.get("followingList")).isEmpty());
     }
 
     @Test
@@ -68,6 +68,6 @@ public class NetworkControllerTest {
 
         Map<String, Object> response = objectMapper.readValue(result.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<>() {});
         assertNotNull(response.get("followers"));
-        assertTrue(((List<?>) response.get("followers")).size() > 0);
+        assertFalse(((List<?>) response.get("followers")).isEmpty());
     }
 }
