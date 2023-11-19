@@ -13,8 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -34,7 +33,10 @@ public class ManagementControllerTest {
     // 챌린지 생성 테스트
     @Test
     public void testCreateChallenge() throws Exception {
-        String challengeJson = "{\"title\":\"새로운 챌린지\", \"description\":\"임의의 챌린지 설명\"}";
+        String challengeJson = new JsonBuilder()
+                .add("title", "새로운 챌린지")
+                .add("description", "임의의 챌린지 설명")
+                .build();
         MvcResult result = mockMvc.perform(post("/challenges")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(challengeJson))
@@ -42,7 +44,7 @@ public class ManagementControllerTest {
                 .andReturn();
 
         Map<String, Object> response = objectMapper.readValue(result.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<>() {});
-        assertEquals("새로운 챌린지", ((Map) response.get("createdChallenge")).get("title"));
+        assertEquals("새로운 챌린지", ((Map<?, ?>) response.get("createdChallenge")).get("title"));
     }
 
     // 챌린지 목록 조회 테스트
@@ -53,7 +55,7 @@ public class ManagementControllerTest {
                 .andReturn();
 
         Map<String, Object> response = objectMapper.readValue(result.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<>() {});
-        assertTrue(((List) response.get("challenges")).size() > 0);
+        assertFalse(((List<?>) response.get("challenges")).isEmpty());
     }
 
     // 특정 챌린지 상세 조회 테스트
@@ -64,13 +66,16 @@ public class ManagementControllerTest {
                 .andReturn();
 
         Map<String, Object> response = objectMapper.readValue(result.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<>() {});
-        assertEquals("30일 동안 매일 매일 런닝하기", ((Map) response.get("challenge")).get("title"));
+        assertEquals("30일 동안 매일 매일 런닝하기", ((Map<?, ?>) response.get("challenge")).get("title"));
     }
 
     // 챌린지 수정 테스트
     @Test
     public void testUpdateChallenge() throws Exception {
-        String updatedChallengeJson = "{\"title\":\"수정된 챌린지 제목\", \"description\":\"수정된 챌린지 설명\"}";
+        String updatedChallengeJson = new JsonBuilder()
+                .add("title", "수정된 챌린지 제목")
+                .add("description", "수정된 챌린지 설명")
+                .build();
         MvcResult result = mockMvc.perform(put("/challenges/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(updatedChallengeJson))
@@ -78,7 +83,7 @@ public class ManagementControllerTest {
                 .andReturn();
 
         Map<String, Object> response = objectMapper.readValue(result.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<>() {});
-        assertEquals("수정된 챌린지 제목", ((Map) response.get("updatedChallenge")).get("title"));
+        assertEquals("수정된 챌린지 제목", ((Map<?, ?>) response.get("updatedChallenge")).get("title"));
     }
 
     // 챌린지 삭제 테스트
@@ -106,7 +111,9 @@ public class ManagementControllerTest {
     // 챌린지 태그 추가 테스트
     @Test
     public void testAddTagToChallenge() throws Exception {
-        String tagJson = "{\"tagName\":\"새로운 태그\"}";
+        String tagJson = new JsonBuilder()
+                .add("tagName", "새로운 태그")
+                .build();
         MvcResult result = mockMvc.perform(post("/challenges/1/tags")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(tagJson))
@@ -114,7 +121,7 @@ public class ManagementControllerTest {
                 .andReturn();
 
         Map<String, Object> response = objectMapper.readValue(result.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<>() {});
-        assertEquals("새로운 태그", ((Map) response.get("tagDetails")).get("tagName"));
+        assertEquals("새로운 태그", ((Map<?, ?>) response.get("tagDetails")).get("tagName"));
     }
 
     // 챌린지 태그 제거 테스트
@@ -131,7 +138,9 @@ public class ManagementControllerTest {
     // 챌린지 이미지 업로드 테스트
     @Test
     public void testUploadImageToChallenge() throws Exception {
-        String imageJson = "{\"imageUrl\":\"https://example.com/new_image.jpg\"}";
+        String imageJson = new JsonBuilder()
+                .add("imageUrl", "https://example.com/new_image.jpg")
+                .build();
         MvcResult result = mockMvc.perform(post("/challenges/1/images")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(imageJson))
@@ -139,7 +148,7 @@ public class ManagementControllerTest {
                 .andReturn();
 
         Map<String, Object> response = objectMapper.readValue(result.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<>() {});
-        assertEquals("https://example.com/new_image.jpg", ((Map) response.get("imageDetails")).get("imageUrl"));
+        assertEquals("https://example.com/new_image.jpg", ((Map<?, ?>) response.get("imageDetails")).get("imageUrl"));
     }
 
     // 챌린지 이미지 삭제 테스트

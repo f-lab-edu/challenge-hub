@@ -34,7 +34,9 @@ public class VerificationControllerTest {
     // 챌린지 인증 업로드 테스트
     @Test
     public void testUploadVerification() throws Exception {
-        String verificationJson = "{\"verificationText\":\"이번 주 도전 성공!\"}";
+        String verificationJson = new JsonBuilder()
+                .add("verificationText", "이번 주 도전 성공!")
+                .build();
         MvcResult result = mockMvc.perform(post("/challenges/3/verification")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(verificationJson))
@@ -42,7 +44,7 @@ public class VerificationControllerTest {
                 .andReturn();
 
         Map<String, Object> response = objectMapper.readValue(result.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<>() {});
-        assertEquals("이번 주 도전 성공!", ((Map) response.get("newVerification")).get("verificationText"));
+        assertEquals("이번 주 도전 성공!", ((Map<?, ?>) response.get("newVerification")).get("verificationText"));
     }
 
     // 챌린지 인증 내역 조회 테스트
@@ -53,13 +55,15 @@ public class VerificationControllerTest {
                 .andReturn();
 
         Map<String, Object> response = objectMapper.readValue(result.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<>() {});
-        assertTrue(((List) response.get("verifications")).size() == 2);
+        assertEquals(2, ((List<?>) response.get("verifications")).size());
     }
 
     // 챌린지 인증 수정 테스트
     @Test
     public void testUpdateVerification() throws Exception {
-        String updatedVerificationJson = "{\"verificationText\":\"챌린지 인증 수정됨\"}";
+        String updatedVerificationJson = new JsonBuilder()
+                .add("verificationText", "챌린지 인증 수정됨")
+                .build();
         MvcResult result = mockMvc.perform(put("/challenges/3/verification/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(updatedVerificationJson))
@@ -67,7 +71,7 @@ public class VerificationControllerTest {
                 .andReturn();
 
         Map<String, Object> response = objectMapper.readValue(result.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<>() {});
-        assertEquals("챌린지 인증 수정됨", ((Map) response.get("updatedVerification")).get("verificationText"));
+        assertEquals("챌린지 인증 수정됨", ((Map<?, ?>) response.get("updatedVerification")).get("verificationText"));
     }
 
     // 챌린지 인증 삭제 테스트

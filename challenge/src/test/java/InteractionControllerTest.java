@@ -32,7 +32,10 @@ public class InteractionControllerTest {
     // 챌린지에 대한 댓글 작성 테스트
     @Test
     public void testPostComment() throws Exception {
-        String commentJson = "{\"commentText\":\"덕분에 즐겁게 챌린지 즐겼습니다. 감사합니다.\"}";
+        String commentJson = new JsonBuilder()
+                .add("commentText", "덕분에 즐겁게 챌린지 즐겼습니다. 감사합니다.")
+                .build();
+
         MvcResult result = mockMvc.perform(post("/challenges/1/comments")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(commentJson))
@@ -51,7 +54,7 @@ public class InteractionControllerTest {
                 .andReturn();
 
         Map<String, Object> response = objectMapper.readValue(result.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<>() {});
-        assertTrue(((List) response.get("comments")).size() == 2);
+        assertEquals(2, ((List<?>) response.get("comments")).size());
     }
 
     // 챌린지별 리더보드 조회 테스트
@@ -62,7 +65,7 @@ public class InteractionControllerTest {
                 .andReturn();
 
         Map<String, Object> response = objectMapper.readValue(result.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<>() {});
-        assertTrue(((List) response.get("leaderboard")).size() == 2);
+        assertEquals(2, ((List<?>) response.get("leaderboard")).size());
     }
 
     // 참여자 상세 정보 조회 테스트
@@ -73,13 +76,15 @@ public class InteractionControllerTest {
                 .andReturn();
 
         Map<String, Object> response = objectMapper.readValue(result.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<>() {});
-        assertTrue(((List) response.get("participants")).size() == 2);
+        assertEquals(2, ((List<?>) response.get("participants")).size());
     }
 
     // 참여자 관리 테스트
     @Test
     public void testManageParticipants() throws Exception {
-        String participantJson = "{\"participantUsername\":\"user1\"}";
+        String participantJson = new JsonBuilder()
+                .add("participantUsername", "user1")
+                .build();
         MvcResult result = mockMvc.perform(post("/challenges/1/participants/manage")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(participantJson))
