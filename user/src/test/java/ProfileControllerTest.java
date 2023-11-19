@@ -42,7 +42,12 @@ public class ProfileControllerTest {
 
     @Test
     public void testUpdateProfile() throws Exception {
-        String profileJson = "{\"username\":\"updatedUser\",\"nickname\":\"UpdatedNickname\",\"email\":\"updated@example.com\",\"bio\":\"Updated bio\"}";
+        String profileJson = new JsonBuilder()
+                .add("username", "updatedUser")
+                .add("nickname", "UpdatedNickname")
+                .add("email", "updated@example.com")
+                .add("bio", "Updated bio")
+                .build();
         MvcResult result = mockMvc.perform(put("/profile")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(profileJson))
@@ -56,7 +61,10 @@ public class ProfileControllerTest {
 
     @Test
     public void testChangePassword() throws Exception {
-        String passwordJson = "{\"currentPassword\":\"oldPassword\",\"newPassword\":\"newStrongPassword\"}";
+        String passwordJson = new JsonBuilder()
+                .add("currentPassword", "oldPassword")
+                .add("newPassword", "newStrongPassword")
+                .build();
         MvcResult result = mockMvc.perform(put("/profile/password")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(passwordJson))
@@ -76,6 +84,6 @@ public class ProfileControllerTest {
 
         Map<String, Object> response = objectMapper.readValue(result.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<>() {});
         assertEquals("성과 목록 조회 성공", response.get("message"));
-        assertTrue(((List<?>) response.get("achievements")).size() > 0);
+        assertFalse(((List<?>) response.get("achievements")).isEmpty());
     }
 }

@@ -31,7 +31,11 @@ public class AuthenticationControllerTest {
 
     @Test
     public void testSignup() throws Exception {
-        String signupJson = "{\"username\":\"testUser\",\"email\":\"test@example.com\",\"password\":\"password123\"}";
+        String signupJson = new JsonBuilder()
+                .add("username", "testUser")
+                .add("email", "test@example.com")
+                .add("password", "password123")
+                .build();
         MvcResult result = mockMvc.perform(post("/auth/users")
                         .contentType("application/json;charset=UTF-8")
                         .content(signupJson))
@@ -56,7 +60,10 @@ public class AuthenticationControllerTest {
 
     @Test
     public void testLogin() throws Exception {
-        String loginJson = "{\"email\":\"user@example.com\",\"password\":\"password123\"}";
+        String loginJson = new JsonBuilder()
+                .add("email", "user@example.com")
+                .add("password", "password123")
+                .build();
         MvcResult result = mockMvc.perform(post("/auth/login")
                         .contentType("application/json;charset=UTF-8")
                         .content(loginJson))
@@ -70,7 +77,10 @@ public class AuthenticationControllerTest {
 
     @Test
     public void testResetPassword() throws Exception {
-        String resetPasswordJson = "{\"currentPassword\":\"currentPassword123\",\"newPassword\":\"newPassword456\"}";
+        String resetPasswordJson = new JsonBuilder()
+                .add("currentPassword", "currentPassword123")
+                .add("newPassword", "newPassword456")
+                .build();
         MvcResult result = mockMvc.perform(post("/auth/password/reset")
                         .contentType("application/json;charset=UTF-8")
                         .content(resetPasswordJson))

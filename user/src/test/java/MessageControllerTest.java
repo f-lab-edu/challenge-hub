@@ -30,7 +30,9 @@ public class MessageControllerTest {
 
     @Test
     public void testSendMessage() throws Exception {
-        String messageJson = "{\"messageContent\":\"안녕하세요. 만나서 반갑습니다.\"}";
+        String messageJson = new JsonBuilder()
+                .add("messageContent", "안녕하세요. 만나서 반갑습니다.")
+                .build();
         MvcResult result = mockMvc.perform(post("/message/user/456")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(messageJson))
@@ -51,7 +53,7 @@ public class MessageControllerTest {
         Map<String, Object> response = objectMapper.readValue(result.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<>() {});
         assertEquals("메시지 목록 조회 성공", response.get("message"));
         assertNotNull(response.get("messages"));
-        assertTrue(((List<?>) response.get("messages")).size() > 0);
+        assertFalse(((List<?>) response.get("messages")).isEmpty());
     }
 
     @Test
@@ -63,6 +65,6 @@ public class MessageControllerTest {
         Map<String, Object> response = objectMapper.readValue(result.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<>() {});
         assertEquals("채팅방 목록 조회 성공", response.get("message"));
         assertNotNull(response.get("chatRooms"));
-        assertTrue(((List<?>) response.get("chatRooms")).size() > 0);
+        assertFalse(((List<?>) response.get("chatRooms")).isEmpty());
     }
 }
