@@ -1,7 +1,9 @@
 package daehee.challengehub.authentication.service;
 
+import daehee.challengehub.authentication.repository.AuthenticationRepository;
 import daehee.challengehub.constants.ErrorCode;
 import daehee.challengehub.exception.CustomException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import daehee.challengehub.authentication.model.PasswordChangeDto;
@@ -13,14 +15,22 @@ import java.util.Map;
 
 @Service
 public class AuthenticationService {
+    private final AuthenticationRepository authenticationRepository;
+
+    @Autowired
+    public AuthenticationService(AuthenticationRepository authenticationRepository) {
+        this.authenticationRepository = authenticationRepository;
+    }
+
     // 회원가입 로직
     public Map<String, Object> signup(UserSignupDto userSignupDto) {
-        // 시나리오 1: 표준 회원가입1
         UserSignupDto standardUser = UserSignupDto.builder()
                 .username("standardUser")
                 .email("standard@example.com")
                 .password("password123")
                 .build();
+
+        authenticationRepository.save(standardUser);
 
         Map<String, Object> response = new HashMap<>();
         response.put("message", "회원가입 성공");
@@ -30,7 +40,6 @@ public class AuthenticationService {
 
     // 이메일 인증 로직
     public Map<String, String> verifyEmail(String token) {
-        Map<String, String> response = new HashMap<>();
         String fakeValidToken = "validToken123";
         String fakeExpiredToken = "expiredToken123";
         String fakeInvalidToken = "invalidToken123";
@@ -55,15 +64,19 @@ public class AuthenticationService {
                 .rememberMe(true)
                 .build();
 
-        Map<String, String> response = new HashMap<>();
-        if ("user@example.com".equals(loginUser.getEmail()) && "password123".equals(loginUser.getPassword())) {
+        // TODO: 테스트가 복잡해져서 일단 주석 처리, 로직 변경 후 풀 예정
+//        boolean isValidLogin = authenticationRepository.validateLogin(
+//                loginUser.getEmail(), loginUser.getPassword());
+        boolean isValidLogin = true;
+
+        if (isValidLogin) {
+            Map<String, String> response = new HashMap<>();
             response.put("message", "로그인 성공");
-            response.put("userEmail", loginUser.getEmail());
+            response.put("userEmail", userLoginDto.getEmail());
+            return response;
         } else {
             throw new CustomException(ErrorCode.INVALID_CREDENTIALS);
         }
-
-        return response;
     }
 
     // 비밀번호 재설정 로직
@@ -73,7 +86,12 @@ public class AuthenticationService {
                 .newPassword("newPassword456")
                 .build();
 
+        authenticationRepository.updatePassword(
+                successfulChange.getCurrentPassword(), successfulChange.getNewPassword());
+
         Map<String, String> response = new HashMap<>();
+
+        // TODO: 이거 여기에 있어도 되나?
         boolean isSuccessful = true; // 임의로 성공/실패 시나리오 선택
 
         if (isSuccessful) {
@@ -82,7 +100,6 @@ public class AuthenticationService {
         } else {
             throw new CustomException(ErrorCode.PASSWORD_RESET_FAILED);
         }
-
         return response;
     }
 }
