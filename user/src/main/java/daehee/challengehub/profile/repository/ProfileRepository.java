@@ -4,20 +4,45 @@ import daehee.challengehub.profile.model.AchievementDto;
 import daehee.challengehub.profile.model.UserProfileDto;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 public class ProfileRepository {
     private final Map<Long, UserProfileDto> profiles = new HashMap<>();
     private final Map<Long, List<AchievementDto>> achievements = new HashMap<>();
 
+    public ProfileRepository() {
+        // 초기 프로필 데이터
+        UserProfileDto sampleProfile = UserProfileDto.builder()
+                .userId(1L)
+                .username("sampleUser")
+                .nickname("SampleNickname")
+                .email("user@example.com")
+                .bio("This is a sample bio.")
+                .build();
+        profiles.put(sampleProfile.getUserId(), sampleProfile);
+
+        // 초기 성과 데이터
+        List<AchievementDto> sampleAchievements = Arrays.asList(
+                AchievementDto.builder()
+                        .userId(1L)
+                        .challengeId(101L)
+                        .achievementDetails("10일 연속 챌린지 완료")
+                        .achievedDate("2023-01-10")
+                        .build(),
+                AchievementDto.builder()
+                        .userId(1L)
+                        .challengeId(102L)
+                        .achievementDetails("커뮤니티에서 활발한 활동")
+                        .achievedDate("2023-02-05")
+                        .build()
+        );
+        achievements.put(1L, sampleAchievements);
+    }
+
     // 프로필 저장
     public void saveProfile(UserProfileDto userProfile) {
-        // TODO: UserId를 인덱스 값으로 할 것인데 인덱스 관련된 부분 처리 후 주석 해제
-//        profiles.put(userProfile.getUserId(), userProfile);
+        profiles.put(userProfile.getUserId(), userProfile);
     }
 
     // 프로필 조회

@@ -49,8 +49,8 @@ public class ProfileController {
 //        return profileService.uploadAvatar(file);
 //    }
 
-    @GetMapping("/achievements")
-    public Map<String, Object> getAchievements() {
-        return profileService.getAchievements();
+    @GetMapping("/{userId}/achievements")
+    public Map<String, Object> getAchievements(@PathVariable Long userId) {
+        return profileService.getAchievements(userId);
     }
 }
