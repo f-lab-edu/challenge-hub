@@ -10,6 +10,16 @@ import java.util.Map;
 public class AuthenticationRepository {
     private final Map<String, UserSignupDto> users = new HashMap<>();
 
+    public AuthenticationRepository() {
+        // 초기화 시 하드코딩된 사용자 데이터를 저장
+        UserSignupDto standardUser = UserSignupDto.builder()
+                .username("standardUser")
+                .email("standard@example.com")
+                .password("password123")
+                .build();
+        users.put(standardUser.getEmail(), standardUser);
+    }
+
     // 사용자 정보 저장
     public void save(UserSignupDto user) {
         users.put(user.getEmail(), user);
@@ -20,20 +30,19 @@ public class AuthenticationRepository {
         return users.get(email);
     }
 
-    // 토큰을 기반으로 이메일 인증 상태 조회 (예시)
+    // 토큰을 기반으로 이메일 인증 상태 조회
     public boolean isEmailVerified(String token) {
-        // 여기에 토큰을 기반으로 이메일 인증 상태를 확인하는 로직 구현
-        // 예를 들어, 토큰과 연관된 사용자의 인증 상태를 반환
+        // 토큰 확인 로직 구현 (여기서는 단순 예시로 true 반환)
         return true;
     }
 
-    // 로그인 정보 확인 (예시)
+    // 로그인 정보 확인
     public boolean validateLogin(String email, String password) {
         UserSignupDto user = findByEmail(email);
         return user != null && user.getPassword().equals(password);
     }
 
-    // 비밀번호 재설정 관련 로직 (예시)
+    // 비밀번호 재설정 관련 로직
     public void updatePassword(String email, String newPassword) {
         UserSignupDto user = users.get(email);
         if (user != null) {
@@ -41,8 +50,9 @@ public class AuthenticationRepository {
                     .username(user.getUsername())
                     .email(user.getEmail())
                     .password(newPassword)
-                    .nickname(user.getNickname())
-                    .phoneNumber(user.getPhoneNumber())
+                    // 하드코딩된 데이터가 없는 경우, 기존 값 유지
+                    .nickname(user.getNickname() != null ? user.getNickname() : "")
+                    .phoneNumber(user.getPhoneNumber() != null ? user.getPhoneNumber() : "")
                     .build();
             save(updatedUser);
         }
