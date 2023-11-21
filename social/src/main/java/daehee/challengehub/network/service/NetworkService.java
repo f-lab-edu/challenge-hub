@@ -1,5 +1,7 @@
 package daehee.challengehub.network.service;
 
+import daehee.challengehub.network.repository.NetworkRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import daehee.challengehub.network.model.FollowDto;
 import daehee.challengehub.network.model.FollowersDto;
@@ -8,12 +10,22 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 public class NetworkService {
+    private final NetworkRepository networkRepository;
 
-    // 사용자 팔로우 로직
-    public Map<String, Object> followUser(Long userId) {
+    @Autowired
+    public NetworkService(NetworkRepository networkRepository) {
+        this.networkRepository = networkRepository;
+    }
+
+    public Map<String, Object> followUser(Long followerId, Long followingId) {
+        networkRepository.followUser(followerId, followingId);
+        boolean isMutual = networkRepository.getFollowers(followingId).contains(followerId);
+
+        // TODO: FollowDto 생성 및 설정
         FollowDto newFollow = FollowDto.builder()
                 .followerId(123L) // 임의의 팔로워 ID
                 .followingId(456L) // 팔로우 대상 ID
@@ -26,13 +38,14 @@ public class NetworkService {
                 .build();
 
         Map<String, Object> response = new HashMap<>();
-        response.put("message", String.format("사용자 %d 팔로우 성공. 상호 팔로우 상태: %s", userId, newFollow.isMutual() ? "예" : "아니오"));
+        response.put("message", String.format("사용자 %d 팔로우 성공. 상호 팔로우 상태: %s", followingId, isMutual ? "예" : "아니오"));
         response.put("followDetails", newFollow);
         return response;
     }
 
-    // 내가 팔로우하는 사용자 목록 조회 로직
-    public Map<String, Object> getFollowings() {
+    public Map<String, Object> getFollowings(Long userId) {
+        Set<Long> followingIds = networkRepository.getFollowings(userId);
+        // TODO: FollowDto 리스트 생성
         List<FollowDto> followingList = Arrays.asList(
                 FollowDto.builder()
                         .followerId(123L)
@@ -62,16 +75,17 @@ public class NetworkService {
         return response;
     }
 
-    // 사용자 언팔로우 로직
-    public Map<String, String> unfollowUser(Long userId) {
-        userId = 1L;
+    public Map<String, String> unfollowUser(Long followerId, Long followingId) {
+        networkRepository.unfollowUser(followerId, followingId);
+
         Map<String, String> response = new HashMap<>();
-        response.put("message", "사용자 ID " + userId + " 언팔로우 성공");
+        response.put("message", String.format("사용자 ID %d 언팔로우 성공", followingId));
         return response;
     }
 
-    // 나를 팔로우하는 사용자 목록 조회 로직
-    public Map<String, Object> getFollowers() {
+    public Map<String, Object> getFollowers(Long userId) {
+        Set<Long> followerIds = networkRepository.getFollowers(userId);
+        // TODO: FollowersDto 리스트 생성
         List<FollowersDto> followers = Arrays.asList(
                 FollowersDto.builder()
                         .userId(789L)
@@ -93,3 +107,4 @@ public class NetworkService {
         return response;
     }
 }
+
