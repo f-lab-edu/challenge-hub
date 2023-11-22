@@ -36,13 +36,14 @@ public class VerificationController {
     }
 
     @PutMapping("/{verificationId}")
-    public Map<String, Object> updateVerification(@PathVariable Long id, @PathVariable Long verificationId) {
-        return verificationService.updateVerification(id, verificationId);
+    public Map<String, Object> updateVerification(@PathVariable Long id, @PathVariable Long verificationId, @RequestBody ChallengeVerificationDto newVerificationData) {
+        return verificationService.updateVerification(id, verificationId, newVerificationData);
     }
 
+    // TODO: 챌린지 id가 굳이 필요 없네 지워야하나
     @DeleteMapping("/{verificationId}")
     public Map<String, String> deleteVerification(@PathVariable Long id, @PathVariable Long verificationId) {
-        return verificationService.deleteVerification(id, verificationId);
+        return verificationService.deleteVerification(verificationId); // 인증 ID만 필요
     }
 }
 

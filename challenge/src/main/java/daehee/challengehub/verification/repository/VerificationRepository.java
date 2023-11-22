@@ -39,8 +39,15 @@ public class VerificationRepository {
 
     public void saveVerification(ChallengeVerificationDto verification) {
         Long newVerificationId = verificationIdCounter++;
-        verification.setVerificationId(newVerificationId);
-        verifications.put(newVerificationId, verification);
+        ChallengeVerificationDto newVerification = ChallengeVerificationDto.builder()
+                .verificationId(newVerificationId)
+                .challengeId(verification.getChallengeId())
+                .userId(verification.getUserId())
+                .verificationText(verification.getVerificationText())
+                .imageUrls(verification.getImageUrls())
+                .submittedAt(verification.getSubmittedAt())
+                .build();
+        verifications.put(newVerificationId, newVerification);
     }
 
     public List<ChallengeVerificationDto> getVerificationsByChallengeId(Long challengeId) {
@@ -55,6 +62,10 @@ public class VerificationRepository {
 
     public void deleteVerification(Long verificationId) {
         verifications.remove(verificationId);
+    }
+
+    public ChallengeVerificationDto getVerificationById(Long verificationId) {
+        return verifications.get(verificationId);
     }
 }
 

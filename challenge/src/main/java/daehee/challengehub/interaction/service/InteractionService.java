@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import daehee.challengehub.interaction.model.ChallengeCommentDto;
 import daehee.challengehub.interaction.model.ChallengeParticipantDto;
 
-import java.util.Arrays;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,16 +22,16 @@ public class InteractionService {
         this.interactionRepository = interactionRepository;
     }
 
-    public Map<String, Object> postComment(Long challengeId, String commentText) {
+    // 챌린지에 대한 댓글 작성 로직
+    public Map<String, Object> postComment(Long id, String commentText) {
         ChallengeCommentDto newComment = ChallengeCommentDto.builder()
-                .commentId(1L) // 임시 ID, 실제로는 repository에서 생성
-                .challengeId(challengeId)
-                .userId(123L) // 예시 사용자 ID
+                .challengeId(id)
+                .userId(123L) // 예시: 현재 로그인한 사용자 ID
                 .commentText(commentText)
-                .postedAt("2023-11-15T12:00:00Z")
+                .postedAt(LocalDateTime.now().toString())
                 .build();
 
-        interactionRepository.postComment(challengeId, newComment);
+        interactionRepository.postComment(id, newComment);
 
         Map<String, Object> response = new HashMap<>();
         response.put("message", "댓글 작성 성공");
@@ -39,8 +39,9 @@ public class InteractionService {
         return response;
     }
 
-    public Map<String, Object> getComments(Long challengeId) {
-        List<ChallengeCommentDto> comments = interactionRepository.getComments(challengeId);
+    // 챌린지 댓글 목록 조회 로직
+    public Map<String, Object> getComments(Long id) {
+        List<ChallengeCommentDto> comments = interactionRepository.getComments(id);
 
         Map<String, Object> response = new HashMap<>();
         response.put("message", "댓글 목록 조회 성공");
@@ -48,8 +49,9 @@ public class InteractionService {
         return response;
     }
 
-    public Map<String, Object> getLeaderboard(Long challengeId) {
-        List<ChallengeParticipantDto> leaderboard = interactionRepository.getLeaderboard(challengeId);
+    // 챌린지별 리더보드 조회 로직
+    public Map<String, Object> getLeaderboard(Long id) {
+        List<ChallengeParticipantDto> leaderboard = interactionRepository.getLeaderboard(id);
 
         Map<String, Object> response = new HashMap<>();
         response.put("message", "리더보드 조회 성공");
@@ -57,8 +59,9 @@ public class InteractionService {
         return response;
     }
 
-    public Map<String, Object> getParticipantDetails(Long challengeId) {
-        List<ChallengeParticipantDto> participants = interactionRepository.getParticipants(challengeId);
+    // 참여자 상세 정보 조회 로직
+    public Map<String, Object> getParticipantDetails(Long id) {
+        List<ChallengeParticipantDto> participants = interactionRepository.getParticipants(id);
 
         Map<String, Object> response = new HashMap<>();
         response.put("message", "참여자 상세 정보 조회 성공");
@@ -66,11 +69,12 @@ public class InteractionService {
         return response;
     }
 
-    public Map<String, String> manageParticipants(Long challengeId, ChallengeParticipantDto participantData) {
-        interactionRepository.manageParticipants(challengeId, participantData);
-
+    // 참여자 관리 로직 (인증이 안된 경우 추방하는 기능은 미구현 상태)
+    public Map<String, String> manageParticipants(Long id, ChallengeParticipantDto participantData) {
+        // TODO: 참여자 관리 로직 구현
+        // 현재는 단순한 메시지 반환으로 처리
         Map<String, String> response = new HashMap<>();
-        response.put("message", String.format("챌린지 ID %d에 대한 참여자 관리 성공", challengeId));
+        response.put("message", String.format("챌린지 ID %d에 대한 참여자 관리 성공", id));
         return response;
     }
 }
