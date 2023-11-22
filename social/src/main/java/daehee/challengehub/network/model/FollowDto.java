@@ -1,10 +1,12 @@
 package daehee.challengehub.network.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
+@AllArgsConstructor
 public class FollowDto {
     private final Long followerId; // 팔로워의 사용자 ID
     private final Long followingId; // 팔로우 대상의 사용자 ID

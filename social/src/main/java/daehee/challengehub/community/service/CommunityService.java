@@ -20,6 +20,8 @@ public class CommunityService {
     }
 
     // 커뮤니티 피드 조회 로직
+    // TODO: 생각해보니까 피드 보는 거는 게시글 1개 보는 걸 하려고 했는데 기능상 굳이 필요 없을 거 같기도 하다.
+    // TODO: 둘중 하나 남기거나 URL 수정해서 1개만 보는 걸로 바꿔야할 거 같다.
     public Map<String, Object> getCommunityFeed() {
         List<CommunityPostDto> communityFeed = communityRepository.getAllPosts();
         Map<String, Object> response = new HashMap<>();

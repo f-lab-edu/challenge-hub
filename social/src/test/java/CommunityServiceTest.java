@@ -31,7 +31,26 @@ public class CommunityServiceTest {
     public void getCommunityFeed_ReturnsFeed() {
         // Given
         List<CommunityPostDto> mockPosts = Arrays.asList(
-                // Mock 커뮤니티 포스트 데이터 생성
+                CommunityPostDto.builder()
+                        .postId(1L)
+                        .authorId(100L)
+                        .postContent("첫 번째 커뮤니티 포스트 내용")
+                        .postTitle("첫 번째 커뮤니티 포스트")
+                        .creationDate("2023-11-10")
+                        .lastEdited("2023-11-10")
+                        .likeCount(15)
+                        .commentCount(4)
+                        .build(),
+                CommunityPostDto.builder()
+                        .postId(2L)
+                        .authorId(101L)
+                        .postContent("두 번째 커뮤니티 포스트 내용")
+                        .postTitle("두 번째 커뮤니티 포스트")
+                        .creationDate("2023-11-11")
+                        .lastEdited("2023-11-11")
+                        .likeCount(10)
+                        .commentCount(2)
+                        .build()
         );
         when(communityRepository.getAllPosts()).thenReturn(mockPosts);
 
@@ -46,7 +65,16 @@ public class CommunityServiceTest {
     @Test
     public void createCommunityPost_CreatesPost() {
         // Given
-        CommunityPostDto newPost = new CommunityPostDto();
+        CommunityPostDto newPost = CommunityPostDto.builder()
+                .postId(1L)
+                .authorId(100L)
+                .postContent("새 게시물 내용")
+                .postTitle("새 게시물 제목")
+                .creationDate("2023-11-15")
+                .lastEdited("2023-11-15")
+                .likeCount(0)
+                .commentCount(0)
+                .build();
         doNothing().when(communityRepository).savePost(any(CommunityPostDto.class));
 
         // When
@@ -62,7 +90,16 @@ public class CommunityServiceTest {
     public void updatePost_UpdatesExistingPost() {
         // Given
         Long postId = 1L;
-        CommunityPostDto updatedPost = new CommunityPostDto();
+        CommunityPostDto updatedPost = CommunityPostDto.builder()
+                .postId(postId)
+                .authorId(100L)
+                .postContent("수정된 게시물 내용")
+                .postTitle("수정된 게시물 제목")
+                .creationDate("2023-11-15")
+                .lastEdited("2023-11-15")
+                .likeCount(10)
+                .commentCount(5)
+                .build();
         doNothing().when(communityRepository).updatePost(eq(postId), any(CommunityPostDto.class));
 
         // When
@@ -91,7 +128,26 @@ public class CommunityServiceTest {
     public void getCommunityPosts_ReturnsPosts() {
         // Given
         List<CommunityPostDto> mockPosts = Arrays.asList(
-                // Mock 커뮤니티 포스트 데이터 생성
+                CommunityPostDto.builder()
+                        .postId(1L)
+                        .authorId(100L)
+                        .postContent("첫 번째 커뮤니티 포스트 내용")
+                        .postTitle("첫 번째 커뮤니티 포스트")
+                        .creationDate("2023-11-10")
+                        .lastEdited("2023-11-10")
+                        .likeCount(15)
+                        .commentCount(4)
+                        .build(),
+                CommunityPostDto.builder()
+                        .postId(2L)
+                        .authorId(101L)
+                        .postContent("두 번째 커뮤니티 포스트 내용")
+                        .postTitle("두 번째 커뮤니티 포스트")
+                        .creationDate("2023-11-11")
+                        .lastEdited("2023-11-11")
+                        .likeCount(10)
+                        .commentCount(2)
+                        .build()
         );
         when(communityRepository.getAllPosts()).thenReturn(mockPosts);
 
@@ -107,9 +163,19 @@ public class CommunityServiceTest {
     public void likeCommunityPost_AddsLikeToPost() {
         // Given
         Long postId = 1L;
-        CommunityPostDto likedPost = new CommunityPostDto();
+        CommunityPostDto likedPost = CommunityPostDto.builder()
+                .postId(postId)
+                .authorId(100L)
+                .postContent("게시물 내용")
+                .postTitle("게시물 제목")
+                .creationDate("2023-11-15")
+                .lastEdited("2023-11-15")
+                .likeCount(5)
+                .commentCount(2)
+                .build();
         when(communityRepository.findPostById(postId)).thenReturn(likedPost);
         doNothing().when(communityRepository).likePost(postId);
+
 
         // When
         Map<String, Object> response = communityService.likeCommunityPost(postId);

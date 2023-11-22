@@ -22,23 +22,26 @@ public class NetworkController {
         this.networkService = networkService;
     }
 
-    @PostMapping("/follow/{userId}")
-    public Map<String, Object> followUser(@PathVariable Long userId) {
-        return networkService.followUser(userId);
+
+    // TODO: URL 수정한 거 정리해서 반영하기
+
+    @PostMapping("/follow/{followerId}/{followingId}")
+    public Map<String, Object> followUser(@PathVariable Long followerId, @PathVariable Long followingId) {
+        return networkService.followUser(followerId, followingId);
     }
 
-    @GetMapping("/following")
-    public Map<String, Object> getFollowings() {
-        return networkService.getFollowings();
+    @GetMapping("/following/{userId}")
+    public Map<String, Object> getFollowings(@PathVariable Long userId) {
+        return networkService.getFollowings(userId);
     }
 
-    @DeleteMapping("/follow/{userId}")
-    public Map<String, String> unfollowUser(@PathVariable Long userId) {
-        return networkService.unfollowUser(userId);
+    @DeleteMapping("/unfollow/{followerId}/{followingId}")
+    public Map<String, String> unfollowUser(@PathVariable Long followerId, @PathVariable Long followingId) {
+        return networkService.unfollowUser(followerId, followingId);
     }
 
-    @GetMapping("/followers")
-    public Map<String, Object> getFollowers() {
-        return networkService.getFollowers();
+    @GetMapping("/followers/{userId}")
+    public Map<String, Object> getFollowers(@PathVariable Long userId) {
+        return networkService.getFollowers(userId);
     }
 }
