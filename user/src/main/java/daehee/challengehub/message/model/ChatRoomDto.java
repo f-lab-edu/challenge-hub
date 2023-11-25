@@ -1,10 +1,12 @@
 package daehee.challengehub.message.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
+@AllArgsConstructor
 public class ChatRoomDto {
     private final Long roomId; // 채팅방 ID
     private final String roomName; // 채팅방 이름

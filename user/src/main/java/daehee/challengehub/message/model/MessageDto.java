@@ -1,10 +1,12 @@
 package daehee.challengehub.message.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
+@AllArgsConstructor
 public class MessageDto {
     private final Long messageId; // 메시지 ID
     private final Long senderId; // 보내는 사람 ID
