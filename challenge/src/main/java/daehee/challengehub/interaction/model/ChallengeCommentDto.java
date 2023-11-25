@@ -1,10 +1,12 @@
 package daehee.challengehub.interaction.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
+@AllArgsConstructor
 public class ChallengeCommentDto {
     private final Long commentId;
     private final Long challengeId;
