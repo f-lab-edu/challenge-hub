@@ -17,7 +17,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/community")
 public class CommunityController {
-
     private final CommunityService communityService;
 
     @Autowired
