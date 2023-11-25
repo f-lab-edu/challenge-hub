@@ -17,7 +17,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/challenges/{id}/verification")
 public class VerificationController {
-
     private final VerificationService verificationService;
 
     @Autowired
@@ -46,4 +45,3 @@ public class VerificationController {
         return verificationService.deleteVerification(verificationId); // 인증 ID만 필요
     }
 }
-

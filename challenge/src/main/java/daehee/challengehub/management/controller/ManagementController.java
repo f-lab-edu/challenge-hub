@@ -19,7 +19,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/challenges")
 public class ManagementController {
-
     private final ManagementService managementService;
 
     @Autowired
@@ -77,5 +76,3 @@ public class ManagementController {
         return managementService.removeImageFromChallenge(id, imageId);
     }
 }
-
-
