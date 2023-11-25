@@ -1,4 +1,3 @@
-
 import daehee.challengehub.management.model.ChallengeDto;
 import daehee.challengehub.management.model.ChallengeImageDto;
 import daehee.challengehub.management.model.ChallengeTagDto;

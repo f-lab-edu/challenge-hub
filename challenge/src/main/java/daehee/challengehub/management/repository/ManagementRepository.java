@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 
-
 @Repository
 public class ManagementRepository {
     private final Map<Long, ChallengeDto> challenges = new HashMap<>();
