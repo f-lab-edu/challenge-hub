@@ -10,7 +10,6 @@ import daehee.challengehub.profile.model.PasswordChangeDto;
 import daehee.challengehub.profile.model.UserProfileDto;
 import daehee.challengehub.exception.CustomException;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

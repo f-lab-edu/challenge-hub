@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.Map;
 
-
 @RestController
 @RequestMapping("/message")
 public class MessageController {

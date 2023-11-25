@@ -45,4 +45,3 @@ public class AuthenticationController {
         return authenticationService.resetPassword(passwordChangeDto);
     }
 }
-
