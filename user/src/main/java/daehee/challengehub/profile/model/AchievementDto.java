@@ -1,10 +1,12 @@
 package daehee.challengehub.profile.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
+@AllArgsConstructor
 public class AchievementDto {
     private final Long userId; // 사용자 ID
     private final Long challengeId; // 챌린지 ID
