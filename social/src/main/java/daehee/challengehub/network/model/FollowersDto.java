@@ -1,10 +1,12 @@
 package daehee.challengehub.network.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
+@AllArgsConstructor
 public class FollowersDto {
     private final Long userId; // 사용자 ID
     private final String username; // 사용자명
