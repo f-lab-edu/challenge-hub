@@ -1,10 +1,12 @@
 package daehee.challengehub.community.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
+@AllArgsConstructor
 public class CommunityPostDto {
     private final Long postId; // 게시물 ID
     private final Long authorId; // 작성자 ID
