@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="challenge.service.ManagementServiceTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2023-11-26T19:14:36" hostname="RYU-NOTEBOOK" time="1.438">
+  <properties/>
+  <testcase name="addTagToChallenge_AddsTag()" classname="challenge.service.ManagementServiceTest" time="1.328"/>
+  <testcase name="removeImageFromChallenge_RemovesImage()" classname="challenge.service.ManagementServiceTest" time="0.019"/>
+  <testcase name="removeTagFromChallenge_RemovesTag()" classname="challenge.service.ManagementServiceTest" time="0.007"/>
+  <testcase name="deleteChallenge_DeletesChallenge()" classname="challenge.service.ManagementServiceTest" time="0.008"/>
+  <testcase name="updateChallenge_UpdatesExistingChallenge()" classname="challenge.service.ManagementServiceTest" time="0.007"/>
+  <testcase name="getAllChallenges_ReturnsAllChallenges()" classname="challenge.service.ManagementServiceTest" time="0.011"/>
+  <testcase name="uploadImageToChallenge_UploadsImage()" classname="challenge.service.ManagementServiceTest" time="0.01"/>
+  <testcase name="createChallenge_CreatesNewChallenge()" classname="challenge.service.ManagementServiceTest" time="0.008"/>
+  <testcase name="getChallengeById_ReturnsChallenge()" classname="challenge.service.ManagementServiceTest" time="0.006"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
