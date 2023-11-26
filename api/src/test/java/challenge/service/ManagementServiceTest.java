@@ -1,26 +1,20 @@
 package challenge.service;
 
-import daehee.challengehub.challenge.management.model.ChallengeDto;
-import daehee.challengehub.challenge.management.model.ChallengeImageDto;
-import daehee.challengehub.challenge.management.model.ChallengeTagDto;
+import daehee.challengehub.challenge.management.model.*;
 import daehee.challengehub.challenge.management.repository.ManagementRepository;
 import daehee.challengehub.challenge.management.service.ManagementService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.util.Map;
-import java.util.List;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ManagementServiceTest {
@@ -49,11 +43,11 @@ public class ManagementServiceTest {
         doNothing().when(managementRepository).createChallenge(any(ChallengeDto.class));
 
         // When
-        Map<String, Object> response = managementService.createChallenge(challengeData);
+        CreateChallengeResponseDto response = managementService.createChallenge(challengeData);
 
         // Then
-        assertEquals("챌린지 생성 성공", response.get("message"));
-        assertEquals(challengeData, response.get("createdChallenge"));
+        assertEquals("챌린지 생성 성공", response.getMessage());
+        assertEquals(challengeData, response.getChallenge());
         verify(managementRepository).createChallenge(any(ChallengeDto.class));
     }
 
@@ -89,11 +83,11 @@ public class ManagementServiceTest {
         when(managementRepository.getAllChallenges()).thenReturn(mockChallenges);
 
         // When
-        Map<String, Object> response = managementService.getAllChallenges();
+        GetAllChallengesResponseDto response = managementService.getAllChallenges();
 
         // Then
-        assertEquals("챌린지 목록 조회 성공", response.get("message"));
-        assertEquals(mockChallenges, response.get("challenges"));
+//        assertEquals("챌린지 목록 조회 성공", response.getMessage());
+        assertEquals(mockChallenges, response.getChallenges());
     }
 
     @Test
@@ -115,11 +109,11 @@ public class ManagementServiceTest {
         when(managementRepository.getChallengeById(challengeId)).thenReturn(mockChallenge);
 
         // When
-        Map<String, Object> response = managementService.getChallengeById(challengeId);
+        GetChallengeResponseDto response = managementService.getChallengeById(challengeId);
 
         // Then
-        assertEquals("챌린지 상세 조회 성공", response.get("message"));
-        assertEquals(mockChallenge, response.get("challenge"));
+//        assertEquals("챌린지 상세 조회 성공", response.getMessage());
+        assertEquals(mockChallenge, response.getChallenge());
     }
 
     @Test
@@ -141,11 +135,11 @@ public class ManagementServiceTest {
         doNothing().when(managementRepository).updateChallenge(eq(challengeId), any(ChallengeDto.class));
 
         // When
-        Map<String, Object> response = managementService.updateChallenge(challengeId, challengeData);
+        UpdateChallengeResponseDto response = managementService.updateChallenge(challengeId, challengeData);
 
         // Then
-        assertEquals("챌린지 수정 성공", response.get("message"));
-        assertEquals(challengeData, response.get("updatedChallenge"));
+        assertEquals("챌린지 수정 성공", response.getMessage());
+        assertEquals(challengeData, response.getUpdatedChallenge());
         verify(managementRepository).updateChallenge(eq(challengeId), any(ChallengeDto.class));
     }
 
@@ -156,10 +150,10 @@ public class ManagementServiceTest {
         doNothing().when(managementRepository).deleteChallenge(challengeId);
 
         // When
-        Map<String, String> response = managementService.deleteChallenge(challengeId);
+        DeleteChallengeResponseDto response = managementService.deleteChallenge(challengeId);
 
         // Then
-        assertEquals("챌린지 삭제 성공: 챌린지 ID " + challengeId, response.get("message"));
+        assertEquals("챌린지 삭제 성공: 챌린지 ID " + challengeId, response.getMessage());
         verify(managementRepository).deleteChallenge(challengeId);
     }
 
@@ -174,11 +168,11 @@ public class ManagementServiceTest {
         doNothing().when(managementRepository).addTagToChallenge(eq(challengeId), any(ChallengeTagDto.class));
 
         // When
-        Map<String, Object> response = managementService.addTagToChallenge(challengeId, tagData);
+        AddTagResponseDto response = managementService.addTagToChallenge(challengeId, tagData);
 
         // Then
-        assertEquals("태그 추가 성공", response.get("message"));
-        assertEquals(tagData, response.get("tagDetails"));
+        assertEquals("태그 추가 성공", response.getMessage());
+        assertEquals(tagData, response.getTag());
         verify(managementRepository).addTagToChallenge(eq(challengeId), any(ChallengeTagDto.class));
     }
 
@@ -190,10 +184,10 @@ public class ManagementServiceTest {
         doNothing().when(managementRepository).removeTagFromChallenge(challengeId, tagId);
 
         // When
-        Map<String, String> response = managementService.removeTagFromChallenge(challengeId, tagId);
+        RemoveTagResponseDto response = managementService.removeTagFromChallenge(challengeId, tagId);
 
         // Then
-        assertEquals("태그 삭제 성공: 태그 ID " + tagId + " 챌린지 ID " + challengeId, response.get("message"));
+        assertEquals("태그 삭제 성공: 태그 ID " + tagId + " 챌린지 ID " + challengeId, response.getMessage());
         verify(managementRepository).removeTagFromChallenge(challengeId, tagId);
     }
 
@@ -208,11 +202,11 @@ public class ManagementServiceTest {
         doNothing().when(managementRepository).uploadImageToChallenge(eq(challengeId), any(ChallengeImageDto.class));
 
         // When
-        Map<String, Object> response = managementService.uploadImageToChallenge(challengeId, imageData);
+        UploadImageResponseDto response = managementService.uploadImageToChallenge(challengeId, imageData);
 
         // Then
-        assertEquals("이미지 업로드 성공", response.get("message"));
-        assertEquals(imageData, response.get("imageDetails"));
+        assertEquals("이미지 업로드 성공", response.getMessage());
+        assertEquals(imageData, response.getImage());
         verify(managementRepository).uploadImageToChallenge(eq(challengeId), any(ChallengeImageDto.class));
     }
 
@@ -224,10 +218,10 @@ public class ManagementServiceTest {
         doNothing().when(managementRepository).removeImageFromChallenge(challengeId, imageId);
 
         // When
-        Map<String, String> response = managementService.removeImageFromChallenge(challengeId, imageId);
+        RemoveImageResponseDto response = managementService.removeImageFromChallenge(challengeId, imageId);
 
         // Then
-        assertEquals("이미지 삭제 성공: 이미지 ID " + imageId + " 챌린지 ID " + challengeId, response.get("message"));
+        assertEquals("이미지 삭제 성공: 이미지 ID " + imageId + " 챌린지 ID " + challengeId, response.getMessage());
         verify(managementRepository).removeImageFromChallenge(challengeId, imageId);
     }
 }

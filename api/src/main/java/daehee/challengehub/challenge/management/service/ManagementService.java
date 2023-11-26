@@ -1,15 +1,11 @@
 package daehee.challengehub.challenge.management.service;
 
-import daehee.challengehub.challenge.management.model.ChallengeDto;
-import daehee.challengehub.challenge.management.model.ChallengeImageDto;
-import daehee.challengehub.challenge.management.model.ChallengeTagDto;
+import daehee.challengehub.challenge.management.model.*;
 import daehee.challengehub.challenge.management.repository.ManagementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class ManagementService {
@@ -21,89 +17,53 @@ public class ManagementService {
         this.managementRepository = managementRepository;
     }
 
-    public Map<String, Object> createChallenge(ChallengeDto challengeData) {
+    public CreateChallengeResponseDto createChallenge(ChallengeDto challengeData) {
         managementRepository.createChallenge(challengeData);
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("message", "챌린지 생성 성공");
-        response.put("createdChallenge", challengeData);
-        return response;
+        return new CreateChallengeResponseDto("챌린지 생성 성공", challengeData);
     }
 
-    public Map<String, Object> getAllChallenges() {
+    public GetAllChallengesResponseDto getAllChallenges() {
         List<ChallengeDto> challenges = managementRepository.getAllChallenges();
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("message", "챌린지 목록 조회 성공");
-        response.put("challenges", challenges);
-        return response;
+        return new GetAllChallengesResponseDto(challenges);
     }
 
-    public Map<String, Object> getChallengeById(Long challengeId) {
+    public GetChallengeResponseDto getChallengeById(Long challengeId) {
         ChallengeDto challenge = managementRepository.getChallengeById(challengeId);
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("message", "챌린지 상세 조회 성공");
-        response.put("challenge", challenge);
-        return response;
+        return new GetChallengeResponseDto(challenge);
     }
 
-    public Map<String, Object> updateChallenge(Long challengeId, ChallengeDto challengeData) {
+    public UpdateChallengeResponseDto updateChallenge(Long challengeId, ChallengeDto challengeData) {
         managementRepository.updateChallenge(challengeId, challengeData);
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("message", "챌린지 수정 성공");
-        response.put("updatedChallenge", challengeData);
-        return response;
+        return new UpdateChallengeResponseDto("챌린지 수정 성공", challengeData);
     }
 
-    public Map<String, String> deleteChallenge(Long challengeId) {
+    public DeleteChallengeResponseDto deleteChallenge(Long challengeId) {
         managementRepository.deleteChallenge(challengeId);
-
-        Map<String, String> response = new HashMap<>();
-        response.put("message", "챌린지 삭제 성공: 챌린지 ID " + challengeId);
-        return response;
+        return new DeleteChallengeResponseDto("챌린지 삭제 성공: 챌린지 ID " + challengeId);
     }
 
-    public Map<String, Object> addTagToChallenge(Long challengeId, ChallengeTagDto tagData) {
+    public AddTagResponseDto addTagToChallenge(Long challengeId, ChallengeTagDto tagData) {
         managementRepository.addTagToChallenge(challengeId, tagData);
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("message", "태그 추가 성공");
-        response.put("tagDetails", tagData);
-        return response;
+        return new AddTagResponseDto("태그 추가 성공", tagData);
     }
 
-    public Map<String, String> removeTagFromChallenge(Long challengeId, Long tagId) {
+    public RemoveTagResponseDto removeTagFromChallenge(Long challengeId, Long tagId) {
         managementRepository.removeTagFromChallenge(challengeId, tagId);
-
-        Map<String, String> response = new HashMap<>();
-        response.put("message", "태그 삭제 성공: 태그 ID " + tagId + " 챌린지 ID " + challengeId);
-        return response;
+        return new RemoveTagResponseDto("태그 삭제 성공: 태그 ID " + tagId + " 챌린지 ID " + challengeId);
     }
 
-    public Map<String, Object> uploadImageToChallenge(Long challengeId, ChallengeImageDto imageData) {
+    public UploadImageResponseDto uploadImageToChallenge(Long challengeId, ChallengeImageDto imageData) {
         managementRepository.uploadImageToChallenge(challengeId, imageData);
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("message", "이미지 업로드 성공");
-        response.put("imageDetails", imageData);
-        return response;
+        return new UploadImageResponseDto("이미지 업로드 성공", imageData);
     }
 
-    public Map<String, String> removeImageFromChallenge(Long challengeId, Long imageId) {
+    public RemoveImageResponseDto removeImageFromChallenge(Long challengeId, Long imageId) {
         managementRepository.removeImageFromChallenge(challengeId, imageId);
-
-        Map<String, String> response = new HashMap<>();
-        response.put("message", "이미지 삭제 성공: 이미지 ID " + imageId + " 챌린지 ID " + challengeId);
-        return response;
+        return new RemoveImageResponseDto("이미지 삭제 성공: 이미지 ID " + imageId + " 챌린지 ID " + challengeId);
     }
 
-    public Map<String, String> participateInChallenge(Long challengeId) {
+    public ParticipateInChallengeResponseDto participateInChallenge(Long challengeId) {
         // TODO: 참가자 데이터 처리 로직 구현 필요
-        Map<String, String> response = new HashMap<>();
-        response.put("message", "챌린지 참여 성공: 챌린지 ID " + challengeId);
-        return response;
+        return new ParticipateInChallengeResponseDto("챌린지 참여 성공: 챌린지 ID " + challengeId);
     }
 }
-
