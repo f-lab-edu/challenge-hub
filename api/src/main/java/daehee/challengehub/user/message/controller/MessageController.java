@@ -1,10 +1,11 @@
 package daehee.challengehub.user.message.controller;
 
+import daehee.challengehub.user.message.model.ChatRoomsResponseDto;
+import daehee.challengehub.user.message.model.SendMessageResponseDto;
+import daehee.challengehub.user.message.model.MessageHistoryResponseDto;
 import daehee.challengehub.user.message.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/message")
@@ -18,17 +19,17 @@ public class MessageController {
     }
 
     @PostMapping("/user/{userId}")
-    public Map<String, Object> sendMessage(@PathVariable Long userId, @RequestBody String messageContent) {
+    public SendMessageResponseDto sendMessage(@PathVariable Long userId, @RequestBody String messageContent) {
         return messageService.sendMessage(userId, messageContent);
     }
 
     @GetMapping("/user/{userId}/messages")
-    public Map<String, Object> getMessageHistory(@PathVariable Long userId) {
+    public MessageHistoryResponseDto getMessageHistory(@PathVariable Long userId) {
         return messageService.getMessageHistory(userId);
     }
 
     @GetMapping("/user/rooms")
-    public Map<String, Object> getChatRooms() {
+    public ChatRoomsResponseDto getChatRooms() {
         return messageService.getChatRooms();
     }
 }
