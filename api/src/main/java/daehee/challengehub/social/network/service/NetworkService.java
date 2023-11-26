@@ -1,14 +1,11 @@
 package daehee.challengehub.social.network.service;
 
-import daehee.challengehub.social.network.model.FollowDto;
-import daehee.challengehub.social.network.model.FollowersDto;
+import daehee.challengehub.social.network.model.*;
 import daehee.challengehub.social.network.repository.NetworkRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -22,59 +19,38 @@ public class NetworkService {
         this.networkRepository = networkRepository;
     }
 
-    public Map<String, Object> followUser(Long followerId, Long followingId) {
+    public FollowResponseDto followUser(Long followerId, Long followingId) {
         networkRepository.followUser(followerId, followingId);
         boolean isMutual = networkRepository.getFollowers(followingId).contains(followerId);
+        FollowDto newFollow = createFollowDto(followerId, followingId);
 
-        FollowDto newFollow = FollowDto.builder()
-                .followerId(followerId)
-                .followingId(followingId)
-                .followDate("2023-11-15")
-                .isMutual(isMutual)
-                .followerUsername("follower_username")
-                .followingUsername("following_username")
-                .followerProfileImage("https://example.com/follower_image.jpg")
-                .followingProfileImage("https://example.com/following_image.jpg")
-                .build();
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("message", String.format("사용자 %d 팔로우 성공. 상호 팔로우 상태: %s", followingId, isMutual ? "예" : "아니오"));
-        response.put("followDetails", newFollow);
-        return response;
+        return new FollowResponseDto(
+                String.format("사용자 %d 팔로우 성공. 상호 팔로우 상태: %s", followingId, isMutual ? "예" : "아니오"),
+                newFollow
+        );
     }
 
-    public Map<String, Object> getFollowings(Long userId) {
+    public FollowingResponseDto getFollowings(Long userId) {
         Set<Long> followingIds = networkRepository.getFollowings(userId);
-        // 실제 팔로잉 ID 목록에 기반하여 FollowDto 리스트 생성
         List<FollowDto> followingList = followingIds.stream()
-                .map(followingId -> createFollowDto(userId, followingId)) // 이 메서드는 실제 FollowDto 생성 로직을 포함해야 함
+                .map(followingId -> createFollowDto(userId, followingId))
                 .collect(Collectors.toList());
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("message", "팔로잉 목록 조회 성공");
-        response.put("followingList", followingList);
-        return response;
+        return new FollowingResponseDto(followingList);
     }
 
-    public Map<String, String> unfollowUser(Long followerId, Long followingId) {
+    public UnfollowResponseDto unfollowUser(Long followerId, Long followingId) {
         networkRepository.unfollowUser(followerId, followingId);
-
-        Map<String, String> response = new HashMap<>();
-        response.put("message", String.format("사용자 ID %d 언팔로우 성공", followingId));
-        return response;
+        return new UnfollowResponseDto(String.format("사용자 ID %d 언팔로우 성공", followingId));
     }
 
-    public Map<String, Object> getFollowers(Long userId) {
+    public FollowersResponseDto getFollowers(Long userId) {
         Set<Long> followerIds = networkRepository.getFollowers(userId);
-        // 실제 팔로워 ID 목록에 기반하여 FollowersDto 리스트 생성
         List<FollowersDto> followers = followerIds.stream()
-                .map(this::createFollowersDto) // 이 메서드는 실제 FollowersDto 생성 로직을 포함해야 함
+                .map(this::createFollowersDto)
                 .collect(Collectors.toList());
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("message", "팔로워 목록 조회 성공");
-        response.put("followers", followers);
-        return response;
+        return new FollowersResponseDto(followers);
     }
 
     private FollowDto createFollowDto(Long followerId, Long followingId) {

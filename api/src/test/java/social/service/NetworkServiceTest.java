@@ -1,22 +1,23 @@
 package social.service;
 
+import daehee.challengehub.social.network.model.FollowResponseDto;
+import daehee.challengehub.social.network.model.FollowersResponseDto;
+import daehee.challengehub.social.network.model.FollowingResponseDto;
+import daehee.challengehub.social.network.model.UnfollowResponseDto;
 import daehee.challengehub.social.network.repository.NetworkRepository;
 import daehee.challengehub.social.network.service.NetworkService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Arrays;
-import java.util.Set;
 import java.util.HashSet;
-import java.util.Map;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class NetworkServiceTest {
@@ -35,7 +36,7 @@ public class NetworkServiceTest {
         doNothing().when(networkRepository).followUser(followerId, followingId);
 
         // When
-        Map<String, Object> response = networkService.followUser(followerId, followingId);
+        FollowResponseDto response = networkService.followUser(followerId, followingId);
 
         // Then
         assertNotNull(response);
@@ -50,7 +51,7 @@ public class NetworkServiceTest {
         when(networkRepository.getFollowings(userId)).thenReturn(followingIds);
 
         // When
-        Map<String, Object> response = networkService.getFollowings(userId);
+        FollowingResponseDto response = networkService.getFollowings(userId);
 
         // Then
         assertNotNull(response);
@@ -65,7 +66,7 @@ public class NetworkServiceTest {
         doNothing().when(networkRepository).unfollowUser(followerId, followingId);
 
         // When
-        Map<String, String> response = networkService.unfollowUser(followerId, followingId);
+        UnfollowResponseDto response = networkService.unfollowUser(followerId, followingId);
 
         // Then
         assertNotNull(response);
@@ -80,7 +81,7 @@ public class NetworkServiceTest {
         when(networkRepository.getFollowers(userId)).thenReturn(followerIds);
 
         // When
-        Map<String, Object> response = networkService.getFollowers(userId);
+        FollowersResponseDto response = networkService.getFollowers(userId);
 
         // Then
         assertNotNull(response);
