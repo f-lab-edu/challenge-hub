@@ -2,12 +2,14 @@ package daehee.challengehub.challenge.interaction.repository;
 
 import daehee.challengehub.challenge.interaction.model.ChallengeCommentDto;
 import daehee.challengehub.challenge.interaction.model.ChallengeParticipantDto;
+import daehee.challengehub.challenge.interaction.model.ParticipantScoreDto;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Repository
 public class InteractionRepository {
@@ -86,9 +88,25 @@ public class InteractionRepository {
         return challengeComments.getOrDefault(challengeId, new ArrayList<>());
     }
 
-    public List<ChallengeParticipantDto> getLeaderboard(Long challengeId) {
-        return challengeLeaderboards.getOrDefault(challengeId, new ArrayList<>());
+    public List<ParticipantScoreDto> getLeaderboard(Long challengeId) {
+        List<ChallengeParticipantDto> participants = challengeLeaderboards.getOrDefault(challengeId, new ArrayList<>());
+
+        // ChallengeParticipantDto 객체를 ParticipantScoreDto 객체로 변환
+        return participants.stream()
+                .map(this::convertToParticipantScoreDto)
+                .collect(Collectors.toList());
     }
+
+    private ParticipantScoreDto convertToParticipantScoreDto(ChallengeParticipantDto participant) {
+        // 이 메소드는 ChallengeParticipantDto 객체를 받아 ParticipantScoreDto 객체를 생성합니다.
+        // 예시 구현은 단순화를 위해 일부 필드만 사용하며, 실제 필요한 데이터에 따라 변경될 수 있습니다.
+        return ParticipantScoreDto.builder()
+                .participantId(participant.getParticipantId())
+                .participantUsername(participant.getParticipantUsername())
+                // 여기에 추가로 점수, 순위 등의 필드를 계산하거나 설정
+                .build();
+    }
+
 
     public List<ChallengeParticipantDto> getParticipants(Long challengeId) {
         return challengeParticipants.getOrDefault(challengeId, new ArrayList<>());
