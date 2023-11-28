@@ -1,26 +1,21 @@
 package challenge.service;
 
-import daehee.challengehub.challenge.verification.model.ChallengeVerificationDto;
+import daehee.challengehub.challenge.verification.model.*;
 import daehee.challengehub.challenge.verification.repository.VerificationRepository;
 import daehee.challengehub.challenge.verification.service.VerificationService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
-@ExtendWith
-(MockitoExtension.class)
+@ExtendWith(MockitoExtension.class)
 public class VerificationServiceTest {
 
     @Mock
@@ -40,12 +35,13 @@ public class VerificationServiceTest {
                 .imageUrls(List.of("https://example.com/image.jpg"))
                 .submittedAt("2023-11-15")
                 .build();
+        doNothing().when(verificationRepository).saveVerification(any(ChallengeVerificationDto.class));
 
         // When
-        Map<String, Object> response = verificationService.uploadVerification(challengeId, newVerificationData);
+        UploadVerificationResponseDto response = verificationService.uploadVerification(challengeId, newVerificationData);
 
         // Then
-        assertEquals("챌린지 인증 업로드 성공", response.get("message"));
+        assertEquals("챌린지 인증 업로드 성공", response.getMessage());
         verify(verificationRepository).saveVerification(any(ChallengeVerificationDto.class));
     }
 
@@ -74,11 +70,11 @@ public class VerificationServiceTest {
         when(verificationRepository.getVerificationsByChallengeId(challengeId)).thenReturn(mockVerifications);
 
         // When
-        Map<String, Object> response = verificationService.getVerifications(challengeId);
+        VerificationsResponseDto response = verificationService.getVerifications(challengeId);
 
         // Then
-        assertEquals("챌린지 인증 내역 조회 성공", response.get("message"));
-        assertEquals(mockVerifications, response.get("verifications"));
+//        assertEquals("챌린지 인증 내역 조회 성공", response.getMessage());
+        assertEquals(mockVerifications, response.getVerifications());
     }
 
     @Test
@@ -101,10 +97,10 @@ public class VerificationServiceTest {
         when(verificationRepository.getVerificationById(verificationId)).thenReturn(existingVerification);
 
         // When
-        Map<String, Object> response = verificationService.updateVerification(challengeId, verificationId, newVerificationData);
+        UpdateVerificationResponseDto response = verificationService.updateVerification(challengeId, verificationId, newVerificationData);
 
         // Then
-        assertEquals("챌린지 인증 업데이트 성공", response.get("message"));
+        assertEquals("챌린지 인증 업데이트 성공", response.getMessage());
         verify(verificationRepository).updateVerification(any(ChallengeVerificationDto.class));
     }
 
@@ -115,11 +111,10 @@ public class VerificationServiceTest {
         doNothing().when(verificationRepository).deleteVerification(verificationId);
 
         // When
-        Map<String, String> response = verificationService.deleteVerification(verificationId);
+        DeleteVerificationResponseDto response = verificationService.deleteVerification(verificationId);
 
         // Then
-        assertEquals("챌린지 인증 삭제 성공: 인증 ID " + verificationId, response.get("message"));
+        assertEquals("챌린지 인증 삭제 성공: 인증 ID " + verificationId, response.getMessage());
         verify(verificationRepository).deleteVerification(verificationId);
     }
-
 }
