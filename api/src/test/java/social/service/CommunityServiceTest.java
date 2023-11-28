@@ -1,24 +1,19 @@
 package social.service;
 
-import daehee.challengehub.social.community.model.CommunityPostDto;
+import daehee.challengehub.social.community.model.*;
 import daehee.challengehub.social.community.repository.CommunityRepository;
 import daehee.challengehub.social.community.service.CommunityService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class CommunityServiceTest {
@@ -57,11 +52,10 @@ public class CommunityServiceTest {
         when(communityRepository.getAllPosts()).thenReturn(mockPosts);
 
         // When
-        Map<String, Object> response = communityService.getCommunityFeed();
+        CommunityFeedResponseDto response = communityService.getCommunityFeed();
 
         // Then
-        assertEquals("커뮤니티 피드 조회 성공", response.get("message"));
-        assertEquals(mockPosts, response.get("communityFeed"));
+        assertEquals(mockPosts, response.getPosts());
     }
 
     @Test
@@ -80,13 +74,12 @@ public class CommunityServiceTest {
         doNothing().when(communityRepository).savePost(any(CommunityPostDto.class));
 
         // When
-        Map<String, Object> response = communityService.createCommunityPost(newPost);
+        CreatePostResponseDto response = communityService.createCommunityPost(newPost);
 
         // Then
-        assertEquals("커뮤니티 포스트 생성 성공", response.get("message"));
+        assertEquals("커뮤니티 포스트 생성 성공", response.getMessage());
         verify(communityRepository).savePost(any(CommunityPostDto.class));
     }
-
 
     @Test
     public void updatePost_UpdatesExistingPost() {
@@ -105,10 +98,10 @@ public class CommunityServiceTest {
         doNothing().when(communityRepository).updatePost(eq(postId), any(CommunityPostDto.class));
 
         // When
-        Map<String, Object> response = communityService.updatePost(postId, updatedPost);
+        UpdatePostResponseDto response = communityService.updatePost(postId, updatedPost);
 
         // Then
-        assertEquals("커뮤니티 포스트 수정 성공", response.get("message"));
+        assertEquals("커뮤니티 포스트 수정 성공", response.getMessage());
         verify(communityRepository).updatePost(eq(postId), any(CommunityPostDto.class));
     }
 
@@ -119,10 +112,10 @@ public class CommunityServiceTest {
         doNothing().when(communityRepository).deletePost(postId);
 
         // When
-        Map<String, String> response = communityService.deletePost(postId);
+        DeletePostResponseDto response = communityService.deletePost(postId);
 
         // Then
-        assertEquals("포스트 삭제 성공: 포스트 ID " + postId, response.get("message"));
+        assertEquals("포스트 삭제 성공: 포스트 ID " + postId, response.getMessage());
         verify(communityRepository).deletePost(postId);
     }
 
@@ -154,11 +147,10 @@ public class CommunityServiceTest {
         when(communityRepository.getAllPosts()).thenReturn(mockPosts);
 
         // When
-        Map<String, Object> response = communityService.getCommunityPosts();
+        CommunityFeedResponseDto response = communityService.getCommunityPosts();
 
         // Then
-        assertEquals("커뮤니티 포스트 목록 조회 성공", response.get("message"));
-        assertEquals(mockPosts, response.get("posts"));
+        assertEquals(mockPosts, response.getPosts());
     }
 
     @Test
@@ -178,13 +170,12 @@ public class CommunityServiceTest {
         when(communityRepository.findPostById(postId)).thenReturn(likedPost);
         doNothing().when(communityRepository).likePost(postId);
 
-
         // When
-        Map<String, Object> response = communityService.likeCommunityPost(postId);
+        LikePostResponseDto response = communityService.likeCommunityPost(postId);
 
         // Then
-        assertEquals(String.format("포스트 ID %d에 좋아요 성공", postId), response.get("message"));
-        assertEquals(likedPost, response.get("likedPost"));
+        assertEquals(String.format("포스트 ID %d에 좋아요 성공", postId), response.getMessage());
+        assertEquals(likedPost.getLikeCount(), response.getNewLikeCount());
         verify(communityRepository).likePost(postId);
     }
 }

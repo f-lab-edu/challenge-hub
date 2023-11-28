@@ -1,11 +1,9 @@
 package daehee.challengehub.social.community.controller;
 
-import daehee.challengehub.social.community.model.CommunityPostDto;
+import daehee.challengehub.social.community.model.*;
 import daehee.challengehub.social.community.service.CommunityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/community")
@@ -18,32 +16,32 @@ public class CommunityController {
     }
 
     @GetMapping("/feed")
-    public Map<String, Object> getCommunityFeed() {
+    public CommunityFeedResponseDto getCommunityFeed() {
         return communityService.getCommunityFeed();
     }
 
     @PostMapping("/posts")
-    public Map<String, Object> createCommunityPost(@RequestBody CommunityPostDto communityPostDto) {
+    public CreatePostResponseDto createCommunityPost(@RequestBody CommunityPostDto communityPostDto) {
         return communityService.createCommunityPost(communityPostDto);
     }
 
     @PutMapping("/posts/{postId}")
-    public Map<String, Object> updatePost(@PathVariable Long postId, @RequestBody CommunityPostDto postUpdateData) {
+    public UpdatePostResponseDto updatePost(@PathVariable Long postId, @RequestBody CommunityPostDto postUpdateData) {
         return communityService.updatePost(postId, postUpdateData);
     }
 
     @DeleteMapping("/posts/{postId}")
-    public Map<String, String> deletePost(@PathVariable Long postId) {
+    public DeletePostResponseDto deletePost(@PathVariable Long postId) {
         return communityService.deletePost(postId);
     }
 
     @GetMapping("/posts")
-    public Map<String, Object> getCommunityPosts() {
+    public CommunityFeedResponseDto getCommunityPosts() {
         return communityService.getCommunityPosts();
     }
 
     @PostMapping("/posts/{postId}/like")
-    public Map<String, Object> likeCommunityPost(@PathVariable Long postId) {
+    public LikePostResponseDto likeCommunityPost(@PathVariable Long postId) {
         return communityService.likeCommunityPost(postId);
     }
 }
