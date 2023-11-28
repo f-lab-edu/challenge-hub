@@ -2,16 +2,12 @@ package daehee.challengehub.user.profile.service;
 
 import daehee.challengehub.common.constants.ErrorCode;
 import daehee.challengehub.common.exception.CustomException;
-import daehee.challengehub.user.profile.model.AchievementDto;
-import daehee.challengehub.user.profile.model.PasswordChangeDto;
-import daehee.challengehub.user.profile.model.UserProfileDto;
+import daehee.challengehub.user.profile.model.*;
 import daehee.challengehub.user.profile.repository.ProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class ProfileService {
@@ -24,41 +20,31 @@ public class ProfileService {
     }
 
     // 사용자 프로필 조회 로직
-    public Map<String, Object> getProfile(Long userId) {
+    public ProfileResponseDto getProfile(Long userId) {
         UserProfileDto userProfile = profileRepository.findProfileByUserId(userId);
         if (userProfile != null) {
-            Map<String, Object> response = new HashMap<>();
-            response.put("message", "프로필 조회 성공");
-            response.put("profile", userProfile);
-            response.put("isCurrentUser", userId.equals(loggedInUserId));
-            return response;
+            return new ProfileResponseDto("프로필 조회 성공", userProfile);
         } else {
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
     }
 
     // 프로필 정보 업데이트 로직
-    public Map<String, String> updateProfile(UserProfileDto userProfileDto) {
+    public UpdateProfileResponseDto updateProfile(UserProfileDto userProfileDto) {
         profileRepository.updateProfile(userProfileDto.getUserId(), userProfileDto);
-        Map<String, String> response = new HashMap<>();
-        response.put("message", "프로필 업데이트 성공");
-        return response;
+        return new UpdateProfileResponseDto("프로필 업데이트 성공");
     }
 
     // 비밀번호 변경 로직
-    public Map<String, String> changePassword(PasswordChangeDto passwordChangeDto) {
+    public ChangePasswordResponseDto changePassword(PasswordChangeDto passwordChangeDto) {
         // TODO: AuthenticationService에 구현한 로직과 중복되므로 검토 후 하나를 제거
-        Map<String, String> response = new HashMap<>();
-        response.put("message", "비밀번호 변경 성공");
-        return response;
+        return new ChangePasswordResponseDto("비밀번호 변경 성공");
     }
 
     // 성과 목록 조회 로직
-    public Map<String, Object> getAchievements(Long userId) {
+    public AchievementsResponseDto getAchievements(Long userId) {
         List<AchievementDto> userAchievements = profileRepository.findAchievementsByUserId(userId);
-        Map<String, Object> response = new HashMap<>();
-        response.put("message", "성과 목록 조회 성공");
-        response.put("achievements", userAchievements);
-        return response;
+        return new AchievementsResponseDto(userAchievements);
     }
 }
+
