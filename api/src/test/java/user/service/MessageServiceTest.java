@@ -1,17 +1,15 @@
 package user.service;
 
-import daehee.challengehub.user.message.model.ChatRoomDto;
-import daehee.challengehub.user.message.model.MessageDto;
+import daehee.challengehub.user.message.model.*;
 import daehee.challengehub.user.message.repository.MessageRepository;
 import daehee.challengehub.user.message.service.MessageService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -34,10 +32,10 @@ public class MessageServiceTest {
         MessageDto mockMessage = new MessageDto(1L, userId, 456L, messageContent, "2023-04-05T15:00:00Z", false, null, null, "text");
         when(messageRepository.createAndSaveMessage(eq(userId), anyLong(), eq(messageContent))).thenReturn(mockMessage);
 
-        Map<String, Object> response = messageService.sendMessage(userId, messageContent);
+        SendMessageResponseDto response = messageService.sendMessage(userId, messageContent);
 
-        assertEquals("메시지 전송 성공", response.get("message"));
-        assertEquals(mockMessage, response.get("sentMessage"));
+        assertEquals("메시지 전송 성공", response.getStatus());
+        assertEquals(mockMessage, response.getMessage());
     }
 
     @Test
@@ -49,10 +47,11 @@ public class MessageServiceTest {
         );
         when(messageRepository.findMessagesByUserId(userId)).thenReturn(mockMessages);
 
-        Map<String, Object> response = messageService.getMessageHistory(userId);
+        MessageHistoryResponseDto response = messageService.getMessageHistory(userId);
 
-        assertEquals("메시지 목록 조회 성공", response.get("message"));
-        assertEquals(mockMessages, response.get("messages"));
+        // TODO: message 필드를 굳이 추가를 해야할까?
+//        assertEquals("메시지 목록 조회 성공", response.getMessage());
+        assertEquals(mockMessages, response.getMessages());
     }
 
     @Test
@@ -63,9 +62,10 @@ public class MessageServiceTest {
         );
         when(messageRepository.findAllChatRooms()).thenReturn(mockChatRooms);
 
-        Map<String, Object> response = messageService.getChatRooms();
+        ChatRoomsResponseDto response = messageService.getChatRooms();
 
-        assertEquals("채팅방 목록 조회 성공", response.get("message"));
-        assertEquals(mockChatRooms, response.get("chatRooms"));
+        // TODO: message 필드를 굳이 추가를 해야할까?
+//        assertEquals("채팅방 목록 조회 성공", response.getMessage());
+        assertEquals(mockChatRooms, response.getChatRooms());
     }
 }
