@@ -1,14 +1,11 @@
 package daehee.challengehub.user.message.service;
 
-import daehee.challengehub.user.message.model.ChatRoomDto;
-import daehee.challengehub.user.message.model.MessageDto;
+import daehee.challengehub.user.message.model.*;
 import daehee.challengehub.user.message.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class MessageService {
@@ -20,33 +17,27 @@ public class MessageService {
     }
 
     // 개인 메시지 전송 로직
-    public Map<String, Object> sendMessage(Long userId, String messageContent) {
+    public SendMessageResponseDto sendMessage(Long userId, String messageContent) {
         // 메시지 생성 및 저장
         MessageDto message = messageRepository.createAndSaveMessage(userId, 456L, messageContent); // 456L은 예시용 리시버 ID
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("message", "메시지 전송 성공");
-        response.put("sentMessage", message);
-        return response;
+        // SendMessageResponseDto 반환
+        return new SendMessageResponseDto("메시지 전송 성공", message);
     }
 
     // 메시지 목록 조회 로직
-    public Map<String, Object> getMessageHistory(Long userId) {
+    public MessageHistoryResponseDto getMessageHistory(Long userId) {
         List<MessageDto> messages = messageRepository.findMessagesByUserId(userId);
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("message", "메시지 목록 조회 성공");
-        response.put("messages", messages);
-        return response;
+        // MessageHistoryResponseDto 반환
+        return new MessageHistoryResponseDto(messages);
     }
 
     // 채팅방 목록 조회 로직
-    public Map<String, Object> getChatRooms() {
+    public ChatRoomsResponseDto getChatRooms() {
         List<ChatRoomDto> chatRooms = messageRepository.findAllChatRooms();
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("message", "채팅방 목록 조회 성공");
-        response.put("chatRooms", chatRooms);
-        return response;
+        // ChatRoomsResponseDto 반환
+        return new ChatRoomsResponseDto(chatRooms);
     }
 }
