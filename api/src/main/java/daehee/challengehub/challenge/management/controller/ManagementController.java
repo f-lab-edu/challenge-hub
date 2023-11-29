@@ -1,13 +1,9 @@
 package daehee.challengehub.challenge.management.controller;
 
-import daehee.challengehub.challenge.management.model.ChallengeDto;
-import daehee.challengehub.challenge.management.model.ChallengeImageDto;
-import daehee.challengehub.challenge.management.model.ChallengeTagDto;
+import daehee.challengehub.challenge.management.model.*;
 import daehee.challengehub.challenge.management.service.ManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/challenges")
@@ -20,52 +16,52 @@ public class ManagementController {
     }
 
     @PostMapping
-    public Map<String, Object> createChallenge(@RequestBody ChallengeDto challengeData) {
+    public CreateChallengeResponseDto createChallenge(@RequestBody ChallengeDto challengeData) {
         return managementService.createChallenge(challengeData);
     }
 
     @GetMapping
-    public Map<String, Object> getAllChallenges() {
+    public GetAllChallengesResponseDto getAllChallenges() {
         return managementService.getAllChallenges();
     }
 
     @GetMapping("/{id}")
-    public Map<String, Object> getChallengeById(@PathVariable Long id) {
+    public GetChallengeResponseDto getChallengeById(@PathVariable Long id) {
         return managementService.getChallengeById(id);
     }
 
     @PutMapping("/{id}")
-    public Map<String, Object> updateChallenge(@PathVariable Long id, @RequestBody ChallengeDto challengeData) {
+    public UpdateChallengeResponseDto updateChallenge(@PathVariable Long id, @RequestBody ChallengeDto challengeData) {
         return managementService.updateChallenge(id, challengeData);
     }
 
     @DeleteMapping("/{id}")
-    public Map<String, String> deleteChallenge(@PathVariable Long id) {
+    public DeleteChallengeResponseDto deleteChallenge(@PathVariable Long id) {
         return managementService.deleteChallenge(id);
     }
 
     @PostMapping("/{id}/participation")
-    public Map<String, String> participateInChallenge(@PathVariable Long id) {
+    public ParticipateInChallengeResponseDto participateInChallenge(@PathVariable Long id) {
         return managementService.participateInChallenge(id);
     }
 
     @PostMapping("/{id}/tags")
-    public Map<String, Object> addTagToChallenge(@PathVariable Long id, @RequestBody ChallengeTagDto tagData) {
+    public AddTagResponseDto addTagToChallenge(@PathVariable Long id, @RequestBody ChallengeTagDto tagData) {
         return managementService.addTagToChallenge(id, tagData);
     }
 
     @DeleteMapping("/{id}/tags/{tagId}")
-    public Map<String, String> removeTagFromChallenge(@PathVariable Long id, @PathVariable Long tagId) {
+    public RemoveTagResponseDto removeTagFromChallenge(@PathVariable Long id, @PathVariable Long tagId) {
         return managementService.removeTagFromChallenge(id, tagId);
     }
 
     @PostMapping("/{id}/images")
-    public Map<String, Object> uploadImageToChallenge(@PathVariable Long id, @RequestBody ChallengeImageDto imageData) {
+    public UploadImageResponseDto uploadImageToChallenge(@PathVariable Long id, @RequestBody ChallengeImageDto imageData) {
         return managementService.uploadImageToChallenge(id, imageData);
     }
 
     @DeleteMapping("/{id}/images/{imageId}")
-    public Map<String, String> removeImageFromChallenge(@PathVariable Long id, @PathVariable Long imageId) {
+    public RemoveImageResponseDto removeImageFromChallenge(@PathVariable Long id, @PathVariable Long imageId) {
         return managementService.removeImageFromChallenge(id, imageId);
     }
 }
