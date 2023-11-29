@@ -1,25 +1,19 @@
 package challenge.service;
 
-import daehee.challengehub.challenge.interaction.model.ChallengeCommentDto;
-import daehee.challengehub.challenge.interaction.model.ChallengeParticipantDto;
+import daehee.challengehub.challenge.interaction.model.*;
 import daehee.challengehub.challenge.interaction.repository.InteractionRepository;
 import daehee.challengehub.challenge.interaction.service.InteractionService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.util.List;
 import java.util.Arrays;
-import java.util.Map;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.eq;
-import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class InteractionServiceTest {
@@ -39,10 +33,10 @@ public class InteractionServiceTest {
         doNothing().when(interactionRepository).postComment(eq(challengeId), any(ChallengeCommentDto.class));
 
         // When
-        Map<String, Object> response = interactionService.postComment(challengeId, commentText);
+        PostCommentResponseDto response = interactionService.postComment(challengeId, commentText);
 
         // Then
-        assertEquals("댓글 작성 성공", response.get("message"));
+        assertEquals("댓글 작성 성공", response.getMessage());
         verify(interactionRepository).postComment(eq(challengeId), any(ChallengeCommentDto.class));
     }
 
@@ -69,39 +63,38 @@ public class InteractionServiceTest {
         when(interactionRepository.getComments(challengeId)).thenReturn(mockComments);
 
         // When
-        Map<String, Object> response = interactionService.getComments(challengeId);
+        CommentsResponseDto response = interactionService.getComments(challengeId);
 
         // Then
-        assertEquals("댓글 목록 조회 성공", response.get("message"));
-        assertEquals(mockComments, response.get("comments"));
+//        assertEquals("댓글 목록 조회 성공", response.getMessage());
+        assertEquals(mockComments, response.getComments());
     }
 
     @Test
     public void getLeaderboard_RetrievesLeaderboardSuccessfully() {
         // Given
         Long challengeId = 3L;
-        List<ChallengeParticipantDto> mockLeaderboard = Arrays.asList(
-                ChallengeParticipantDto.builder()
+        List<ParticipantScoreDto> mockLeaderboard = Arrays.asList(
+                ParticipantScoreDto.builder()
                         .participantId(1L)
-                        .challengeId(3L)
                         .participantUsername("user1")
-                        .joinedAt("2023-11-14")
+                        .score(100)
+                        .rank("1")
                         .build(),
-                ChallengeParticipantDto.builder()
+                ParticipantScoreDto.builder()
                         .participantId(2L)
-                        .challengeId(4L)
                         .participantUsername("user2")
-                        .joinedAt("2023-11-14")
+                        .score(90)
+                        .rank("2")
                         .build()
         );
         when(interactionRepository.getLeaderboard(challengeId)).thenReturn(mockLeaderboard);
 
         // When
-        Map<String, Object> response = interactionService.getLeaderboard(challengeId);
+        LeaderboardResponseDto response = interactionService.getLeaderboard(challengeId);
 
         // Then
-        assertEquals("리더보드 조회 성공", response.get("message"));
-        assertEquals(mockLeaderboard, response.get("leaderboard"));
+        assertEquals(mockLeaderboard, response.getLeaderboard());
     }
 
     @Test
@@ -125,11 +118,11 @@ public class InteractionServiceTest {
         when(interactionRepository.getParticipants(challengeId)).thenReturn(mockParticipants);
 
         // When
-        Map<String, Object> response = interactionService.getParticipantDetails(challengeId);
+        ParticipantDetailsResponseDto response = interactionService.getParticipantDetails(challengeId);
 
         // Then
-        assertEquals("참여자 상세 정보 조회 성공", response.get("message"));
-        assertEquals(mockParticipants, response.get("participants"));
+//        assertEquals("참여자 상세 정보 조회 성공", response.getMessage());
+        assertEquals(mockParticipants, response.getParticipants());
     }
 
     // TODO: manageParticipants 메서드의 테스트 구현
