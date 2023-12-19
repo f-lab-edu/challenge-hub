@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.Instant;
+
 @Getter
 @Builder
 @AllArgsConstructor
@@ -12,7 +14,7 @@ public class MessageDto {
     private final Long senderId; // 보내는 사람 ID
     private final Long receiverId; // 받는 사람 ID
     private final String messageContent; // 메시지 내용
-    private final String sentTime; // 보낸 시간 (ISO 8601 형식)
+    private final Instant sentTime; // 보낸 시간 (ISO 8601 형식)
     private final Boolean isRead; // 읽음 여부
     private final String imageUrl; // 이미지 URL (null 가능)
     private final String videoUrl; // 동영상 URL (null 가능)

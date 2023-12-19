@@ -3,7 +3,7 @@ package daehee.challengehub.challenge.verification.repository;
 import daehee.challengehub.challenge.verification.model.ChallengeVerificationDto;
 import org.springframework.stereotype.Repository;
 
-import java.util.Arrays;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,8 +21,8 @@ public class VerificationRepository {
                 .challengeId(3L)
                 .userId(123L)
                 .verificationText("첫 번째 주 인증 완료")
-                .imageUrls(Arrays.asList("https://example.com/image1.jpg"))
-                .submittedAt("2023-11-08")
+                .imageUrls(List.of("https://example.com/image1.jpg"))
+                .submittedAt(Instant.parse("2023-11-08T13:00:00Z"))
                 .build();
         verifications.put(verification1.getVerificationId(), verification1);
 
@@ -31,8 +31,8 @@ public class VerificationRepository {
                 .challengeId(4L)
                 .userId(456L)
                 .verificationText("두 번째 주 도전 성공")
-                .imageUrls(Arrays.asList("https://example.com/image2.jpg"))
-                .submittedAt("2023-11-15")
+                .imageUrls(List.of("https://example.com/image2.jpg"))
+                .submittedAt(Instant.parse("2023-11-15T13:00:00Z"))
                 .build();
         verifications.put(verification2.getVerificationId(), verification2);
     }

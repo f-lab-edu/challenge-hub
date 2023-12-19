@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.Instant;
 import java.util.List;
 
 @Getter
@@ -15,5 +16,5 @@ public class ChallengeVerificationDto {
     private final Long userId;
     private final String verificationText;
     private final List<String> imageUrls;
-    private final String submittedAt;
+    private final Instant submittedAt;
 }

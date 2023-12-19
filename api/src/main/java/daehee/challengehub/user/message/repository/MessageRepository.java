@@ -24,7 +24,7 @@ public class MessageRepository {
                 .senderId(123L)
                 .receiverId(456L)
                 .messageContent("안녕하세요.")
-                .sentTime("2023-04-05T15:00:00Z")
+                .sentTime(Instant.parse("2023-04-05T15:00:00Z"))
                 .isRead(true)
                 .build();
         messages.put(message1.getMessageId(), message1);
@@ -34,7 +34,7 @@ public class MessageRepository {
                 .senderId(789L)
                 .receiverId(123L)
                 .messageContent("만나서 반갑습니다.")
-                .sentTime("2023-04-05T16:00:00Z")
+                .sentTime(Instant.parse("2023-04-05T16:00:00Z"))
                 .isRead(false)
                 .build();
         messages.put(message2.getMessageId(), message2);
@@ -44,7 +44,7 @@ public class MessageRepository {
                 .roomName("Room 1")
                 .lastMessageId(2L)
                 .lastMessagePreview("Hi there!")
-                .lastMessageTime("2023-04-05T16:00:00Z")
+                .lastMessageTime(Instant.parse("2023-04-05T16:00:00Z"))
                 .unreadMessagesCount(1)
                 .roomImageUrl(null)
                 .build();
@@ -55,7 +55,7 @@ public class MessageRepository {
                 .roomName("Room 2")
                 .lastMessageId(3L)
                 .lastMessagePreview("How are you?")
-                .lastMessageTime("2023-04-06T10:00:00Z")
+                .lastMessageTime(Instant.parse("2023-04-06T10:00:00Z"))
                 .unreadMessagesCount(2)
                 .roomImageUrl(null)
                 .build();
@@ -69,7 +69,7 @@ public class MessageRepository {
                 .senderId(senderId)
                 .receiverId(receiverId)
                 .messageContent(messageContent)
-                .sentTime(Instant.now().toString())
+                .sentTime(Instant.now())
                 .isRead(false)
                 .build();
         messages.put(message.getMessageId(), message);
