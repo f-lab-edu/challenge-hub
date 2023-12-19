@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  mysql-container:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASS}
+      MYSQL_DATABASE: ${MYSQL_DB}
+    ports:
+      - "3306:3306"
+
+  spring-app:
+    build: ./api
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql-container
