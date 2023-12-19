@@ -1,6 +1,11 @@
 package daehee.challengehub.challenge.verification.service;
 
-import daehee.challengehub.challenge.verification.model.*;
+
+import daehee.challengehub.challenge.verification.model.ChallengeVerificationDto;
+import daehee.challengehub.challenge.verification.model.DeleteVerificationResponseDto;
+import daehee.challengehub.challenge.verification.model.UpdateVerificationResponseDto;
+import daehee.challengehub.challenge.verification.model.UploadVerificationResponseDto;
+import daehee.challengehub.challenge.verification.model.VerificationsResponseDto;
 import daehee.challengehub.challenge.verification.repository.VerificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

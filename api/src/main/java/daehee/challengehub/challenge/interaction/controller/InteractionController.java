@@ -1,9 +1,20 @@
 package daehee.challengehub.challenge.interaction.controller;
 
-import daehee.challengehub.challenge.interaction.model.*;
+import daehee.challengehub.challenge.interaction.model.ChallengeParticipantDto;
+import daehee.challengehub.challenge.interaction.model.CommentsResponseDto;
+import daehee.challengehub.challenge.interaction.model.LeaderboardResponseDto;
+import daehee.challengehub.challenge.interaction.model.ManageParticipantsResponseDto;
+import daehee.challengehub.challenge.interaction.model.ParticipantDetailsResponseDto;
+import daehee.challengehub.challenge.interaction.model.PostCommentResponseDto;
 import daehee.challengehub.challenge.interaction.service.InteractionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 
 @RestController
 @RequestMapping("/challenges")

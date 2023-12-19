@@ -1,7 +1,13 @@
 package user.service;
 
 import daehee.challengehub.common.exception.CustomException;
-import daehee.challengehub.user.profile.model.*;
+import daehee.challengehub.user.profile.model.AchievementDto;
+import daehee.challengehub.user.profile.model.AchievementsResponseDto;
+import daehee.challengehub.user.profile.model.ChangePasswordResponseDto;
+import daehee.challengehub.user.profile.model.PasswordChangeDto;
+import daehee.challengehub.user.profile.model.ProfileResponseDto;
+import daehee.challengehub.user.profile.model.UpdateProfileResponseDto;
+import daehee.challengehub.user.profile.model.UserProfileDto;
 import daehee.challengehub.user.profile.repository.ProfileRepository;
 import daehee.challengehub.user.profile.service.ProfileService;
 import org.junit.jupiter.api.Test;
@@ -10,12 +16,18 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 
 @ExtendWith(MockitoExtension.class)
 public class ProfileServiceTest {
@@ -60,7 +72,7 @@ public class ProfileServiceTest {
     @Test
     public void getAchievements_ExistingUser_ReturnsAchievements() {
         Long userId = 1L;
-        List<AchievementDto> achievements = Arrays.asList(new AchievementDto(userId, 101L, "10일 연속 챌린지 완료", "2023-01-10"));
+        List<AchievementDto> achievements = Arrays.asList(new AchievementDto(userId, 101L, "10일 연속 챌린지 완료", Instant.parse("2023-01-10T13:00:00Z")));
         when(profileRepository.findAchievementsByUserId(userId)).thenReturn(achievements);
 
         AchievementsResponseDto response = profileService.getAchievements(userId);

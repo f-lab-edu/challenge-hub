@@ -1,7 +1,13 @@
 package user.service;
 
 import daehee.challengehub.common.exception.CustomException;
-import daehee.challengehub.user.authentication.model.*;
+import daehee.challengehub.user.authentication.model.LoginResponseDto;
+import daehee.challengehub.user.authentication.model.PasswordChangeDto;
+import daehee.challengehub.user.authentication.model.ResetPasswordResponseDto;
+import daehee.challengehub.user.authentication.model.SignupResponseDto;
+import daehee.challengehub.user.authentication.model.UserLoginDto;
+import daehee.challengehub.user.authentication.model.UserSignupDto;
+import daehee.challengehub.user.authentication.model.VerifyEmailResponseDto;
 import daehee.challengehub.user.authentication.repository.AuthenticationRepository;
 import daehee.challengehub.user.authentication.service.AuthenticationService;
 import org.junit.jupiter.api.Test;

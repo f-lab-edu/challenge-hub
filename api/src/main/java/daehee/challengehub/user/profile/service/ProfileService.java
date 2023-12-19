@@ -2,7 +2,13 @@ package daehee.challengehub.user.profile.service;
 
 import daehee.challengehub.common.constants.ErrorCode;
 import daehee.challengehub.common.exception.CustomException;
-import daehee.challengehub.user.profile.model.*;
+import daehee.challengehub.user.profile.model.AchievementDto;
+import daehee.challengehub.user.profile.model.AchievementsResponseDto;
+import daehee.challengehub.user.profile.model.ChangePasswordResponseDto;
+import daehee.challengehub.user.profile.model.PasswordChangeDto;
+import daehee.challengehub.user.profile.model.ProfileResponseDto;
+import daehee.challengehub.user.profile.model.UpdateProfileResponseDto;
+import daehee.challengehub.user.profile.model.UserProfileDto;
 import daehee.challengehub.user.profile.repository.ProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

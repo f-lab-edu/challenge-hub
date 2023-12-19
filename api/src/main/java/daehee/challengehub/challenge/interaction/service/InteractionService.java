@@ -1,11 +1,18 @@
 package daehee.challengehub.challenge.interaction.service;
 
-import daehee.challengehub.challenge.interaction.model.*;
+import daehee.challengehub.challenge.interaction.model.ChallengeCommentDto;
+import daehee.challengehub.challenge.interaction.model.ChallengeParticipantDto;
+import daehee.challengehub.challenge.interaction.model.CommentsResponseDto;
+import daehee.challengehub.challenge.interaction.model.LeaderboardResponseDto;
+import daehee.challengehub.challenge.interaction.model.ManageParticipantsResponseDto;
+import daehee.challengehub.challenge.interaction.model.ParticipantDetailsResponseDto;
+import daehee.challengehub.challenge.interaction.model.ParticipantScoreDto;
+import daehee.challengehub.challenge.interaction.model.PostCommentResponseDto;
 import daehee.challengehub.challenge.interaction.repository.InteractionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -24,7 +31,7 @@ public class InteractionService {
                 .challengeId(id)
                 .userId(123L) // 예시: 현재 로그인한 사용자 ID
                 .commentText(commentText)
-                .postedAt(LocalDateTime.now().toString())
+                .postedAt(Instant.now())
                 .build();
 
         interactionRepository.postComment(id, newComment);

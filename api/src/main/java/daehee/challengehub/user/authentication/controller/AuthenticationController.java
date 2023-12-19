@@ -1,9 +1,21 @@
 package daehee.challengehub.user.authentication.controller;
 
-import daehee.challengehub.user.authentication.model.*;
+
+import daehee.challengehub.user.authentication.model.LoginResponseDto;
+import daehee.challengehub.user.authentication.model.PasswordChangeDto;
+import daehee.challengehub.user.authentication.model.ResetPasswordResponseDto;
+import daehee.challengehub.user.authentication.model.SignupResponseDto;
+import daehee.challengehub.user.authentication.model.UserLoginDto;
+import daehee.challengehub.user.authentication.model.UserSignupDto;
+import daehee.challengehub.user.authentication.model.VerifyEmailResponseDto;
 import daehee.challengehub.user.authentication.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/auth")

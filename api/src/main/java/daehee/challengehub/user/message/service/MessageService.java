@@ -1,6 +1,10 @@
 package daehee.challengehub.user.message.service;
 
-import daehee.challengehub.user.message.model.*;
+import daehee.challengehub.user.message.model.ChatRoomDto;
+import daehee.challengehub.user.message.model.ChatRoomsResponseDto;
+import daehee.challengehub.user.message.model.MessageDto;
+import daehee.challengehub.user.message.model.MessageHistoryResponseDto;
+import daehee.challengehub.user.message.model.SendMessageResponseDto;
 import daehee.challengehub.user.message.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

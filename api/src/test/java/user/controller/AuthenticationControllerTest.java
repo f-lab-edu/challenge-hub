@@ -39,7 +39,7 @@ public class AuthenticationControllerTest {
                 .add("password", "password123")
                 .build();
         MvcResult result = mockMvc.perform(post("/auth/users")
-                        .contentType("application/json;charset=UTF-8")
+                        .contentType("application.yml/json;charset=UTF-8")
                         .content(signupJson))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -67,7 +67,7 @@ public class AuthenticationControllerTest {
                 .add("password", "password123")
                 .build();
         MvcResult result = mockMvc.perform(post("/auth/login")
-                        .contentType("application/json;charset=UTF-8")
+                        .contentType("application.yml/json;charset=UTF-8")
                         .content(loginJson))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -84,7 +84,7 @@ public class AuthenticationControllerTest {
                 .add("newPassword", "newPassword456")
                 .build();
         MvcResult result = mockMvc.perform(post("/auth/password/reset")
-                        .contentType("application/json;charset=UTF-8")
+                        .contentType("application.yml/json;charset=UTF-8")
                         .content(resetPasswordJson))
                 .andExpect(status().isOk())
                 .andReturn();
