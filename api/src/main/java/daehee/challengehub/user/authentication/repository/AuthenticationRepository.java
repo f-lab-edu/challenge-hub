@@ -1,6 +1,8 @@
 package daehee.challengehub.user.authentication.repository;
 
 import daehee.challengehub.user.authentication.model.UserSignupDto;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
@@ -8,6 +10,13 @@ import java.util.Map;
 
 @Repository
 public class AuthenticationRepository {
+    private final MongoTemplate mongoTemplate;
+
+    @Autowired
+    public AuthenticationRepository(MongoTemplate mongoTemplate) {
+        this.mongoTemplate = mongoTemplate;
+    }
+
     private final Map<String, UserSignupDto> users = new HashMap<>();
 
     public AuthenticationRepository() {
