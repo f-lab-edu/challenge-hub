@@ -1,16 +1,21 @@
-version: '3.8'
+version: '3'
 services:
-  mysql-container:
-    image: mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_PASS}
-      MYSQL_DATABASE: ${MYSQL_DB}
+  mongodb:
+    image: mongo
+    container_name: mongodb-container
     ports:
-      - "3306:3306"
+      - "27017:27017"
+    env_file:
+      - plain.env
+    networks:
+      - bridge-net
+    command: --bind_ip 0.0.0.0
+    volumes:
+      - mongodb_data:/data/db
 
-  spring-app:
-    build: ./api
-    ports:
-      - "8080:8080"
-    depends_on:
-      - mysql-container
+networks:
+  bridge-net:
+    external: true
+
+volumes:
+  mongodb_data:

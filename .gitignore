@@ -4,3 +4,8 @@ build/
 
 ### IntelliJ IDEA ###
 .idea
+
+# Environment variables
+docker/database.env
+docker/decryption.env
+docker/plain.env
