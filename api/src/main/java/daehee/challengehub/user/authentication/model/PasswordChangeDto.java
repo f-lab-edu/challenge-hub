@@ -8,6 +8,7 @@ import lombok.Getter;
 @Builder
 @AllArgsConstructor
 public class PasswordChangeDto {
+    private final String email;
     private final String currentPassword;
     private final String newPassword;
 }
