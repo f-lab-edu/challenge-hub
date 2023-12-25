@@ -42,14 +42,7 @@ public class AuthenticationService {
 
     // 비밀번호 재설정 로직
     public boolean resetPassword(PasswordChangeDto passwordChangeDto) {
-        boolean isCorrectPassword = authenticationRepository.validateLogin(
-                passwordChangeDto.getEmail(), passwordChangeDto.getCurrentPassword());
-
-        if (isCorrectPassword) {
-            return authenticationRepository.updatePassword(
-                    passwordChangeDto.getEmail(), passwordChangeDto.getNewPassword());
-        } else {
-            return false;
-        }
+        return authenticationRepository.validateLogin(passwordChangeDto.getEmail(), passwordChangeDto.getCurrentPassword())
+                && authenticationRepository.updatePassword(passwordChangeDto.getEmail(), passwordChangeDto.getNewPassword());
     }
 }
