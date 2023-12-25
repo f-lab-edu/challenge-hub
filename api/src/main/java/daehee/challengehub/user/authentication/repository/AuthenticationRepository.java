@@ -1,5 +1,6 @@
 package daehee.challengehub.user.authentication.repository;
 
+import com.mongodb.client.result.UpdateResult;
 import daehee.challengehub.user.authentication.entity.User;
 import daehee.challengehub.user.authentication.model.UserSignupDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,10 +46,11 @@ public class AuthenticationRepository {
     }
 
     // 비밀번호 재설정 관련 로직
-    public void updatePassword(String email, String newPassword) {
-        // MongoDB에서 사용자의 비밀번호 업데이트
+    public boolean updatePassword(String email, String newPassword) {
         Query query = new Query(Criteria.where("email").is(email));
         Update update = new Update().set("password", newPassword);
-        mongoTemplate.updateFirst(query, update, UserSignupDto.class, "users");
+        UpdateResult result = mongoTemplate.updateFirst(query, update, UserSignupDto.class, "users");
+
+        return result.getModifiedCount() == 1; // 비밀번호가 성공적으로 변경되었으면 true 반환
     }
 }

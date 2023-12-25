@@ -46,9 +46,8 @@ public class AuthenticationService {
                 passwordChangeDto.getEmail(), passwordChangeDto.getCurrentPassword());
 
         if (isCorrectPassword) {
-            authenticationRepository.updatePassword(
+            return authenticationRepository.updatePassword(
                     passwordChangeDto.getEmail(), passwordChangeDto.getNewPassword());
-            return true;
         } else {
             return false;
         }
