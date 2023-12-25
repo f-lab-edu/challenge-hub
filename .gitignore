@@ -2,7 +2,8 @@
 build/
 !gradle/wrapper/gradle-wrapper.jar
 
-*.class
+# Ignore 'out' directories in all submodules
+*/out/
 
 ### IntelliJ IDEA ###
 .idea
