@@ -1,8 +1,5 @@
 package daehee.challengehub.challenge.interaction.repository;
 
-import daehee.challengehub.challenge.interaction.model.ChallengeCommentDto;
-import daehee.challengehub.challenge.interaction.model.ChallengeParticipantDto;
-import daehee.challengehub.challenge.interaction.model.ParticipantScoreDto;
 import org.springframework.stereotype.Repository;
 
 import java.time.Instant;

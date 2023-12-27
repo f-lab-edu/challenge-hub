@@ -1,11 +1,5 @@
 package daehee.challengehub.challenge.interaction.controller;
 
-import daehee.challengehub.challenge.interaction.model.ChallengeParticipantDto;
-import daehee.challengehub.challenge.interaction.model.CommentsResponseDto;
-import daehee.challengehub.challenge.interaction.model.LeaderboardResponseDto;
-import daehee.challengehub.challenge.interaction.model.ManageParticipantsResponseDto;
-import daehee.challengehub.challenge.interaction.model.ParticipantDetailsResponseDto;
-import daehee.challengehub.challenge.interaction.model.PostCommentResponseDto;
 import daehee.challengehub.challenge.interaction.service.InteractionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,34 +20,29 @@ public class InteractionController {
         this.interactionService = interactionService;
     }
 
-    // 챌린지에 대한 댓글 작성 API
-    // {id}는 챌린지의 고유 ID를 나타냄
-    @PostMapping("/{id}/comments")
-    public PostCommentResponseDto postComment(@PathVariable Long id, @RequestBody String commentText) {
-        return interactionService.postComment(id, commentText);
+    // 챌린지 채팅방의 메시지를 전송하는 API
+    @PostMapping("/{id}/chat/message")
+    public ResponseEntity<?> postChatMessage(@PathVariable Long id, @RequestBody ChatMessageDto chatMessageDto) {
+        interactionService.postChatMessage(id, chatMessageDto);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    // 특정 챌린지의 모든 댓글을 조회하는 API
-    @GetMapping("/{id}/comments")
-    public CommentsResponseDto getComments(@PathVariable Long id) {
-        return interactionService.getComments(id);
+    // 특정 챌린지의 채팅방 내용을 조회하는 API
+    @GetMapping("/{id}/chat")
+    public List<ChatMessageDto> getChatMessages(@PathVariable Long id) {
+        return interactionService.getChatMessages(id);
     }
 
-    // 챌린지별 리더보드 조회 API
-    @GetMapping("/{id}/leaderboard")
-    public LeaderboardResponseDto getLeaderboard(@PathVariable Long id) {
-        return interactionService.getLeaderboard(id);
+    // 챌린지에 후기 및 별점을 작성하는 API
+    @PostMapping("/{id}/review")
+    public ResponseEntity<?> postReview(@PathVariable Long id, @RequestBody ReviewDto reviewDto) {
+        interactionService.postReview(id, reviewDto);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    // 챌린지 참여자들의 상세 정보 조회 API
-    @GetMapping("/{id}/participants/details")
-    public ParticipantDetailsResponseDto getParticipantDetails(@PathVariable Long id) {
-        return interactionService.getParticipantDetails(id);
-    }
-
-    // 챌린지 참여자들의 상태를 관리하는 API
-    @PostMapping("/{id}/participants/manage")
-    public ManageParticipantsResponseDto manageParticipants(@PathVariable Long id, @RequestBody ChallengeParticipantDto participantData) {
-        return interactionService.manageParticipants(id, participantData);
+    // 특정 챌린지의 모든 후기 및 별점을 조회하는 API
+    @GetMapping("/{id}/reviews")
+    public List<ReviewDto> getReviews(@PathVariable Long id) {
+        return interactionService.getReviews(id);
     }
 }

@@ -1,11 +1,6 @@
 package challenge.service;
 
 
-import daehee.challengehub.challenge.verification.model.ChallengeVerificationDto;
-import daehee.challengehub.challenge.verification.model.DeleteVerificationResponseDto;
-import daehee.challengehub.challenge.verification.model.UpdateVerificationResponseDto;
-import daehee.challengehub.challenge.verification.model.UploadVerificationResponseDto;
-import daehee.challengehub.challenge.verification.model.VerificationsResponseDto;
 import daehee.challengehub.challenge.verification.repository.VerificationRepository;
 import daehee.challengehub.challenge.verification.service.VerificationService;
 import org.junit.jupiter.api.Test;

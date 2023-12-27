@@ -1,6 +1,5 @@
 package daehee.challengehub.challenge.verification.repository;
 
-import daehee.challengehub.challenge.verification.model.ChallengeVerificationDto;
 import org.springframework.stereotype.Repository;
 
 import java.time.Instant;

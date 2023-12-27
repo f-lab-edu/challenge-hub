@@ -1,8 +1,5 @@
 package daehee.challengehub.challenge.management.repository;
 
-import daehee.challengehub.challenge.management.model.ChallengeDto;
-import daehee.challengehub.challenge.management.model.ChallengeImageDto;
-import daehee.challengehub.challenge.management.model.ChallengeTagDto;
 import org.springframework.stereotype.Repository;
 
 import java.time.Instant;

@@ -1,13 +1,5 @@
 package daehee.challengehub.challenge.interaction.service;
 
-import daehee.challengehub.challenge.interaction.model.ChallengeCommentDto;
-import daehee.challengehub.challenge.interaction.model.ChallengeParticipantDto;
-import daehee.challengehub.challenge.interaction.model.CommentsResponseDto;
-import daehee.challengehub.challenge.interaction.model.LeaderboardResponseDto;
-import daehee.challengehub.challenge.interaction.model.ManageParticipantsResponseDto;
-import daehee.challengehub.challenge.interaction.model.ParticipantDetailsResponseDto;
-import daehee.challengehub.challenge.interaction.model.ParticipantScoreDto;
-import daehee.challengehub.challenge.interaction.model.PostCommentResponseDto;
 import daehee.challengehub.challenge.interaction.repository.InteractionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

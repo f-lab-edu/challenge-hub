@@ -1,13 +1,6 @@
 package challenge.service;
 
 
-import daehee.challengehub.challenge.interaction.model.ChallengeCommentDto;
-import daehee.challengehub.challenge.interaction.model.ChallengeParticipantDto;
-import daehee.challengehub.challenge.interaction.model.CommentsResponseDto;
-import daehee.challengehub.challenge.interaction.model.LeaderboardResponseDto;
-import daehee.challengehub.challenge.interaction.model.ParticipantDetailsResponseDto;
-import daehee.challengehub.challenge.interaction.model.ParticipantScoreDto;
-import daehee.challengehub.challenge.interaction.model.PostCommentResponseDto;
 import daehee.challengehub.challenge.interaction.repository.InteractionRepository;
 import daehee.challengehub.challenge.interaction.service.InteractionService;
 import org.junit.jupiter.api.Test;
