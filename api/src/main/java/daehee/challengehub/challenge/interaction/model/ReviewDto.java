@@ -1,9 +1,11 @@
 package daehee.challengehub.challenge.interaction.model;
 
+import lombok.Builder;
 import lombok.Getter;
 
 import java.time.Instant;
 
+@Builder
 @Getter
 public class ReviewDto {
     private String id;
