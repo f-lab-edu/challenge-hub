@@ -5,7 +5,7 @@ import lombok.Getter;
 import java.time.Instant;
 
 @Getter
-public class ChatMessageDTO {
+public class ChatMessageDto {
     private String id;
     private String chatRoomId;
     private String senderId;

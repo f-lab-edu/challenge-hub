@@ -5,7 +5,7 @@ import lombok.Getter;
 import java.time.Instant;
 
 @Getter
-public class VerificationDTO {
+public class VerificationDto {
     private String id;
     private String challengeId;
     private String participantId;

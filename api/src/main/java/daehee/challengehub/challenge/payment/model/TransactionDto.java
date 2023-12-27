@@ -2,7 +2,7 @@ package daehee.challengehub.challenge.payment.model;
 
 import java.time.Instant;
 
-public class TransactionDTO {
+public class TransactionDto {
     private String id;
     private String userId;
     private Instant transactionDate;

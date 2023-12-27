@@ -5,7 +5,7 @@ import lombok.Getter;
 import java.time.Instant;
 
 @Getter
-public class ReviewDTO {
+public class ReviewDto {
     private String id;
     private String challengeId;
     private String authorId;

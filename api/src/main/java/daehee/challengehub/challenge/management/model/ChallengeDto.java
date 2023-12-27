@@ -6,7 +6,7 @@ import java.time.Instant;
 import java.util.List;
 
 @Getter
-public class ChallengeDTO {
+public class ChallengeDto {
     private String id;
     private String title;
     private String frequency;
