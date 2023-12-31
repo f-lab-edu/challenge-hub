@@ -1,6 +1,6 @@
 package challenge.service;
 
-
+import daehee.challengehub.challenge.management.model.*;
 import daehee.challengehub.challenge.management.repository.ManagementRepository;
 import daehee.challengehub.challenge.management.service.ManagementService;
 import org.junit.jupiter.api.Test;
@@ -9,17 +9,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ManagementServiceTest {
@@ -39,11 +34,11 @@ public class ManagementServiceTest {
                 .description("Description")
                 .tags(Arrays.asList("Tag1", "Tag2"))
                 .imageUrls(Arrays.asList("https://example.com/image1.jpg", "https://example.com/image2.jpg"))
-                .startDate(Instant.parse("2023-11-01T13:00:00Z"))
-                .endDate(Instant.parse("2023-11-30T13:00:00Z"))
+                .startDate("2023-11-01")
+                .endDate("2023-11-30")
                 .createdBy("admin")
-                .createdAt(Instant.parse("2023-11-15T13:00:00Z"))
-                .lastModified(Instant.parse("2023-11-15T13:00:00Z"))
+                .createdAt("2023-11-15")
+                .lastModified("2023-11-15")
                 .build();
         doNothing().when(managementRepository).createChallenge(any(ChallengeDto.class));
 
@@ -66,11 +61,11 @@ public class ManagementServiceTest {
                         .description("Description 1")
                         .tags(List.of("태그1"))
                         .imageUrls(List.of("https://example.com/image1.jpg"))
-                        .startDate(Instant.parse("2023-11-01T13:00:00Z"))
-                        .endDate(Instant.parse("2023-11-30T13:00:00Z"))
+                        .startDate("2023-11-01")
+                        .endDate("2023-11-30")
                         .createdBy("creator1")
-                        .createdAt(Instant.parse("2023-10-01T13:00:00Z"))
-                        .lastModified(Instant.parse("2023-10-05T13:00:00Z"))
+                        .createdAt("2023-10-01")
+                        .lastModified("2023-10-05")
                         .build(),
                 ChallengeDto.builder()
                         .challengeId(2L)
@@ -78,11 +73,11 @@ public class ManagementServiceTest {
                         .description("Description 2")
                         .tags(List.of("태그2"))
                         .imageUrls(List.of("https://example.com/image2.jpg"))
-                        .startDate(Instant.parse("2023-11-02T13:00:00Z"))
-                        .endDate(Instant.parse("2023-12-02T13:00:00Z"))
+                        .startDate("2023-11-02")
+                        .endDate("2023-12-02")
                         .createdBy("creator2")
-                        .createdAt(Instant.parse("2023-10-02T13:00:00Z"))
-                        .lastModified(Instant.parse("2023-10-06T13:00:00Z"))
+                        .createdAt("2023-10-02")
+                        .lastModified("2023-10-06")
                         .build()
         );
         when(managementRepository.getAllChallenges()).thenReturn(mockChallenges);
@@ -105,11 +100,11 @@ public class ManagementServiceTest {
                 .description("Description")
                 .tags(Arrays.asList("태그1", "태그2"))
                 .imageUrls(Arrays.asList("https://example.com/image1.jpg", "https://example.com/image2.jpg"))
-                .startDate(Instant.parse("2023-11-01T13:00:00Z"))
-                .endDate(Instant.parse("2023-11-30T13:00:00Z"))
+                .startDate("2023-11-01")
+                .endDate("2023-11-30")
                 .createdBy("creator")
-                .createdAt(Instant.parse("2023-10-01T13:00:00Z"))
-                .lastModified(Instant.parse("2023-10-05T13:00:00Z"))
+                .createdAt("2023-10-01")
+                .lastModified("2023-10-05")
                 .build();
         when(managementRepository.getChallengeById(challengeId)).thenReturn(mockChallenge);
 
@@ -131,11 +126,11 @@ public class ManagementServiceTest {
                 .description("Updated Description")
                 .tags(Arrays.asList("수정된 태그1", "수정된 태그2"))
                 .imageUrls(Arrays.asList("https://example.com/updated_image1.jpg", "https://example.com/updated_image2.jpg"))
-                .startDate(Instant.parse("2023-11-02T13:00:00Z"))
-                .endDate(Instant.parse("2023-12-02T13:00:00Z"))
+                .startDate("2023-11-02")
+                .endDate("2023-12-02")
                 .createdBy("updatedCreator")
-                .createdAt(Instant.parse("2023-10-02T13:00:00Z"))
-                .lastModified(Instant.parse("2023-10-06T13:00:00Z"))
+                .createdAt("2023-10-02")
+                .lastModified("2023-10-06")
                 .build();
         doNothing().when(managementRepository).updateChallenge(eq(challengeId), any(ChallengeDto.class));
 

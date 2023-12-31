@@ -1,25 +1,23 @@
 package daehee.challengehub.challenge.management.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
-import java.time.Instant;
 import java.util.List;
 
 @Getter
+@Builder
+@AllArgsConstructor
 public class ChallengeDto {
-    private String id;
-    private String title;
-    private String frequency;
-    private String duration;
-    private Instant startTime;
-    private Instant endTime;
-    private Instant startDate;
-    private String verificationMethod;
-    private List<String> verificationExampleUrls;
-    private boolean isCameraOnly;
-    private String description;
-    private String category;
-    private String coverImageUrl;
-    private List<String> keywords;
-    private boolean isPublic;
+    private final Long challengeId;
+    private final String title;
+    private final String description;
+    private final List<String> tags;
+    private final List<String> imageUrls;
+    private final String startDate;
+    private final String endDate;
+    private final String createdBy;
+    private final String createdAt;
+    private final String lastModified;
 }

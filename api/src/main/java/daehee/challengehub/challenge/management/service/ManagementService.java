@@ -1,6 +1,6 @@
 package daehee.challengehub.challenge.management.service;
 
-
+import daehee.challengehub.challenge.management.model.*;
 import daehee.challengehub.challenge.management.repository.ManagementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
