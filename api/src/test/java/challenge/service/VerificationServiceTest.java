@@ -1,11 +1,6 @@
 package challenge.service;
 
-
-import daehee.challengehub.challenge.verification.model.ChallengeVerificationDto;
-import daehee.challengehub.challenge.verification.model.DeleteVerificationResponseDto;
-import daehee.challengehub.challenge.verification.model.UpdateVerificationResponseDto;
-import daehee.challengehub.challenge.verification.model.UploadVerificationResponseDto;
-import daehee.challengehub.challenge.verification.model.VerificationsResponseDto;
+import daehee.challengehub.challenge.verification.model.*;
 import daehee.challengehub.challenge.verification.repository.VerificationRepository;
 import daehee.challengehub.challenge.verification.service.VerificationService;
 import org.junit.jupiter.api.Test;
@@ -14,15 +9,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class VerificationServiceTest {
@@ -42,7 +33,7 @@ public class VerificationServiceTest {
                 .userId(123L)
                 .verificationText("새 인증 내용")
                 .imageUrls(List.of("https://example.com/image.jpg"))
-                .submittedAt(Instant.parse("2023-11-15T13:00:00Z"))
+                .submittedAt("2023-11-15")
                 .build();
         doNothing().when(verificationRepository).saveVerification(any(ChallengeVerificationDto.class));
 
@@ -65,7 +56,7 @@ public class VerificationServiceTest {
                         .userId(123L)
                         .verificationText("인증 내용 1")
                         .imageUrls(List.of("https://example.com/image1.jpg"))
-                        .submittedAt(Instant.parse("2023-11-08T13:00:00Z"))
+                        .submittedAt("2023-11-08")
                         .build(),
                 ChallengeVerificationDto.builder()
                         .verificationId(2L)
@@ -73,7 +64,7 @@ public class VerificationServiceTest {
                         .userId(456L)
                         .verificationText("인증 내용 2")
                         .imageUrls(List.of("https://example.com/image2.jpg"))
-                        .submittedAt(Instant.parse("2023-11-15T13:00:00Z"))
+                        .submittedAt("2023-11-15")
                         .build()
         );
         when(verificationRepository.getVerificationsByChallengeId(challengeId)).thenReturn(mockVerifications);
@@ -101,7 +92,7 @@ public class VerificationServiceTest {
                 .userId(789L)
                 .verificationText("원래 인증 내용")
                 .imageUrls(List.of("https://example.com/original.jpg"))
-                .submittedAt(Instant.parse("2023-11-15T13:00:00Z"))
+                .submittedAt("2023-11-15")
                 .build();
         when(verificationRepository.getVerificationById(verificationId)).thenReturn(existingVerification);
 

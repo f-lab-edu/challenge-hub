@@ -1,18 +1,14 @@
 package daehee.challengehub.challenge.interaction.service;
 
-import daehee.challengehub.challenge.interaction.model.ChallengeCommentDto;
-import daehee.challengehub.challenge.interaction.model.ChallengeParticipantDto;
-import daehee.challengehub.challenge.interaction.model.CommentsResponseDto;
-import daehee.challengehub.challenge.interaction.model.LeaderboardResponseDto;
-import daehee.challengehub.challenge.interaction.model.ManageParticipantsResponseDto;
-import daehee.challengehub.challenge.interaction.model.ParticipantDetailsResponseDto;
-import daehee.challengehub.challenge.interaction.model.ParticipantScoreDto;
-import daehee.challengehub.challenge.interaction.model.PostCommentResponseDto;
+import daehee.challengehub.challenge.interaction.entity.ChatMessage;
+import daehee.challengehub.challenge.interaction.entity.Review;
+import daehee.challengehub.challenge.interaction.model.ChatMessageDto;
+import daehee.challengehub.challenge.interaction.model.ReviewDto;
 import daehee.challengehub.challenge.interaction.repository.InteractionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -25,42 +21,25 @@ public class InteractionService {
         this.interactionRepository = interactionRepository;
     }
 
-    // 챌린지에 대한 댓글 작성 로직
-    public PostCommentResponseDto postComment(Long id, String commentText) {
-        ChallengeCommentDto newComment = ChallengeCommentDto.builder()
-                .challengeId(id)
-                .userId(123L) // 예시: 현재 로그인한 사용자 ID
-                .commentText(commentText)
-                .postedAt(Instant.now())
-                .build();
-
-        interactionRepository.postComment(id, newComment);
-        return new PostCommentResponseDto("댓글 작성 성공", newComment);
+    // 챌린지 채팅방의 메시지를 전송하는 로직
+    public ChatMessage postChatMessage(String challengeId, ChatMessageDto chatMessageDto) {
+        return interactionRepository.saveChatMessage(challengeId, chatMessageDto);
     }
 
-    // 챌린지 댓글 목록 조회 로직
-    public CommentsResponseDto getComments(Long id) {
-        List<ChallengeCommentDto> comments = interactionRepository.getComments(id);
-        return new CommentsResponseDto(comments);
+    // 특정 챌린지의 채팅방 내용을 조회하는 로직
+    // TODO: 모든 거 전체 다 가져오는 것은 당연히 문제가 생길 것이다. 이것에 대해서 공부 해야한다.
+    public List<ChatMessage> getChatMessages(String challengeId) {
+        return interactionRepository.findChatMessagesByChallengeId(challengeId);
     }
 
-    // 챌린지별 리더보드 조회 로직
-    public LeaderboardResponseDto getLeaderboard(Long id) {
-        // interactionRepository.getLeaderboard(id)가 List<ParticipantScoreDto>를 반환하도록 가정
-        List<ParticipantScoreDto> leaderboard = interactionRepository.getLeaderboard(id);
-
-        return new LeaderboardResponseDto(leaderboard);
+    // 챌린지에 후기 및 별점을 작성하는 로직
+    public Review postReview(String challengeId, ReviewDto reviewDto) {
+        return interactionRepository.saveReview(challengeId, reviewDto);
     }
 
-    // 참여자 상세 정보 조회 로직
-    public ParticipantDetailsResponseDto getParticipantDetails(Long id) {
-        List<ChallengeParticipantDto> participants = interactionRepository.getParticipants(id);
-        return new ParticipantDetailsResponseDto(participants);
-    }
-
-    // 참여자 관리 로직
-    public ManageParticipantsResponseDto manageParticipants(Long id, ChallengeParticipantDto participantData) {
-        // TODO: 참여자 관리 로직 구현
-        return new ManageParticipantsResponseDto(String.format("챌린지 ID %d에 대한 참여자 관리 성공", id));
+    // 특정 챌린지의 모든 후기 및 별점을 조회하는 로직
+    // TODO: 모든 거 전체 다 가져오는 것은 당연히 문제가 생길 것이다. 이것에 대해서 공부 해야한다.
+    public List<Review> getReviews(String challengeId) {
+        return interactionRepository.findReviewsByChallengeId(challengeId);
     }
 }

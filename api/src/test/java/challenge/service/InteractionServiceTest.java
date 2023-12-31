@@ -1,13 +1,6 @@
 package challenge.service;
 
-
-import daehee.challengehub.challenge.interaction.model.ChallengeCommentDto;
-import daehee.challengehub.challenge.interaction.model.ChallengeParticipantDto;
-import daehee.challengehub.challenge.interaction.model.CommentsResponseDto;
-import daehee.challengehub.challenge.interaction.model.LeaderboardResponseDto;
-import daehee.challengehub.challenge.interaction.model.ParticipantDetailsResponseDto;
-import daehee.challengehub.challenge.interaction.model.ParticipantScoreDto;
-import daehee.challengehub.challenge.interaction.model.PostCommentResponseDto;
+import daehee.challengehub.challenge.interaction.model.*;
 import daehee.challengehub.challenge.interaction.repository.InteractionRepository;
 import daehee.challengehub.challenge.interaction.service.InteractionService;
 import org.junit.jupiter.api.Test;
@@ -16,17 +9,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class InteractionServiceTest {
@@ -42,7 +29,7 @@ public class InteractionServiceTest {
         // Given
         Long challengeId = 3L;
         String commentText = "덕분에 즐겁게 챌린지 즐겼습니다. 감사합니다.";
-        ChallengeCommentDto newComment = new ChallengeCommentDto(1L, challengeId, 123L, commentText, Instant.parse("2023-11-15T12:00:00Z"));
+        ChallengeCommentDto newComment = new ChallengeCommentDto(1L, challengeId, 123L, commentText, "2023-11-15T12:00:00Z");
         doNothing().when(interactionRepository).postComment(eq(challengeId), any(ChallengeCommentDto.class));
 
         // When
@@ -63,14 +50,14 @@ public class InteractionServiceTest {
                         .challengeId(3L)
                         .userId(123L)
                         .commentText("좋은 챌린지 였습니다.")
-                        .postedAt(Instant.parse("2023-11-15T12:00:00Z"))
+                        .postedAt("2023-11-15T12:00:00Z")
                         .build(),
                 ChallengeCommentDto.builder()
                         .commentId(2L)
                         .challengeId(4L)
                         .userId(456L)
                         .commentText("참여하여 너무나도 즐거웠습니다.")
-                        .postedAt(Instant.parse("2023-11-15T13:00:00Z"))
+                        .postedAt("2023-11-15T13:00:00Z")
                         .build()
         );
         when(interactionRepository.getComments(challengeId)).thenReturn(mockComments);
@@ -119,13 +106,13 @@ public class InteractionServiceTest {
                         .participantId(3L)
                         .challengeId(5L)
                         .participantUsername("user3")
-                        .joinedAt(Instant.parse("2023-11-13T13:00:00Z"))
+                        .joinedAt("2023-11-13")
                         .build(),
                 ChallengeParticipantDto.builder()
                         .participantId(4L)
                         .challengeId(6L)
                         .participantUsername("user4")
-                        .joinedAt(Instant.parse("2023-11-12T13:00:00Z"))
+                        .joinedAt("2023-11-12")
                         .build()
         );
         when(interactionRepository.getParticipants(challengeId)).thenReturn(mockParticipants);
