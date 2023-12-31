@@ -5,7 +5,10 @@ import daehee.challengehub.challenge.management.model.ChallengeImageDto;
 import daehee.challengehub.challenge.management.model.ChallengeTagDto;
 import org.springframework.stereotype.Repository;
 
-import java.util.*;
+import java.time.Instant;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Repository
 public class ManagementRepository {
@@ -22,13 +25,13 @@ public class ManagementRepository {
                 .challengeId(challengeIdCounter++)
                 .title("30일 요가 도전")
                 .description("초보자를 위한 매일 요가 도전.")
-                .tags(Arrays.asList("요가", "건강"))
-                .imageUrls(Arrays.asList("https://example.com/image1.jpg"))
-                .startDate("2023-11-01")
-                .endDate("2023-11-30")
+                .tags(List.of("요가", "건강"))
+                .imageUrls(List.of("https://example.com/image1.jpg"))
+                .startDate(Instant.parse("2023-11-01T09:30:00Z"))
+                .endDate(Instant.parse("2023-11-30T23:59:00Z"))
                 .createdBy("사용자1")
-                .createdAt("2023-10-15")
-                .lastModified("2023-11-01")
+                .createdAt(Instant.parse("2023-10-15T08:00:00Z"))
+                .lastModified(Instant.parse("2023-11-01T10:00:00Z"))
                 .build();
         challenges.put(challenge1.getChallengeId(), challenge1);
 
@@ -36,13 +39,13 @@ public class ManagementRepository {
                 .challengeId(challengeIdCounter++)
                 .title("매일 명상하기")
                 .description("매일 15분간 명상하기.")
-                .tags(Arrays.asList("명상", "마음챙김"))
-                .imageUrls(Arrays.asList("https://example.com/image2.jpg"))
-                .startDate("2023-11-05")
-                .endDate("2023-12-05")
+                .tags(List.of("명상", "마음챙김"))
+                .imageUrls(List.of("https://example.com/image2.jpg"))
+                .startDate(Instant.parse("2023-11-05T12:00:00Z"))
+                .endDate(Instant.parse("2023-12-05T20:00:00Z"))
                 .createdBy("사용자2")
-                .createdAt("2023-10-20")
-                .lastModified("2023-11-04")
+                .createdAt(Instant.parse("2023-10-20T14:30:00Z"))
+                .lastModified(Instant.parse("2023-11-04T17:45:00Z"))
                 .build();
         challenges.put(challenge2.getChallengeId(), challenge2);
 
@@ -82,7 +85,7 @@ public class ManagementRepository {
     }
 
     public List<ChallengeDto> getAllChallenges() {
-        return new ArrayList<>(challenges.values());
+         return List.of(challenges.values().toArray(new ChallengeDto[0]));
     }
 
     public void updateChallenge(Long challengeId, ChallengeDto challengeData) {

@@ -27,9 +27,6 @@ public class AuthenticationControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-    
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @Test
     public void testSignup() throws Exception {
@@ -37,14 +34,17 @@ public class AuthenticationControllerTest {
                 .add("username", "testUser")
                 .add("email", "test@example.com")
                 .add("password", "password123")
+                .add("nickname", "TestNickname")
+                .add("phoneNumber", "1234567890")
                 .build();
+
         MvcResult result = mockMvc.perform(post("/auth/users")
                         .contentType("application/json;charset=UTF-8")
                         .content(signupJson))
                 .andExpect(status().isOk())
                 .andReturn();
 
-        Map<String, Object> response = objectMapper.readValue(result.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<>() {});
+        Map<String, Object> response = new ObjectMapper().readValue(result.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<>() {});
         assertEquals("회원가입 성공", response.get("message"));
         assertNotNull(response.get("user"));
     }
@@ -55,7 +55,7 @@ public class AuthenticationControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        Map<String, String> response = objectMapper.readValue(result.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<>() {});
+        Map<String, Object> response = new ObjectMapper().readValue(result.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<>() {});
         assertEquals("이메일 인증 성공", response.get("message"));
         assertEquals("validToken123", response.get("token"));
     }
@@ -66,13 +66,14 @@ public class AuthenticationControllerTest {
                 .add("email", "user@example.com")
                 .add("password", "password123")
                 .build();
+
         MvcResult result = mockMvc.perform(post("/auth/login")
                         .contentType("application/json;charset=UTF-8")
                         .content(loginJson))
                 .andExpect(status().isOk())
                 .andReturn();
 
-        Map<String, String> response = objectMapper.readValue(result.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<>() {});
+        Map<String, Object> response = new ObjectMapper().readValue(result.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<>() {});
         assertEquals("로그인 성공", response.get("message"));
         assertEquals("user@example.com", response.get("userEmail"));
     }
@@ -83,13 +84,14 @@ public class AuthenticationControllerTest {
                 .add("currentPassword", "currentPassword123")
                 .add("newPassword", "newPassword456")
                 .build();
+
         MvcResult result = mockMvc.perform(post("/auth/password/reset")
                         .contentType("application/json;charset=UTF-8")
                         .content(resetPasswordJson))
                 .andExpect(status().isOk())
                 .andReturn();
 
-        Map<String, String> response = objectMapper.readValue(result.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<>() {});
+        Map<String, Object> response = new ObjectMapper().readValue(result.getResponse().getContentAsString(StandardCharsets.UTF_8), new TypeReference<>() {});
         assertEquals("비밀번호 재설정 성공", response.get("message"));
         assertEquals("newPassword456", response.get("newPassword"));
     }

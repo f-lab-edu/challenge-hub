@@ -1,0 +1,21 @@
+version: '3'
+services:
+  mongodb:
+    image: mongo
+    container_name: mongodb-container
+    ports:
+      - "27017:27017"
+    env_file:
+      - plain.env
+    networks:
+      - bridge-net
+    command: --bind_ip 0.0.0.0
+    volumes:
+      - mongodb_data:/data/db
+
+networks:
+  bridge-net:
+    external: true
+
+volumes:
+  mongodb_data:

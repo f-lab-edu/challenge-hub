@@ -1,7 +1,9 @@
 package user.service;
 
-import daehee.challengehub.common.exception.CustomException;
-import daehee.challengehub.user.authentication.model.*;
+import daehee.challengehub.user.authentication.entity.User;
+import daehee.challengehub.user.authentication.model.PasswordChangeDto;
+import daehee.challengehub.user.authentication.model.UserLoginDto;
+import daehee.challengehub.user.authentication.model.UserSignupDto;
 import daehee.challengehub.user.authentication.repository.AuthenticationRepository;
 import daehee.challengehub.user.authentication.service.AuthenticationService;
 import org.junit.jupiter.api.Test;
@@ -11,7 +13,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
@@ -34,14 +40,17 @@ public class AuthenticationServiceTest {
                 .email("standard@example.com")
                 .password("password123")
                 .build();
+        User user = signupDto.toEntity();
+        when(authenticationRepository.findByEmail(signupDto.getEmail())).thenReturn(user);
 
         // When
-        SignupResponseDto response = authenticationService.signup(signupDto);
+        User result = authenticationService.signup(signupDto);
 
         // Then
-        assertEquals("회원가입 성공", response.getMessage());
-        assertEquals(signupDto, response.getUser());
-        verify(authenticationRepository).save(signupDto);
+        assertNotNull(result);
+        assertEquals(signupDto.getUsername(), result.getUsername());
+        assertEquals(signupDto.getEmail(), result.getEmail());
+        verify(authenticationRepository).save(any(UserSignupDto.class));
     }
 
 
@@ -52,13 +61,11 @@ public class AuthenticationServiceTest {
         when(authenticationRepository.isEmailVerified(validToken)).thenReturn(true);
 
         // When
-        VerifyEmailResponseDto response = authenticationService.verifyEmail(validToken);
+        boolean isVerified = authenticationService.verifyEmail(validToken);
 
         // Then
-        assertEquals("이메일 인증 성공", response.getMessage());
-        assertEquals(validToken, response.getToken());
+        assertTrue(isVerified);
     }
-
 
     @Test
     public void testVerifyEmail_InvalidToken() {
@@ -67,9 +74,8 @@ public class AuthenticationServiceTest {
         when(authenticationRepository.isEmailVerified(invalidToken)).thenReturn(false);
 
         // When & Then
-        assertThrows(CustomException.class, () -> authenticationService.verifyEmail(invalidToken));
+        assertFalse(authenticationService.verifyEmail(invalidToken));
     }
-
 
     @Test
     public void testLogin_Success() {
@@ -79,15 +85,14 @@ public class AuthenticationServiceTest {
                 .password("password123")
                 .build();
         when(authenticationRepository.validateLogin(loginDto.getEmail(), loginDto.getPassword())).thenReturn(true);
+        when(authenticationRepository.findByEmail(loginDto.getEmail())).thenReturn(new User());
 
         // When
-        LoginResponseDto response = authenticationService.login(loginDto);
+        User result = authenticationService.login(loginDto);
 
         // Then
-        assertEquals("로그인 성공", response.getMessage());
-        assertEquals(loginDto.getEmail(), response.getUserEmail());
+        assertNotNull(result);
     }
-
 
     @Test
     public void testLogin_Failure() {
@@ -99,7 +104,7 @@ public class AuthenticationServiceTest {
         when(authenticationRepository.validateLogin(loginDto.getEmail(), loginDto.getPassword())).thenReturn(false);
 
         // When & Then
-        assertThrows(CustomException.class, () -> authenticationService.login(loginDto));
+        assertNull(authenticationService.login(loginDto));
     }
 
     @Test
@@ -109,13 +114,13 @@ public class AuthenticationServiceTest {
                 .currentPassword("oldPassword")
                 .newPassword("newPassword")
                 .build();
+        when(authenticationRepository.validateLogin(anyString(), eq("oldPassword"))).thenReturn(true);
 
         // When
-        ResetPasswordResponseDto response = authenticationService.resetPassword(passwordChangeDto);
+        boolean isReset = authenticationService.resetPassword(passwordChangeDto);
 
         // Then
-        assertEquals("비밀번호 재설정 성공", response.getMessage());
-        assertEquals("newPassword", response.getNewPassword());
+        assertTrue(isReset);
         verify(authenticationRepository).updatePassword(anyString(), eq("newPassword"));
     }
 

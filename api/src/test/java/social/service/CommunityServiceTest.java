@@ -1,6 +1,12 @@
 package social.service;
 
-import daehee.challengehub.social.community.model.*;
+
+import daehee.challengehub.social.community.model.CommunityFeedResponseDto;
+import daehee.challengehub.social.community.model.CommunityPostDto;
+import daehee.challengehub.social.community.model.CreatePostResponseDto;
+import daehee.challengehub.social.community.model.DeletePostResponseDto;
+import daehee.challengehub.social.community.model.LikePostResponseDto;
+import daehee.challengehub.social.community.model.UpdatePostResponseDto;
 import daehee.challengehub.social.community.repository.CommunityRepository;
 import daehee.challengehub.social.community.service.CommunityService;
 import org.junit.jupiter.api.Test;
@@ -9,11 +15,17 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 
 @ExtendWith(MockitoExtension.class)
 public class CommunityServiceTest {
@@ -33,8 +45,8 @@ public class CommunityServiceTest {
                         .authorId(100L)
                         .postContent("첫 번째 커뮤니티 포스트 내용")
                         .postTitle("첫 번째 커뮤니티 포스트")
-                        .creationDate("2023-11-10")
-                        .lastEdited("2023-11-10")
+                        .creationDate(Instant.parse("2023-11-10T13:00:00Z"))
+                        .lastEdited(Instant.parse("2023-11-10T13:00:00Z"))
                         .likeCount(15)
                         .commentCount(4)
                         .build(),
@@ -43,8 +55,8 @@ public class CommunityServiceTest {
                         .authorId(101L)
                         .postContent("두 번째 커뮤니티 포스트 내용")
                         .postTitle("두 번째 커뮤니티 포스트")
-                        .creationDate("2023-11-11")
-                        .lastEdited("2023-11-11")
+                        .creationDate(Instant.parse("2023-11-11T13:00:00Z"))
+                        .lastEdited(Instant.parse("2023-11-11T13:00:00Z"))
                         .likeCount(10)
                         .commentCount(2)
                         .build()
@@ -66,8 +78,8 @@ public class CommunityServiceTest {
                 .authorId(100L)
                 .postContent("새 게시물 내용")
                 .postTitle("새 게시물 제목")
-                .creationDate("2023-11-15")
-                .lastEdited("2023-11-15")
+                .creationDate(Instant.parse("2023-11-15T13:00:00Z"))
+                .lastEdited(Instant.parse("2023-11-15T13:00:00Z"))
                 .likeCount(0)
                 .commentCount(0)
                 .build();
@@ -90,8 +102,8 @@ public class CommunityServiceTest {
                 .authorId(100L)
                 .postContent("수정된 게시물 내용")
                 .postTitle("수정된 게시물 제목")
-                .creationDate("2023-11-15")
-                .lastEdited("2023-11-15")
+                .creationDate(Instant.parse("2023-11-15T13:00:00Z"))
+                .lastEdited(Instant.parse("2023-11-15T13:00:00Z"))
                 .likeCount(10)
                 .commentCount(5)
                 .build();
@@ -128,8 +140,8 @@ public class CommunityServiceTest {
                         .authorId(100L)
                         .postContent("첫 번째 커뮤니티 포스트 내용")
                         .postTitle("첫 번째 커뮤니티 포스트")
-                        .creationDate("2023-11-10")
-                        .lastEdited("2023-11-10")
+                        .creationDate(Instant.parse("2023-11-10T13:00:00Z"))
+                        .lastEdited(Instant.parse("2023-11-10T13:00:00Z"))
                         .likeCount(15)
                         .commentCount(4)
                         .build(),
@@ -138,8 +150,8 @@ public class CommunityServiceTest {
                         .authorId(101L)
                         .postContent("두 번째 커뮤니티 포스트 내용")
                         .postTitle("두 번째 커뮤니티 포스트")
-                        .creationDate("2023-11-11")
-                        .lastEdited("2023-11-11")
+                        .creationDate(Instant.parse("2023-11-11T13:00:00Z"))
+                        .lastEdited(Instant.parse("2023-11-11T13:00:00Z"))
                         .likeCount(10)
                         .commentCount(2)
                         .build()
@@ -162,8 +174,8 @@ public class CommunityServiceTest {
                 .authorId(100L)
                 .postContent("게시물 내용")
                 .postTitle("게시물 제목")
-                .creationDate("2023-11-15")
-                .lastEdited("2023-11-15")
+                .creationDate(Instant.parse("2023-11-15T13:00:00Z"))
+                .lastEdited(Instant.parse("2023-11-15T13:00:00Z"))
                 .likeCount(5)
                 .commentCount(2)
                 .build();

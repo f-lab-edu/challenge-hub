@@ -5,6 +5,7 @@ import daehee.challengehub.challenge.interaction.model.ChallengeParticipantDto;
 import daehee.challengehub.challenge.interaction.model.ParticipantScoreDto;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +26,7 @@ public class InteractionRepository {
                 .challengeId(3L)
                 .userId(123L)
                 .commentText("좋은 챌린지 였습니다.")
-                .postedAt("2023-11-15T12:00:00Z")
+                .postedAt(Instant.parse("2023-11-15T12:00:00Z"))
                 .build();
         challengeComments.computeIfAbsent(3L, k -> new ArrayList<>()).add(comment1);
 
@@ -34,7 +35,7 @@ public class InteractionRepository {
                 .challengeId(4L)
                 .userId(456L)
                 .commentText("참여하여 너무나도 즐거웠습니다.")
-                .postedAt("2023-11-15T13:00:00Z")
+                .postedAt(Instant.parse("2023-11-15T13:00:00Z"))
                 .build();
         challengeComments.computeIfAbsent(4L, k -> new ArrayList<>()).add(comment2);
 
@@ -43,7 +44,7 @@ public class InteractionRepository {
                 .participantId(1L)
                 .challengeId(3L)
                 .participantUsername("user1")
-                .joinedAt("2023-11-14")
+                .joinedAt(Instant.parse("2023-11-14T12:00:00Z"))
                 .build();
         challengeParticipants.computeIfAbsent(3L, k -> new ArrayList<>()).add(participant1);
 
@@ -51,7 +52,7 @@ public class InteractionRepository {
                 .participantId(2L)
                 .challengeId(4L)
                 .participantUsername("user2")
-                .joinedAt("2023-11-14")
+                .joinedAt(Instant.parse("2023-11-14T13:00:00Z"))
                 .build();
         challengeParticipants.computeIfAbsent(4L, k -> new ArrayList<>()).add(participant2);
 
@@ -60,7 +61,7 @@ public class InteractionRepository {
                 .participantId(1L)
                 .challengeId(3L)
                 .participantUsername("user1")
-                .joinedAt("2023-11-14")
+                .joinedAt(Instant.parse("2023-11-14T13:00:00Z"))
                 .build();
         challengeLeaderboards.computeIfAbsent(3L, k -> new ArrayList<>()).add(participant3);
 
@@ -68,7 +69,7 @@ public class InteractionRepository {
                 .participantId(2L)
                 .challengeId(4L)
                 .participantUsername("user2")
-                .joinedAt("2023-11-14")
+                .joinedAt(Instant.parse("2023-11-14T13:00:00Z"))
                 .build();
         challengeLeaderboards.computeIfAbsent(4L, k -> new ArrayList<>()).add(participant4);
     }

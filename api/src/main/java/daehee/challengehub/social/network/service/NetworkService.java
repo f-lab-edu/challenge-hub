@@ -1,10 +1,17 @@
 package daehee.challengehub.social.network.service;
 
-import daehee.challengehub.social.network.model.*;
+
+import daehee.challengehub.social.network.model.FollowDto;
+import daehee.challengehub.social.network.model.FollowResponseDto;
+import daehee.challengehub.social.network.model.FollowersDto;
+import daehee.challengehub.social.network.model.FollowersResponseDto;
+import daehee.challengehub.social.network.model.FollowingResponseDto;
+import daehee.challengehub.social.network.model.UnfollowResponseDto;
 import daehee.challengehub.social.network.repository.NetworkRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -63,7 +70,7 @@ public class NetworkService {
         return FollowDto.builder()
                 .followerId(followerId)
                 .followingId(followingId)
-                .followDate("2023-11-15")
+                .followDate(Instant.parse("2023-11-15T13:00:00Z"))
                 .isMutual(networkRepository.getFollowers(followingId).contains(followerId))
                 .followerUsername(followerUsername)
                 .followingUsername(followingUsername)

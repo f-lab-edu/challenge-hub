@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.Instant;
+
 @Getter
 @Builder
 @AllArgsConstructor
@@ -12,5 +14,5 @@ public class ChallengeCommentDto {
     private final Long challengeId;
     private final Long userId;
     private final String commentText;
-    private final String postedAt;
+    private final Instant postedAt;
 }

@@ -3,6 +3,7 @@ package daehee.challengehub.social.community.repository;
 import daehee.challengehub.social.community.model.CommunityPostDto;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,8 +20,8 @@ public class CommunityRepository {
                 .authorId(100L)
                 .postContent("첫 번째 커뮤니티 포스트 내용")
                 .postTitle("첫 번째 커뮤니티 포스트")
-                .creationDate("2023-11-10")
-                .lastEdited("2023-11-10")
+                .creationDate(Instant.parse("2023-11-10T13:00:00Z"))
+                .lastEdited(Instant.parse("2023-11-10T13:00:00Z"))
                 .likeCount(15)
                 .commentCount(4)
                 .build();
@@ -31,8 +32,8 @@ public class CommunityRepository {
                 .authorId(101L)
                 .postContent("두 번째 커뮤니티 포스트 내용")
                 .postTitle("두 번째 커뮤니티 포스트")
-                .creationDate("2023-11-11")
-                .lastEdited("2023-11-11")
+                .creationDate(Instant.parse("2023-11-11T13:00:00Z"))
+                .lastEdited(Instant.parse("2023-11-11T13:00:00Z"))
                 .likeCount(10)
                 .commentCount(2)
                 .build();

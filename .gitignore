@@ -2,5 +2,13 @@
 build/
 !gradle/wrapper/gradle-wrapper.jar
 
+# Ignore 'out' directories in all submodules
+*/out/
+
 ### IntelliJ IDEA ###
 .idea
+
+# Environment variables
+docker/database.env
+docker/decryption.env
+docker/plain.env

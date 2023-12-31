@@ -1,9 +1,19 @@
 package daehee.challengehub.user.profile.controller;
 
-import daehee.challengehub.user.profile.model.*;
+import daehee.challengehub.user.profile.model.AchievementsResponseDto;
+import daehee.challengehub.user.profile.model.ChangePasswordResponseDto;
+import daehee.challengehub.user.profile.model.PasswordChangeDto;
+import daehee.challengehub.user.profile.model.ProfileResponseDto;
+import daehee.challengehub.user.profile.model.UpdateProfileResponseDto;
+import daehee.challengehub.user.profile.model.UserProfileDto;
 import daehee.challengehub.user.profile.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/profile")

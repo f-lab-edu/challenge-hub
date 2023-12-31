@@ -1,6 +1,12 @@
 package daehee.challengehub.social.community.service;
 
-import daehee.challengehub.social.community.model.*;
+
+import daehee.challengehub.social.community.model.CommunityFeedResponseDto;
+import daehee.challengehub.social.community.model.CommunityPostDto;
+import daehee.challengehub.social.community.model.CreatePostResponseDto;
+import daehee.challengehub.social.community.model.DeletePostResponseDto;
+import daehee.challengehub.social.community.model.LikePostResponseDto;
+import daehee.challengehub.social.community.model.UpdatePostResponseDto;
 import daehee.challengehub.social.community.repository.CommunityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
