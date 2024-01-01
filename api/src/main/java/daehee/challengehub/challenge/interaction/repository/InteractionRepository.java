@@ -32,10 +32,10 @@ public class InteractionRepository {
         return mongoTemplate.save(chatMessage, "chat_messages");
     }
 
-    public List<ChatMessageDto> findChatMessagesByChallengeId(String challengeId) {
-        // 챌린지 ID에 따른 채팅 메시지 조회 로직
+    // 챌린지 ID에 따른 채팅 메시지 조회 로직
+    public List<ChatMessage> findChatMessagesByChallengeId(String challengeId) {
         Query query = new Query(Criteria.where("challengeId").is(challengeId));
-        return mongoTemplate.find(query, ChatMessageDto.class, "chat_messages");
+        return mongoTemplate.find(query, ChatMessage.class, "chat_messages");
     }
 
     public Review saveReview(String challengeId, ReviewDto reviewDto) {
@@ -49,11 +49,9 @@ public class InteractionRepository {
         return mongoTemplate.save(review, "reviews");
     }
 
-    public List<ReviewDto> findReviewsByChallengeId(String challengeId) {
-        // 챌린지 ID에 따른 후기 조회 로직
+    public List<Review> findReviewsByChallengeId(String challengeId) {
         Query query = new Query(Criteria.where("challengeId").is(challengeId));
-        return mongoTemplate.find(query, ReviewDto.class, "reviews");
+        return mongoTemplate.find(query, Review.class, "reviews");
     }
-
 }
 
