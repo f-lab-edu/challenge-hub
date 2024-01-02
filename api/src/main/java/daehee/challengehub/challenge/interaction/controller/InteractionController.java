@@ -31,13 +31,12 @@ public class InteractionController {
     // 챌린지 채팅방의 메시지를 전송하는 API
     @PostMapping("/{id}/chat/message")
     public ChatMessageDto postChatMessage(@PathVariable String id, @RequestBody ChatMessageDto chatMessageDto) {
-        interactionService.postChatMessage(id, chatMessageDto);
-        return chatMessageDto;
+        ChatMessage chatMessage = interactionService.postChatMessage(id, chatMessageDto);
+        return modelMapper.map(chatMessage, ChatMessageDto.class);
     }
 
     // 특정 챌린지의 채팅방 내용을 조회하는 API
     // TODO: 모든 거 전체 다 가져오는 것은 당연히 문제가 생길 것이다. 이것에 대해서 공부 해야한다.
-    // 특정 챌린지의 채팅방 내용을 조회하는 API
     @GetMapping("/{id}/chat")
     public List<ChatMessageDto> getChatMessages(@PathVariable String id) {
         List<ChatMessage> chatMessages = interactionService.getChatMessages(id);
@@ -49,8 +48,8 @@ public class InteractionController {
     // 챌린지에 후기 및 별점을 작성하는 API
     @PostMapping("/{id}/review")
     public ReviewDto postReview(@PathVariable String id, @RequestBody ReviewDto reviewDto) {
-        interactionService.postReview(id, reviewDto);
-        return reviewDto;
+        Review review = interactionService.postReview(id, reviewDto);
+        return modelMapper.map(review, ReviewDto.class);
     }
 
     // 특정 챌린지의 모든 후기 및 별점을 조회하는 API
@@ -63,3 +62,4 @@ public class InteractionController {
                 .toList();
     }
 }
+
