@@ -1,9 +1,12 @@
 package daehee.challengehub.challenge.payment.entity;
 
+import lombok.Builder;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.time.Instant;
 
+@Builder
 @Document
 public class Transaction {
     @Id
