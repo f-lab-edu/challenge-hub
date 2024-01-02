@@ -1,123 +1,121 @@
 package daehee.challengehub.challenge.management.repository;
 
+import daehee.challengehub.challenge.management.entity.Challenge;
+import daehee.challengehub.challenge.management.entity.Participant;
+import daehee.challengehub.challenge.management.model.ChallengeDto;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
-import java.util.HashMap;
 import java.util.List;
 
 @Repository
 public class ManagementRepository {
-    private final Map<Long, ChallengeDto> challenges = new HashMap<>();
-    private final Map<Long, ChallengeTagDto> challengeTags = new HashMap<>();
-    private final Map<Long, ChallengeImageDto> challengeImages = new HashMap<>();
-    private long challengeIdCounter = 1;
-    private long tagIdCounter = 1;
-    private long imageIdCounter = 1;
 
-    public ManagementRepository() {
-        // 초기 챌린지 데이터 설정
-        ChallengeDto challenge1 = ChallengeDto.builder()
-                .challengeId(challengeIdCounter++)
-                .title("30일 요가 도전")
-                .description("초보자를 위한 매일 요가 도전.")
-                .tags(List.of("요가", "건강"))
-                .imageUrls(List.of("https://example.com/image1.jpg"))
-                .startDate(Instant.parse("2023-11-01T09:30:00Z"))
-                .endDate(Instant.parse("2023-11-30T23:59:00Z"))
-                .createdBy("사용자1")
-                .createdAt(Instant.parse("2023-10-15T08:00:00Z"))
-                .lastModified(Instant.parse("2023-11-01T10:00:00Z"))
+    private final MongoTemplate mongoTemplate;
+
+    @Autowired
+    public ManagementRepository(MongoTemplate mongoTemplate) {
+        this.mongoTemplate = mongoTemplate;
+    }
+
+    // 챌린지 생성
+    public Challenge createChallenge(ChallengeDto challengeDto) {
+        Challenge challenge = Challenge.builder()
+                .title(challengeDto.getTitle())
+                .frequency(challengeDto.getFrequency())
+                .duration(challengeDto.getDuration())
+                .startTime(challengeDto.getStartTime())
+                .endTime(challengeDto.getEndTime())
+                .startDate(challengeDto.getStartDate())
+                .verificationMethod(challengeDto.getVerificationMethod())
+                .verificationExampleUrls(challengeDto.getVerificationExampleUrls())
+                .isCameraOnly(challengeDto.isCameraOnly())
+                .description(challengeDto.getDescription())
+                .category(challengeDto.getCategory())
+                .coverImageUrl(challengeDto.getCoverImageUrl())
+                .keywords(challengeDto.getKeywords())
+                .isPublic(challengeDto.isPublic())
+                .createdBy(challengeDto.getCreatedBy())
+                .createdAt(Instant.now())
+                .lastModified(Instant.now())
                 .build();
-        challenges.put(challenge1.getChallengeId(), challenge1);
 
-        ChallengeDto challenge2 = ChallengeDto.builder()
-                .challengeId(challengeIdCounter++)
-                .title("매일 명상하기")
-                .description("매일 15분간 명상하기.")
-                .tags(List.of("명상", "마음챙김"))
-                .imageUrls(List.of("https://example.com/image2.jpg"))
-                .startDate(Instant.parse("2023-11-05T12:00:00Z"))
-                .endDate(Instant.parse("2023-12-05T20:00:00Z"))
-                .createdBy("사용자2")
-                .createdAt(Instant.parse("2023-10-20T14:30:00Z"))
-                .lastModified(Instant.parse("2023-11-04T17:45:00Z"))
+        return mongoTemplate.save(challenge, "challenges");
+    }
+
+
+    // 전체 챌린지 목록 조회
+    public List<Challenge> getAllChallenges() {
+        return mongoTemplate.findAll(Challenge.class, "challenges");
+    }
+
+    // 특정 챌린지 상세 조회
+    public Challenge getChallengeById(String challengeId) {
+        return mongoTemplate.findById(challengeId, Challenge.class, "challenges");
+    }
+
+    // 특정 챌린지 수정
+    public Challenge updateChallenge(String challengeId, ChallengeDto updatedChallengeDto) {
+        // 주어진 challengeId로 기존 Challenge를 찾아 업데이트
+        Query query = new Query(Criteria.where("id").is(challengeId));
+        Update update = new Update();
+
+        // Update 객체에 필드별 변경 사항을 설정
+        update.set("title", updatedChallengeDto.getTitle());
+        update.set("frequency", updatedChallengeDto.getFrequency());
+        update.set("duration", updatedChallengeDto.getDuration());
+        update.set("startTime", updatedChallengeDto.getStartTime());
+        update.set("endTime", updatedChallengeDto.getEndTime());
+        update.set("startDate", updatedChallengeDto.getStartDate());
+        update.set("verificationMethod", updatedChallengeDto.getVerificationMethod());
+        update.set("verificationExampleUrls", updatedChallengeDto.getVerificationExampleUrls());
+        update.set("isCameraOnly", updatedChallengeDto.isCameraOnly());
+        update.set("description", updatedChallengeDto.getDescription());
+        update.set("category", updatedChallengeDto.getCategory());
+        update.set("coverImageUrl", updatedChallengeDto.getCoverImageUrl());
+        update.set("keywords", updatedChallengeDto.getKeywords());
+        update.set("isPublic", updatedChallengeDto.isPublic());
+        update.set("createdBy", updatedChallengeDto.getCreatedBy());
+        update.set("createdAt", updatedChallengeDto.getCreatedAt());
+        update.set("lastModified", Instant.now()); // 마지막 수정 시간을 현재 시간으로 설정
+
+        // 기존 문서를 업데이트하고 결과 반환
+        return mongoTemplate.findAndModify(query, update, Challenge.class, "challenges");
+    }
+
+    // 챌린지 삭제
+    public boolean deleteChallenge(String challengeId) {
+        Query query = new Query(Criteria.where("id").is(challengeId));
+        return mongoTemplate.remove(query, Challenge.class, "challenges").getDeletedCount() > 0;
+    }
+
+    // 챌린지 참여 신청
+    public Participant participateInChallenge(String challengeId, String userId) {
+        Participant participant = Participant.builder()
+                .challengeId(challengeId)
+                .userId(userId)
+                .joinDate(Instant.now())
+                .achievementRate(0.0)
                 .build();
-        challenges.put(challenge2.getChallengeId(), challenge2);
 
-        // 초기 태그 데이터 (예시 데이터, 실제 연결 로직 필요)
-        ChallengeTagDto tag1 = ChallengeTagDto.builder()
-                .tagId(tagIdCounter++)
-                .tagName("새로운 태그")
-                .build();
-        challengeTags.put(tag1.getTagId(), tag1);
-
-        // 초기 이미지 데이터 (예시 데이터, 실제 연결 로직 필요)
-        ChallengeImageDto image1 = ChallengeImageDto.builder()
-                .imageId(imageIdCounter++)
-                .imageUrl("https://example.com/new_image.jpg")
-                .build();
-        challengeImages.put(image1.getImageId(), image1);
+        return mongoTemplate.save(participant, "participants");
     }
 
-    public void createChallenge(ChallengeDto challengeData) {
-        ChallengeDto newChallenge = ChallengeDto.builder()
-                .challengeId(challengeIdCounter++)
-                .title(challengeData.getTitle())
-                .description(challengeData.getDescription())
-                .tags(challengeData.getTags())
-                .imageUrls(challengeData.getImageUrls())
-                .startDate(challengeData.getStartDate())
-                .endDate(challengeData.getEndDate())
-                .createdBy(challengeData.getCreatedBy())
-                .createdAt(challengeData.getCreatedAt())
-                .lastModified(challengeData.getLastModified())
-                .build();
-        challenges.put(newChallenge.getChallengeId(), newChallenge);
+    // 챌린지 참여 취소
+    public boolean cancelParticipation(String challengeId, String userId) {
+        Query query = new Query(Criteria.where("challengeId").is(challengeId)
+                .andOperator(Criteria.where("userId").is(userId)));
+        return mongoTemplate.remove(query, Participant.class, "participants").getDeletedCount() > 0;
     }
 
-    public ChallengeDto getChallengeById(Long challengeId) {
-        return challenges.get(challengeId);
+    // 챌린지 참가자 목록 조회
+    public List<Participant> getChallengeParticipants(String challengeId) {
+        Query query = new Query(Criteria.where("challengeId").is(challengeId));
+        return mongoTemplate.find(query, Participant.class, "participants");
     }
-
-    public List<ChallengeDto> getAllChallenges() {
-         return List.of(challenges.values().toArray(new ChallengeDto[0]));
-    }
-
-    public void updateChallenge(Long challengeId, ChallengeDto challengeData) {
-        challenges.put(challengeId, challengeData);
-    }
-
-    public void deleteChallenge(Long challengeId) {
-        challenges.remove(challengeId);
-    }
-
-    public void addTagToChallenge(Long challengeId, ChallengeTagDto tagData) {
-        ChallengeTagDto newTag = ChallengeTagDto.builder()
-                .tagId(tagIdCounter++)
-                .tagName(tagData.getTagName())
-                .build();
-        challengeTags.put(newTag.getTagId(), newTag);
-        // TODO: 챌린지에 태그 연결 로직 (추가 필요)
-    }
-
-    public void removeTagFromChallenge(Long challengeId, Long tagId) {
-        challengeTags.remove(tagId);
-        // TODO: 챌린지에서 태그 연결 해제 로직 (추가 필요)
-    }
-
-    public void uploadImageToChallenge(Long challengeId, ChallengeImageDto imageData) {
-        ChallengeImageDto newImage = ChallengeImageDto.builder()
-                .imageId(imageIdCounter++)
-                .imageUrl(imageData.getImageUrl())
-                .build();
-        challengeImages.put(newImage.getImageId(), newImage);
-        // TODO: 챌린지에 이미지 연결 로직 (추가 필요)
-    }
-
-    public void removeImageFromChallenge(Long challengeId, Long imageId) {
-        challengeImages.remove(imageId);
-        // TODO: 챌린지에서 이미지 연결 해제 로직 (추가 필요)
-    }
-
 }

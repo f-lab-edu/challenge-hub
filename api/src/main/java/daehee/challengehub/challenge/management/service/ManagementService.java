@@ -1,6 +1,8 @@
 package daehee.challengehub.challenge.management.service;
 
-import daehee.challengehub.challenge.management.model.*;
+import daehee.challengehub.challenge.management.entity.Challenge;
+import daehee.challengehub.challenge.management.entity.Participant;
+import daehee.challengehub.challenge.management.model.ChallengeDto;
 import daehee.challengehub.challenge.management.repository.ManagementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,53 +19,43 @@ public class ManagementService {
         this.managementRepository = managementRepository;
     }
 
-    public CreateChallengeResponseDto createChallenge(ChallengeDto challengeData) {
-        managementRepository.createChallenge(challengeData);
-        return new CreateChallengeResponseDto("챌린지 생성 성공", challengeData);
+    // 챌린지 생성
+    public Challenge createChallenge(ChallengeDto challengeDto) {
+        return managementRepository.createChallenge(challengeDto);
     }
 
-    public GetAllChallengesResponseDto getAllChallenges() {
-        List<ChallengeDto> challenges = managementRepository.getAllChallenges();
-        return new GetAllChallengesResponseDto(challenges);
+    // 전체 챌린지 목록 조회
+    public List<Challenge> getAllChallenges() {
+        return managementRepository.getAllChallenges();
     }
 
-    public GetChallengeResponseDto getChallengeById(Long challengeId) {
-        ChallengeDto challenge = managementRepository.getChallengeById(challengeId);
-        return new GetChallengeResponseDto(challenge);
+    // 특정 챌린지 상세 조회
+    public Challenge getChallengeById(String challengeId) {
+        return managementRepository.getChallengeById(challengeId);
     }
 
-    public UpdateChallengeResponseDto updateChallenge(Long challengeId, ChallengeDto challengeData) {
-        managementRepository.updateChallenge(challengeId, challengeData);
-        return new UpdateChallengeResponseDto("챌린지 수정 성공", challengeData);
+    // 특정 챌린지 수정
+    public Challenge updateChallenge(String challengeId, ChallengeDto challengeDto) {
+        return managementRepository.updateChallenge(challengeId, challengeDto);
     }
 
-    public DeleteChallengeResponseDto deleteChallenge(Long challengeId) {
-        managementRepository.deleteChallenge(challengeId);
-        return new DeleteChallengeResponseDto("챌린지 삭제 성공: 챌린지 ID " + challengeId);
+    // 챌린지 삭제
+    public boolean deleteChallenge(String challengeId) {
+        return managementRepository.deleteChallenge(challengeId);
     }
 
-    public AddTagResponseDto addTagToChallenge(Long challengeId, ChallengeTagDto tagData) {
-        managementRepository.addTagToChallenge(challengeId, tagData);
-        return new AddTagResponseDto("태그 추가 성공", tagData);
+    // 챌린지 참여 신청
+    public Participant participateInChallenge(String challengeId, String userId) {
+        return managementRepository.participateInChallenge(challengeId, userId);
     }
 
-    public RemoveTagResponseDto removeTagFromChallenge(Long challengeId, Long tagId) {
-        managementRepository.removeTagFromChallenge(challengeId, tagId);
-        return new RemoveTagResponseDto("태그 삭제 성공: 태그 ID " + tagId + " 챌린지 ID " + challengeId);
+    // 챌린지 참여 취소
+    public boolean cancelParticipation(String challengeId, String userId) {
+        return managementRepository.cancelParticipation(challengeId, userId);
     }
 
-    public UploadImageResponseDto uploadImageToChallenge(Long challengeId, ChallengeImageDto imageData) {
-        managementRepository.uploadImageToChallenge(challengeId, imageData);
-        return new UploadImageResponseDto("이미지 업로드 성공", imageData);
-    }
-
-    public RemoveImageResponseDto removeImageFromChallenge(Long challengeId, Long imageId) {
-        managementRepository.removeImageFromChallenge(challengeId, imageId);
-        return new RemoveImageResponseDto("이미지 삭제 성공: 이미지 ID " + imageId + " 챌린지 ID " + challengeId);
-    }
-
-    public ParticipateInChallengeResponseDto participateInChallenge(Long challengeId) {
-        // TODO: 참가자 데이터 처리 로직 구현 필요
-        return new ParticipateInChallengeResponseDto("챌린지 참여 성공: 챌린지 ID " + challengeId);
+    // 챌린지 참가자 목록 조회
+    public List<Participant> getChallengeParticipants(String challengeId) {
+        return managementRepository.getChallengeParticipants(challengeId);
     }
 }
