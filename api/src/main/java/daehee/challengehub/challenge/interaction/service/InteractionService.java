@@ -34,7 +34,7 @@ public class InteractionService {
 
 
     // 챌린지 채팅 메시지에 대한 알림을 보내는 로직
-    // TODO: 임시 코드 수정 예정
+    // TODO: 임시 코드 수정 예정, return값 void로 한 거 고치기
     private void sendChatNotification(ChatMessage chatMessage) {
         ChatRoom chatRoom = interactionRepository.findChatRoomById(chatMessage.getChatRoomId());
         User sender = userRepository.findById(chatMessage.getSenderId());
