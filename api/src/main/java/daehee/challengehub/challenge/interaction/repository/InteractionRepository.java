@@ -1,6 +1,7 @@
 package daehee.challengehub.challenge.interaction.repository;
 
 import daehee.challengehub.challenge.interaction.entity.ChatMessage;
+import daehee.challengehub.challenge.interaction.entity.ChatRoom;
 import daehee.challengehub.challenge.interaction.entity.Review;
 import daehee.challengehub.challenge.interaction.model.ChatMessageDto;
 import daehee.challengehub.challenge.interaction.model.ReviewDto;
@@ -36,6 +37,11 @@ public class InteractionRepository {
     public List<ChatMessage> findChatMessagesByChallengeId(String challengeId) {
         Query query = new Query(Criteria.where("challengeId").is(challengeId));
         return mongoTemplate.find(query, ChatMessage.class, "chat_messages");
+    }
+
+    public ChatRoom findChatRoomById(String challengeId) {
+        Query query = new Query(Criteria.where("challengeId").is(challengeId));
+        return mongoTemplate.findOne(query, ChatRoom.class, "chat_rooms");
     }
 
     public Review saveReview(String challengeId, ReviewDto reviewDto) {
