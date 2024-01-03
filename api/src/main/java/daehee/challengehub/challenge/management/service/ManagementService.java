@@ -24,9 +24,9 @@ public class ManagementService {
         return managementRepository.createChallenge(challengeDto);
     }
 
-    // 전체 챌린지 목록 조회
-    public List<Challenge> getAllChallenges() {
-        return managementRepository.getAllChallenges();
+    // 전체 챌린지 목록 조회 with 커서 기반 페이지네이션
+    public List<Challenge> getAllChallenges(String lastId, int limit) {
+        return managementRepository.getAllChallenges(lastId, limit);
     }
 
     // 특정 챌린지 상세 조회
@@ -54,7 +54,7 @@ public class ManagementService {
         return managementRepository.cancelParticipation(challengeId, userId);
     }
 
-    // 챌린지 참가자 목록 조회
+    // 챌린지 참가자 목록 조회, TODO: 참가자 목록 전체 조회가 말이 안된다 고치기
     public List<Participant> getChallengeParticipants(String challengeId) {
         return managementRepository.getChallengeParticipants(challengeId);
     }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -37,10 +38,11 @@ public class ManagementController {
         return modelMapper.map(createdChallenge, ChallengeDto.class);
     }
 
-    // 전체 챌린지 목록 조회
+    // 전체 챌린지 목록 조회 with 인피니트 스크롤 & 커서 기반 페이지네이션
     @GetMapping
-    public List<ChallengeDto> getAllChallenges() {
-        List<Challenge> challenges = managementService.getAllChallenges();
+    public List<ChallengeDto> getAllChallenges(@RequestParam(required = false) String lastId,
+                                               @RequestParam(defaultValue = "10") int limit) {
+        List<Challenge> challenges = managementService.getAllChallenges(lastId, limit);
         return challenges.stream()
                 .map(challenge -> modelMapper.map(challenge, ChallengeDto.class))
                 .toList();
@@ -66,6 +68,7 @@ public class ManagementController {
     public boolean deleteChallenge(@PathVariable String id) {
         return managementService.deleteChallenge(id);
     }
+
 
     // 챌린지 참여 신청
     @PostMapping("/{id}/participation")

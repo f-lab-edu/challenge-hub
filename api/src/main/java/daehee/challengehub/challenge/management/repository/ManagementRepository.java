@@ -3,7 +3,9 @@ package daehee.challengehub.challenge.management.repository;
 import daehee.challengehub.challenge.management.entity.Challenge;
 import daehee.challengehub.challenge.management.entity.Participant;
 import daehee.challengehub.challenge.management.model.ChallengeDto;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -48,11 +50,41 @@ public class ManagementRepository {
         return mongoTemplate.save(challenge, "challenges");
     }
 
+    // 전체 챌린지 목록 조회
+    // TODO: MongoDB 성능 테스트용 - Mongo Java Driver로 코드 작성, 삭제 예정
+    public List<Challenge> getAllChallengesWithMongoDriver(String lastId, int limit) {
+        Query query = new Query();
+        if (lastId != null && !lastId.isEmpty()) {
+            query.addCriteria(Criteria.where("_id").gt(new ObjectId(lastId)));
+        }
+        query.limit(limit).with(Sort.by(Sort.Direction.DESC, "_id"));
+        return mongoTemplate.find(query, Challenge.class, "challenges");
+    }
 
     // 전체 챌린지 목록 조회
-    public List<Challenge> getAllChallenges() {
-        return mongoTemplate.findAll(Challenge.class, "challenges");
+    // TODO: MongoDB 성능 테스트용 - Mongo Java Driver로 코드 작성 X, 삭제 예정
+    public List<Challenge> getAllChallengesWithoutMongoDriver(String lastCreatedAt, int limit) {
+        Query query = new Query();
+        if (lastCreatedAt != null && !lastCreatedAt.isEmpty()) {
+            query.addCriteria(Criteria.where("createdAt").gt(Instant.parse(lastCreatedAt)));
+        }
+        query.limit(limit);
+        query.with(Sort.by(Sort.Direction.DESC, "createdAt")); // 여기에서 직접 정렬 조건을 추가
+        return mongoTemplate.find(query, Challenge.class, "challenges");
     }
+
+//    // 전체 챌린지 목록 조회 with 커서 기반 페이지네이션
+//    public List<Challenge> getAllChallenges(String lastCreatedAt, int limit) {
+//        Query query = new Query();
+//        // TODO: 이 부분은 MongoDB Driver를 사용해볼까?
+//        if (lastCreatedAt != null && !lastCreatedAt.isEmpty()) {
+//            query.addCriteria(Criteria.where("createdAt").gt(Instant.parse(lastCreatedAt)));
+//        }
+//        query.limit(limit);
+//        query.with(Sort.by(Sort.Direction.DESC, "createdAt"));
+//        return mongoTemplate.find(query, Challenge.class, "challenges");
+//    }
+
 
     // 특정 챌린지 상세 조회
     public Challenge getChallengeById(String challengeId) {
