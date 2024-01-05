@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -56,13 +57,20 @@ public class ManagementController {
         return modelMapper.map(challenge, ChallengeDto.class);
     }
 
-    // 특정 챌린지 수정
-    @PutMapping("/{id}")
-    public ChallengeDto updateChallenge(@PathVariable String id, @RequestBody ChallengeDto challengeData) {
-        Challenge updatedChallenge = managementService.updateChallenge(id, challengeData);
-        // 수정된 엔터티를 DTO로 변환하여 반환
+    // 특정 챌린지 수정 (부분 업데이트)
+    @PatchMapping("/{id}")
+    public ChallengeDto updateChallengePartially(@PathVariable String id, @RequestBody ChallengeDto challengeData) {
+        Challenge updatedChallenge = managementService.updateChallenge(id, challengeData, false);
         return modelMapper.map(updatedChallenge, ChallengeDto.class);
     }
+
+    // 특정 챌린지 수정 (전체 업데이트)
+    @PutMapping("/{id}")
+    public ChallengeDto updateChallengeFully(@PathVariable String id, @RequestBody ChallengeDto challengeData) {
+        Challenge updatedChallenge = managementService.updateChallenge(id, challengeData, true);
+        return modelMapper.map(updatedChallenge, ChallengeDto.class);
+    }
+
 
     // 챌린지 삭제
     // TODO: 삭제는 실제로 삭제를 하는 것일까 아니면 삭제한 "척"을 하는 것일까?

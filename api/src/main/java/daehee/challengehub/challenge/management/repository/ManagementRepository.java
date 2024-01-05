@@ -3,6 +3,8 @@ package daehee.challengehub.challenge.management.repository;
 import daehee.challengehub.challenge.management.entity.Challenge;
 import daehee.challengehub.challenge.management.entity.Participant;
 import daehee.challengehub.challenge.management.model.ChallengeDto;
+import daehee.challengehub.common.constants.ErrorCode;
+import daehee.challengehub.common.exception.CustomException;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -36,12 +38,12 @@ public class ManagementRepository {
                 .startDate(challengeDto.getStartDate())
                 .verificationMethod(challengeDto.getVerificationMethod())
                 .verificationExampleUrls(challengeDto.getVerificationExampleUrls())
-                .isCameraOnly(challengeDto.isCameraOnly())
+                .isCameraOnly(challengeDto.getIsCameraOnly())
                 .description(challengeDto.getDescription())
                 .category(challengeDto.getCategory())
                 .coverImageUrl(challengeDto.getCoverImageUrl())
                 .keywords(challengeDto.getKeywords())
-                .isPublic(challengeDto.isPublic())
+                .isPublic(challengeDto.getIsPublic())
                 .createdBy(challengeDto.getCreatedBy())
                 .createdAt(Instant.now())
                 .lastModified(Instant.now())
@@ -67,32 +69,87 @@ public class ManagementRepository {
     }
 
     // 특정 챌린지 수정
-    public Challenge updateChallenge(String challengeId, ChallengeDto updatedChallengeDto) {
-        // 주어진 challengeId로 기존 Challenge를 찾아 업데이트
+    public Challenge updateChallenge(String challengeId, ChallengeDto updatedChallengeDto, boolean isFullUpdate) {
+        if (challengeId == null) {
+            throw new CustomException(ErrorCode.CHALLENGE_ID_REQUIRED);
+        }
+
         Query query = new Query(Criteria.where("id").is(challengeId));
         Update update = new Update();
 
-        // Update 객체에 필드별 변경 사항을 설정
-        update.set("title", updatedChallengeDto.getTitle());
-        update.set("frequency", updatedChallengeDto.getFrequency());
-        update.set("duration", updatedChallengeDto.getDuration());
-        update.set("startTime", updatedChallengeDto.getStartTime());
-        update.set("endTime", updatedChallengeDto.getEndTime());
-        update.set("startDate", updatedChallengeDto.getStartDate());
-        update.set("verificationMethod", updatedChallengeDto.getVerificationMethod());
-        update.set("verificationExampleUrls", updatedChallengeDto.getVerificationExampleUrls());
-        update.set("isCameraOnly", updatedChallengeDto.isCameraOnly());
-        update.set("description", updatedChallengeDto.getDescription());
-        update.set("category", updatedChallengeDto.getCategory());
-        update.set("coverImageUrl", updatedChallengeDto.getCoverImageUrl());
-        update.set("keywords", updatedChallengeDto.getKeywords());
-        update.set("isPublic", updatedChallengeDto.isPublic());
-        update.set("createdBy", updatedChallengeDto.getCreatedBy());
-        update.set("createdAt", updatedChallengeDto.getCreatedAt());
-        update.set("lastModified", Instant.now()); // 마지막 수정 시간을 현재 시간으로 설정
+        // 전체 업데이트인 경우 모든 필드를 업데이트
+        if (isFullUpdate) {
+            update.set("title", updatedChallengeDto.getTitle());
+            update.set("frequency", updatedChallengeDto.getFrequency());
+            update.set("duration", updatedChallengeDto.getDuration());
+            update.set("startTime", updatedChallengeDto.getStartTime());
+            update.set("endTime", updatedChallengeDto.getEndTime());
+            update.set("startDate", updatedChallengeDto.getStartDate());
+            update.set("verificationMethod", updatedChallengeDto.getVerificationMethod());
+            update.set("verificationExampleUrls", updatedChallengeDto.getVerificationExampleUrls());
+            update.set("isCameraOnly", updatedChallengeDto.getIsCameraOnly());
+            update.set("description", updatedChallengeDto.getDescription());
+            update.set("category", updatedChallengeDto.getCategory());
+            update.set("coverImageUrl", updatedChallengeDto.getCoverImageUrl());
+            update.set("keywords", updatedChallengeDto.getKeywords());
+            update.set("isPublic", updatedChallengeDto.getIsPublic());
+            update.set("createdBy", updatedChallengeDto.getCreatedBy());
+            update.set("createdAt", updatedChallengeDto.getCreatedAt());
+            update.set("lastModified", Instant.now());
+        } else {
+            if (updatedChallengeDto.getTitle() != null) {
+                update.set("title", updatedChallengeDto.getTitle());
+            }
+            if (updatedChallengeDto.getFrequency() != null) {
+                update.set("frequency", updatedChallengeDto.getFrequency());
+            }
+            if (updatedChallengeDto.getDuration() != null) {
+                update.set("duration", updatedChallengeDto.getDuration());
+            }
+            if (updatedChallengeDto.getStartTime() != null) {
+                update.set("startTime", updatedChallengeDto.getStartTime());
+            }
+            if (updatedChallengeDto.getEndTime() != null) {
+                update.set("endTime", updatedChallengeDto.getEndTime());
+            }
+            if (updatedChallengeDto.getStartDate() != null) {
+                update.set("startDate", updatedChallengeDto.getStartDate());
+            }
+            if (updatedChallengeDto.getVerificationMethod() != null) {
+                update.set("verificationMethod", updatedChallengeDto.getVerificationMethod());
+            }
+            if (updatedChallengeDto.getVerificationExampleUrls() != null) {
+                update.set("verificationExampleUrls", updatedChallengeDto.getVerificationExampleUrls());
+            }
+            if (updatedChallengeDto.getIsCameraOnly() != null) {
+                update.set("isCameraOnly", updatedChallengeDto.getIsCameraOnly());
+            }
+            if (updatedChallengeDto.getDescription() != null) {
+                update.set("description", updatedChallengeDto.getDescription());
+            }
+            if (updatedChallengeDto.getCategory() != null) {
+                update.set("category", updatedChallengeDto.getCategory());
+            }
+            if (updatedChallengeDto.getCoverImageUrl() != null) {
+                update.set("coverImageUrl", updatedChallengeDto.getCoverImageUrl());
+            }
+            if (updatedChallengeDto.getKeywords() != null) {
+                update.set("keywords", updatedChallengeDto.getKeywords());
+            }
+            if (updatedChallengeDto.getIsPublic() != null) {
+                update.set("isPublic", updatedChallengeDto.getIsPublic());
+            }
+            if (updatedChallengeDto.getCreatedBy() != null) {
+                update.set("createdBy", updatedChallengeDto.getCreatedBy());
+            }
+            if (updatedChallengeDto.getCreatedAt() != null) {
+                update.set("createdAt", updatedChallengeDto.getCreatedAt());
+            }
+        }
 
-        // 기존 문서를 업데이트하고 결과 반환
-        return mongoTemplate.findAndModify(query, update, Challenge.class, "challenges");
+        update.set("lastModified", Instant.now()); // 마지막 수정 시간 설정
+
+        return mongoTemplate.findAndModify(query, update, Challenge.class);
     }
 
     // 챌린지 삭제

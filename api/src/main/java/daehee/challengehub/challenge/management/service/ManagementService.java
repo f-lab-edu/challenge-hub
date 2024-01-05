@@ -35,8 +35,8 @@ public class ManagementService {
     }
 
     // 특정 챌린지 수정
-    public Challenge updateChallenge(String challengeId, ChallengeDto challengeDto) {
-        return managementRepository.updateChallenge(challengeId, challengeDto);
+    public Challenge updateChallenge(String challengeId, ChallengeDto challengeDto, boolean isFullUpdate) {
+        return managementRepository.updateChallenge(challengeId, challengeDto, isFullUpdate);
     }
 
     // 챌린지 삭제
