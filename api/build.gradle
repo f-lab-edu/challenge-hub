@@ -19,7 +19,6 @@ dependencies {
     implementation 'org.jasypt:jasypt:1.9.3'
     implementation 'org.modelmapper:modelmapper:2.3.8'
     implementation project(':kafka')
-    // MongoDB Java Driver, TODO: 성능 테스트 용으로 import
     implementation 'org.mongodb:mongodb-driver-sync:4.11.1'
 }
 
