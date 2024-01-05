@@ -5,25 +5,26 @@ import daehee.challengehub.challenge.interaction.entity.Review;
 import daehee.challengehub.challenge.interaction.model.ChatMessageDto;
 import daehee.challengehub.challenge.interaction.model.ReviewDto;
 import daehee.challengehub.challenge.interaction.repository.InteractionRepository;
+import daehee.challengehub.kafka.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 public class InteractionService {
-
     private final InteractionRepository interactionRepository;
 
     @Autowired
-    public InteractionService(InteractionRepository interactionRepository) {
+    public InteractionService(InteractionRepository interactionRepository, NotificationService notificationService) {
         this.interactionRepository = interactionRepository;
     }
 
+
     // 챌린지 채팅방의 메시지를 전송하는 로직
     public ChatMessage postChatMessage(String challengeId, ChatMessageDto chatMessageDto) {
-        return interactionRepository.saveChatMessage(challengeId, chatMessageDto);
+        ChatMessage chatMessage = interactionRepository.saveChatMessage(challengeId, chatMessageDto);
+        return chatMessage;
     }
 
     // 특정 챌린지의 채팅방 내용을 조회하는 로직
@@ -34,7 +35,8 @@ public class InteractionService {
 
     // 챌린지에 후기 및 별점을 작성하는 로직
     public Review postReview(String challengeId, ReviewDto reviewDto) {
-        return interactionRepository.saveReview(challengeId, reviewDto);
+        Review review = interactionRepository.saveReview(challengeId, reviewDto);
+        return review;
     }
 
     // 특정 챌린지의 모든 후기 및 별점을 조회하는 로직

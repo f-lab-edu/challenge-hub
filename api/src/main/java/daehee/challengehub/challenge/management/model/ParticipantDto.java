@@ -10,4 +10,6 @@ public class ParticipantDto {
     private String challengeId;
     private String userId;
     private Instant joinDate;
+    private double achievementRate; // 달성율
 }
+

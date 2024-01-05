@@ -2,3 +2,13 @@ spring:
   data:
     mongodb:
       uri: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongodb-container:27017/challenge-hub
+
+  kafka:
+    bootstrap-servers: localhost:9092  # Kafka 서버 주소
+    consumer:
+      group-id: my-group               # 컨슈머 그룹 ID
+      auto-offset-reset: earliest      # 읽지 않은 가장 오래된 메시지부터 시작
+    producer:
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    listener:
+      log-container-config: false      # 리스너 컨테이너 설정 로깅 비활성화

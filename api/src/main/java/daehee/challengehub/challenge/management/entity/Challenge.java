@@ -1,11 +1,15 @@
 package daehee.challengehub.challenge.management.entity;
 
+import lombok.Builder;
+import lombok.Getter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.Instant;
 import java.util.List;
 
+@Builder
+@Getter
 @Document
 public class Challenge {
     @Id
@@ -24,4 +28,9 @@ public class Challenge {
     private String coverImageUrl; // 대표 사진 URL
     private List<String> keywords; // 검색 키워드 리스트
     private boolean isPublic; // 공개/비공개 챌린지
+    private String createdBy; // 챌린지 생성자 ID
+    private Instant createdAt; // 생성 시간
+    private Instant lastModified; // 마지막 수정 시간
+
+    // 기타 getter, setter 및 생성자
 }

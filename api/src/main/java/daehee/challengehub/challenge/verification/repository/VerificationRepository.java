@@ -1,70 +1,73 @@
 package daehee.challengehub.challenge.verification.repository;
 
+import com.mongodb.client.result.DeleteResult;
+import daehee.challengehub.challenge.verification.entity.Verification;
+import daehee.challengehub.challenge.verification.model.VerificationDto;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Repository
 public class VerificationRepository {
-    private final Map<Long, ChallengeVerificationDto> verifications = new HashMap<>();
-    private long verificationIdCounter = 1;
 
-    public VerificationRepository() {
-        // 초기 챌린지 인증 데이터 설정
-        ChallengeVerificationDto verification1 = ChallengeVerificationDto.builder()
-                .verificationId(verificationIdCounter++)
-                .challengeId(3L)
-                .userId(123L)
-                .verificationText("첫 번째 주 인증 완료")
-                .imageUrls(List.of("https://example.com/image1.jpg"))
-                .submittedAt(Instant.parse("2023-11-08T13:00:00Z"))
+    private final MongoTemplate mongoTemplate;
+
+    @Autowired
+    public VerificationRepository(MongoTemplate mongoTemplate) {
+        this.mongoTemplate = mongoTemplate;
+    }
+
+    // 인증 정보 저장
+    public Verification saveVerification(VerificationDto verificationDto) {
+        Verification verification = Verification.builder()
+                .challengeId(verificationDto.getChallengeId())
+                .participantId(verificationDto.getParticipantId())
+                .imageUrl(verificationDto.getImageUrl())
+                .timestamp(Instant.now()) // TODO: 참여자가 보낸 시점으로 시간대 생성, 로직에 따라 바뀔 수도 있음
+                .isVerified(verificationDto.isVerified())
                 .build();
-        verifications.put(verification1.getVerificationId(), verification1);
 
-        ChallengeVerificationDto verification2 = ChallengeVerificationDto.builder()
-                .verificationId(verificationIdCounter++)
-                .challengeId(4L)
-                .userId(456L)
-                .verificationText("두 번째 주 도전 성공")
-                .imageUrls(List.of("https://example.com/image2.jpg"))
-                .submittedAt(Instant.parse("2023-11-15T13:00:00Z"))
-                .build();
-        verifications.put(verification2.getVerificationId(), verification2);
+        return mongoTemplate.save(verification, "verifications");
     }
 
-    public void saveVerification(ChallengeVerificationDto verification) {
-        Long newVerificationId = verificationIdCounter++;
-        ChallengeVerificationDto newVerification = ChallengeVerificationDto.builder()
-                .verificationId(newVerificationId)
-                .challengeId(verification.getChallengeId())
-                .userId(verification.getUserId())
-                .verificationText(verification.getVerificationText())
-                .imageUrls(verification.getImageUrls())
-                .submittedAt(verification.getSubmittedAt())
-                .build();
-        verifications.put(newVerificationId, newVerification);
+    // 특정 챌린지에 대한 모든 인증 정보 조회
+    public List<Verification> findAllByChallengeId(String challengeId) {
+        Query query = new Query(Criteria.where("challengeId").is(challengeId));
+        return mongoTemplate.find(query, Verification.class, "verifications");
     }
 
-    public List<ChallengeVerificationDto> getVerificationsByChallengeId(Long challengeId) {
-        return verifications.values().stream()
-                .filter(verification -> verification.getChallengeId().equals(challengeId))
-                .collect(Collectors.toList());
+    // 특정 참가자의 인증 정보 조회
+    public List<Verification> findByParticipantId(String participantId) {
+        Query query = new Query(Criteria.where("participantId").is(participantId));
+        return mongoTemplate.find(query, Verification.class, "verifications");
     }
 
-    public void updateVerification(ChallengeVerificationDto verification) {
-        verifications.put(verification.getVerificationId(), verification);
+    // 특정 인증 정보 조회
+    public Verification findById(String id) {
+        return mongoTemplate.findById(id, Verification.class, "verifications");
     }
 
-    public void deleteVerification(Long verificationId) {
-        verifications.remove(verificationId);
+    // 특정 인증 정보 업데이트
+    // TODO: 이건 챌린지 리더가 변경 해야하기 위해서 필요한 부분인데 어떻게 비즈니스 로직 처리해야할 지를 Service 파트에서 생각을 해봐야할 듯
+    public Verification updateVerification(String id, VerificationDto updatedVerificationDto) {
+        Query query = new Query(Criteria.where("id").is(id));
+        Update update = new Update();
+        update.set("isVerified", updatedVerificationDto.isVerified());
+        return mongoTemplate.findAndModify(query, update, Verification.class, "verifications");
     }
 
-    public ChallengeVerificationDto getVerificationById(Long verificationId) {
-        return verifications.get(verificationId);
+    // 특정 인증 정보 삭제
+    public boolean deleteById(String id) {
+        Query query = new Query(Criteria.where("id").is(id));
+        DeleteResult deleteResult = mongoTemplate.remove(query, Verification.class, "verifications");
+        return deleteResult.getDeletedCount() > 0;
     }
 }
+
 
