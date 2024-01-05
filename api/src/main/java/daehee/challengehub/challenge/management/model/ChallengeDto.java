@@ -19,15 +19,13 @@ public class ChallengeDto {
     private final Instant startDate;
     private final String verificationMethod;
     private final List<String> verificationExampleUrls;
-    private final boolean isCameraOnly;
+    private final Boolean isCameraOnly;
     private final String description;
     private final String category;
     private final String coverImageUrl;
     private final List<String> keywords;
-    private final boolean isPublic;
+    private final Boolean isPublic;
     private final String createdBy;
     private final Instant createdAt;
     private final Instant lastModified;
-
-    // 기타 getter 및 필요한 메소드
 }
