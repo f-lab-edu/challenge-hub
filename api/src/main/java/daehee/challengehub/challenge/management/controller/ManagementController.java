@@ -49,6 +49,7 @@ public class ManagementController {
     }
 
     // 특정 챌린지 상세 조회
+    // TODO: 이건 API를 또 나눠야할까? 아니면 API를 또 나눌 필요가 없을까?
     @GetMapping("/{id}")
     public ChallengeDto getChallengeById(@PathVariable String id) {
         Challenge challenge = managementService.getChallengeById(id);
@@ -64,6 +65,7 @@ public class ManagementController {
     }
 
     // 챌린지 삭제
+    // TODO: 삭제는 실제로 삭제를 하는 것일까 아니면 삭제한 "척"을 하는 것일까?
     @DeleteMapping("/{id}")
     public boolean deleteChallenge(@PathVariable String id) {
         return managementService.deleteChallenge(id);

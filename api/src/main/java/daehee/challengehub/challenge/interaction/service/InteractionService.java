@@ -14,12 +14,10 @@ import java.util.List;
 @Service
 public class InteractionService {
     private final InteractionRepository interactionRepository;
-    private final NotificationService notificationService;
 
     @Autowired
     public InteractionService(InteractionRepository interactionRepository, NotificationService notificationService) {
         this.interactionRepository = interactionRepository;
-        this.notificationService = notificationService;
     }
 
 
