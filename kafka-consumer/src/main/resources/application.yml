@@ -1,8 +1,4 @@
 spring:
-  data:
-    mongodb:
-      uri: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongodb-container:27017/challenge-hub
-
   kafka:
     bootstrap-servers: kafka:29092
     consumer:
