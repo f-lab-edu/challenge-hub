@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class InteractionNotificationService {
 
-    private final KafkaTemplate<String, String> kafkaTemplate;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
     private static final String INTERACTION_TOPIC = "interaction-notifications";
 
     @Autowired
-    public InteractionNotificationService(KafkaTemplate<String, String> kafkaTemplate) {
+    public InteractionNotificationService(KafkaTemplate<String, Object> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 

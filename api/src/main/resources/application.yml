@@ -4,7 +4,7 @@ spring:
       uri: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongodb-container:27017/challenge-hub
 
   kafka:
-    bootstrap-servers: kafka:29092
+    bootstrap-servers: kafka-1:9092,kafka-2:9093,kafka-3:9094
     consumer:
       group-id: my-group
       auto-offset-reset: latest
