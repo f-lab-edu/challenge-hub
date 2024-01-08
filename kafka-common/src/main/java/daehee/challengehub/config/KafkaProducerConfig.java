@@ -1,4 +1,4 @@
-package daehee.challengehub.kafka.config;
+package daehee.challengehub.config;
 
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
