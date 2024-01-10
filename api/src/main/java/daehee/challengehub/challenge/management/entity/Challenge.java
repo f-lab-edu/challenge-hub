@@ -10,7 +10,7 @@ import java.util.List;
 
 @Builder
 @Getter
-@Document
+@Document(collection = "challenges")
 public class Challenge {
     @Id
     private String challengeId;

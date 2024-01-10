@@ -55,52 +55,51 @@ public class ManagementController {
 
     // 특정 챌린지 상세 조회
     // TODO: 이건 API를 또 나눠야할까? 아니면 API를 또 나눌 필요가 없을까?
-    @GetMapping("/{id}")
-    public ChallengeDto getChallengeById(@PathVariable String id) {
-        Challenge challenge = managementService.getChallengeById(id);
+    @GetMapping("/{challengeId}")
+    public ChallengeDto getChallengeById(@PathVariable String challengeId) {
+        Challenge challenge = managementService.getChallengeById(challengeId);
         return modelMapper.map(challenge, ChallengeDto.class);
     }
 
     // 특정 챌린지 수정 (부분 업데이트)
-    @PatchMapping("/{id}")
-    public ChallengeDto updateChallengePartially(@PathVariable String id, @RequestBody ChallengeDto challengeData) {
-        Challenge updatedChallenge = managementService.updateChallenge(id, challengeData, false);
+    @PatchMapping("/{challengeId}")
+    public ChallengeDto updateChallengePartially(@PathVariable String challengeId, @RequestBody ChallengeDto challengeData) {
+        Challenge updatedChallenge = managementService.updateChallenge(challengeId, challengeData, false);
         return modelMapper.map(updatedChallenge, ChallengeDto.class);
     }
 
     // 특정 챌린지 수정 (전체 업데이트)
-    @PutMapping("/{id}")
-    public ChallengeDto updateChallengeFully(@PathVariable String id, @RequestBody ChallengeDto challengeData) {
-        Challenge updatedChallenge = managementService.updateChallenge(id, challengeData, true);
+    @PutMapping("/{challengeId}")
+    public ChallengeDto updateChallengeFully(@PathVariable String challengeId, @RequestBody ChallengeDto challengeData) {
+        Challenge updatedChallenge = managementService.updateChallenge(challengeId, challengeData, true);
         return modelMapper.map(updatedChallenge, ChallengeDto.class);
     }
 
-
     // 챌린지 삭제
     // TODO: 삭제는 실제로 삭제를 하는 것일까 아니면 삭제한 "척"을 하는 것일까?
-    @DeleteMapping("/{id}")
-    public boolean deleteChallenge(@PathVariable String id) {
-        return managementService.deleteChallenge(id);
+    @DeleteMapping("/{challengeId}")
+    public boolean deleteChallenge(@PathVariable String challengeId) {
+        return managementService.deleteChallenge(challengeId);
     }
 
 
     // 챌린지 참여 신청
-    @PostMapping("/{id}/participation")
-    public ParticipantDto participateInChallenge(@PathVariable String id, @RequestBody String userId) {
-        Participant participant = managementService.participateInChallenge(id, userId);
+    @PostMapping("/{challengeId}/participation")
+    public ParticipantDto participateInChallenge(@PathVariable String challengeId, @RequestBody String userId) {
+        Participant participant = managementService.participateInChallenge(challengeId, userId);
         return modelMapper.map(participant, ParticipantDto.class);
     }
 
     // 챌린지 참여 취소
-    @DeleteMapping("/{id}/participation")
-    public boolean cancelParticipation(@PathVariable String id, @RequestBody String userId) {
-        return managementService.cancelParticipation(id, userId);
+    @DeleteMapping("/{challengeId}/participation")
+    public boolean cancelParticipation(@PathVariable String challengeId, @RequestBody String userId) {
+        return managementService.cancelParticipation(challengeId, userId);
     }
 
     // 챌린지 참가자 목록 조회
-    @GetMapping("/{id}/participants")
-    public List<ParticipantDto> getChallengeParticipants(@PathVariable String id) {
-        List<Participant> participants = managementService.getChallengeParticipants(id);
+    @GetMapping("/{challengeId}/participants")
+    public List<ParticipantDto> getChallengeParticipants(@PathVariable String challengeId) {
+        List<Participant> participants = managementService.getChallengeParticipants(challengeId);
         return participants.stream()
                 .map(participant -> modelMapper.map(participant, ParticipantDto.class))
                 .toList();

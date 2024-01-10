@@ -9,7 +9,7 @@ import java.time.Instant;
 
 @Builder
 @Getter
-@Document
+@Document(collection = "participants")
 public class Participant {
     @Id
     private String participantId;
