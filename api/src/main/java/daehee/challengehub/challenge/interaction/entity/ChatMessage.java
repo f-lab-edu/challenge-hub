@@ -12,8 +12,8 @@ import java.time.Instant;
 @Getter
 public class ChatMessage {
     @Id
-    private String id;
-    private String chatRoomId;
+    private String chatMessageId;
+    private String challengeId; // 채팅 룸 Id = 챌린지 Id
     private String senderId;
     private String content;
     private Instant timestamp;

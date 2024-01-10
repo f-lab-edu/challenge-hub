@@ -12,10 +12,10 @@ import java.time.Instant;
 @Getter
 public class Review {
     @Id
-    private String id;
+    private String reviewId;
     private String challengeId;
     private String authorId;
-    private int rating;
+    private Integer rating;
     private String comment;
     private Instant createdDate;
 }
