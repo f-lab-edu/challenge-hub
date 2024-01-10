@@ -5,7 +5,6 @@ import daehee.challengehub.challenge.interaction.entity.Review;
 import daehee.challengehub.challenge.interaction.model.ChatMessageDto;
 import daehee.challengehub.challenge.interaction.model.ReviewDto;
 import daehee.challengehub.challenge.interaction.repository.InteractionRepository;
-import daehee.challengehub.kafka.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +15,7 @@ public class InteractionService {
     private final InteractionRepository interactionRepository;
 
     @Autowired
-    public InteractionService(InteractionRepository interactionRepository, NotificationService notificationService) {
+    public InteractionService(InteractionRepository interactionRepository) {
         this.interactionRepository = interactionRepository;
     }
 
