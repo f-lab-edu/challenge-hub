@@ -14,4 +14,3 @@ docker/kafka_data3
 
 # Environment variables
 docker/.env
-
