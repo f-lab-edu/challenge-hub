@@ -6,6 +6,7 @@ import daehee.challengehub.challenge.management.model.ChallengeDto;
 import daehee.challengehub.challenge.management.repository.ManagementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import daehee.challengehub.common.util.LoggerUtil;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class ManagementService {
 
     // 챌린지 생성
     public Challenge createChallenge(ChallengeDto challengeDto) {
+        LoggerUtil.info(this.getClass().getName(), "createChallenge", "Creating challenge with data: " + challengeDto.getTitle());
         return managementRepository.createChallenge(challengeDto);
     }
 

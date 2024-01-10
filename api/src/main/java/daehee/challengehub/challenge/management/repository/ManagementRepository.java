@@ -5,6 +5,7 @@ import daehee.challengehub.challenge.management.entity.Participant;
 import daehee.challengehub.challenge.management.model.ChallengeDto;
 import daehee.challengehub.common.constants.ErrorCode;
 import daehee.challengehub.common.exception.CustomException;
+import daehee.challengehub.common.util.LoggerUtil;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -49,7 +50,9 @@ public class ManagementRepository {
                 .lastModified(Instant.now())
                 .build();
 
-        return mongoTemplate.save(challenge, "challenges");
+        Challenge savedChallenge = mongoTemplate.save(challenge, "challenges");
+        LoggerUtil.info(this.getClass().getSimpleName(), "createChallenge", "Saved challenge saveChallenge Object: " + savedChallenge.getChallengeId() + ", Type: " + savedChallenge.getChallengeId().getClass().getName());
+        return savedChallenge;
     }
 
     // 전체 챌린지 목록 조회

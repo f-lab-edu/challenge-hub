@@ -5,6 +5,7 @@ import daehee.challengehub.challenge.management.entity.Participant;
 import daehee.challengehub.challenge.management.model.ChallengeDto;
 import daehee.challengehub.challenge.management.model.ParticipantDto;
 import daehee.challengehub.challenge.management.service.ManagementService;
+import daehee.challengehub.common.util.LoggerUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,7 +36,10 @@ public class ManagementController {
     // 챌린지 생성
     @PostMapping
     public ChallengeDto createChallenge(@RequestBody ChallengeDto challengeData) {
+        LoggerUtil.info(this.getClass().getSimpleName(), "createChallenge", "Received challenge data: " + challengeData.getTitle());
         Challenge createdChallenge = managementService.createChallenge(challengeData);
+        LoggerUtil.info(this.getClass().getSimpleName(), "createChallenge", "Received createdChallenge data: " + createdChallenge.getChallengeId());
+
         return modelMapper.map(createdChallenge, ChallengeDto.class);
     }
 

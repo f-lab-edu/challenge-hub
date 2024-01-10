@@ -1,16 +1,18 @@
 package daehee.challengehub.challenge.management.entity;
 
 import lombok.Builder;
+import lombok.Getter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.Instant;
 
 @Builder
+@Getter
 @Document
 public class Participant {
     @Id
-    private String id;
+    private String participantId;
     private String challengeId;
     private String userId;
     private Instant joinDate;

@@ -6,7 +6,7 @@ import java.time.Instant;
 
 @Getter
 public class ParticipantDto {
-    private String id;
+    private String participantId;
     private String challengeId;
     private String userId;
     private Instant joinDate;
