@@ -25,7 +25,7 @@ public class InteractionRepository {
 
     public ChatMessage saveChatMessage(String challengeId, ChatMessageDto chatMessageDto) {
         ChatMessage chatMessage = ChatMessage.builder()
-                .chatRoomId(challengeId)
+                .challengeId(challengeId)
                 .senderId(chatMessageDto.getSenderId())
                 .content(chatMessageDto.getContent())
                 .timestamp(Instant.now())

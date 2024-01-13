@@ -5,9 +5,11 @@ import daehee.challengehub.challenge.management.entity.Participant;
 import daehee.challengehub.challenge.management.model.ChallengeDto;
 import daehee.challengehub.common.constants.ErrorCode;
 import daehee.challengehub.common.exception.CustomException;
+import daehee.challengehub.common.util.LoggerUtil;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -49,7 +51,9 @@ public class ManagementRepository {
                 .lastModified(Instant.now())
                 .build();
 
-        return mongoTemplate.save(challenge, "challenges");
+        Challenge savedChallenge = mongoTemplate.save(challenge);
+        LoggerUtil.info(this.getClass().getSimpleName(), "createChallenge", "Saved challenge saveChallenge Object: " + savedChallenge.getChallengeId() + ", Type: " + savedChallenge.getChallengeId().getClass().getName());
+        return savedChallenge;
     }
 
     // 전체 챌린지 목록 조회
@@ -59,13 +63,13 @@ public class ManagementRepository {
             query.addCriteria(Criteria.where("_id").gt(new ObjectId(lastId)));
         }
         query.limit(limit).with(Sort.by(Sort.Direction.DESC, "_id"));
-        return mongoTemplate.find(query, Challenge.class, "challenges");
+        return mongoTemplate.find(query, Challenge.class);
     }
 
 
     // 특정 챌린지 상세 조회
     public Challenge getChallengeById(String challengeId) {
-        return mongoTemplate.findById(challengeId, Challenge.class, "challenges");
+        return mongoTemplate.findById(challengeId, Challenge.class);
     }
 
     // 특정 챌린지 수정
@@ -74,7 +78,7 @@ public class ManagementRepository {
             throw new CustomException(ErrorCode.CHALLENGE_ID_REQUIRED);
         }
 
-        Query query = new Query(Criteria.where("id").is(challengeId));
+        Query query = new Query(Criteria.where("_id").is(challengeId));
         Update update = new Update();
 
         // 전체 업데이트인 경우 모든 필드를 업데이트
@@ -147,15 +151,15 @@ public class ManagementRepository {
             }
         }
 
-        update.set("lastModified", Instant.now()); // 마지막 수정 시간 설정
+        FindAndModifyOptions options = FindAndModifyOptions.options().returnNew(true);
 
-        return mongoTemplate.findAndModify(query, update, Challenge.class);
+        return mongoTemplate.findAndModify(query, update, options, Challenge.class);
     }
 
     // 챌린지 삭제
     public boolean deleteChallenge(String challengeId) {
-        Query query = new Query(Criteria.where("id").is(challengeId));
-        return mongoTemplate.remove(query, Challenge.class, "challenges").getDeletedCount() > 0;
+        Query query = new Query(Criteria.where("challengeId").is(challengeId));
+        return mongoTemplate.remove(query, Challenge.class).getDeletedCount() > 0;
     }
 
     // 챌린지 참여 신청
@@ -167,19 +171,19 @@ public class ManagementRepository {
                 .achievementRate(0.0)
                 .build();
 
-        return mongoTemplate.save(participant, "participants");
+        return mongoTemplate.save(participant);
     }
 
     // 챌린지 참여 취소
     public boolean cancelParticipation(String challengeId, String userId) {
         Query query = new Query(Criteria.where("challengeId").is(challengeId)
                 .andOperator(Criteria.where("userId").is(userId)));
-        return mongoTemplate.remove(query, Participant.class, "participants").getDeletedCount() > 0;
+        return mongoTemplate.remove(query, Participant.class).getDeletedCount() > 0;
     }
 
     // 챌린지 참가자 목록 조회
     public List<Participant> getChallengeParticipants(String challengeId) {
         Query query = new Query(Criteria.where("challengeId").is(challengeId));
-        return mongoTemplate.find(query, Participant.class, "participants");
+        return mongoTemplate.find(query, Participant.class);
     }
 }

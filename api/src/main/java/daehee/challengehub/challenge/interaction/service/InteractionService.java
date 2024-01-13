@@ -22,8 +22,7 @@ public class InteractionService {
 
     // 챌린지 채팅방의 메시지를 전송하는 로직
     public ChatMessage postChatMessage(String challengeId, ChatMessageDto chatMessageDto) {
-        ChatMessage chatMessage = interactionRepository.saveChatMessage(challengeId, chatMessageDto);
-        return chatMessage;
+        return interactionRepository.saveChatMessage(challengeId, chatMessageDto);
     }
 
     // 특정 챌린지의 채팅방 내용을 조회하는 로직
@@ -34,8 +33,7 @@ public class InteractionService {
 
     // 챌린지에 후기 및 별점을 작성하는 로직
     public Review postReview(String challengeId, ReviewDto reviewDto) {
-        Review review = interactionRepository.saveReview(challengeId, reviewDto);
-        return review;
+        return interactionRepository.saveReview(challengeId, reviewDto);
     }
 
     // 특정 챌린지의 모든 후기 및 별점을 조회하는 로직

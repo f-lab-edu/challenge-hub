@@ -6,8 +6,7 @@ services:
     ports:
       - "27017:27017"
     env_file:
-      - ./.env.mongodb.plain
-      - ./.env.docker.volume
+      - .env
     networks:
       - bridge-net
     command: --bind_ip 0.0.0.0
@@ -56,8 +55,6 @@ services:
       - zookeeper
     ports:
       - "9093:9093"
-    env_file:
-      - ./.env.docker.volume
     environment:
       KAFKA_BROKER_ID: 2
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
@@ -76,8 +73,6 @@ services:
       - zookeeper
     ports:
       - "9094:9094"
-    env_file:
-      - ./.env.docker.volume
     environment:
       KAFKA_BROKER_ID: 3
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181

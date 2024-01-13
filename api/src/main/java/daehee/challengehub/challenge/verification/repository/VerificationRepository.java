@@ -30,7 +30,7 @@ public class VerificationRepository {
                 .participantId(verificationDto.getParticipantId())
                 .imageUrl(verificationDto.getImageUrl())
                 .timestamp(Instant.now()) // TODO: 참여자가 보낸 시점으로 시간대 생성, 로직에 따라 바뀔 수도 있음
-                .isVerified(verificationDto.isVerified())
+                .isVerified(verificationDto.getIsVerified())
                 .build();
 
         return mongoTemplate.save(verification, "verifications");
@@ -58,7 +58,7 @@ public class VerificationRepository {
     public Verification updateVerification(String id, VerificationDto updatedVerificationDto) {
         Query query = new Query(Criteria.where("id").is(id));
         Update update = new Update();
-        update.set("isVerified", updatedVerificationDto.isVerified());
+        update.set("isVerified", updatedVerificationDto.getIsVerified());
         return mongoTemplate.findAndModify(query, update, Verification.class, "verifications");
     }
 

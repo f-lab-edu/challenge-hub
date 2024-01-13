@@ -13,7 +13,4 @@ docker/kafka_data3
 .idea
 
 # Environment variables
-docker/.env.docker.volume
-docker/.env.database
-docker/.env.decryption
-docker/.env.mongodb.plain
+docker/.env
