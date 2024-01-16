@@ -8,7 +8,7 @@ import lombok.NonNull;
 @Getter
 public class PaymentNotificationMessage {
     @NonNull private String userId;
-    @NonNull private String userNames;
+    @NonNull private String userName;
     @NonNull private Double transactionAmount;
     @NonNull private String transactionType;
 }
