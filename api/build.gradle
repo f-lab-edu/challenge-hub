@@ -12,13 +12,13 @@ repositories {
 }
 
 dependencies {
+    implementation project(':kafka-common')
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
     implementation 'org.jasypt:jasypt:1.9.3'
     implementation 'org.modelmapper:modelmapper:2.3.8'
-    implementation project(':kafka-common')
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2' // TODO: Swagger 관련 코드인데 API 인수 테스트 하고 삭제 예정
     implementation 'io.github.cdimascio:dotenv-java:3.0.0'
 }
