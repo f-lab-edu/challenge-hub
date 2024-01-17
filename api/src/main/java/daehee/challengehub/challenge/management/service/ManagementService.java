@@ -4,9 +4,12 @@ import daehee.challengehub.challenge.management.entity.Challenge;
 import daehee.challengehub.challenge.management.entity.Participant;
 import daehee.challengehub.challenge.management.model.ChallengeDto;
 import daehee.challengehub.challenge.management.repository.ManagementRepository;
+import daehee.challengehub.common.util.LoggerUtil;
+import daehee.challengehub.interfaces.KafkaProducerService;
+import daehee.challengehub.topic.KafkaTopic;
+import daehee.challengehub.util.KafkaMessageTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import daehee.challengehub.common.util.LoggerUtil;
 
 import java.util.List;
 
@@ -14,16 +17,21 @@ import java.util.List;
 public class ManagementService {
 
     private final ManagementRepository managementRepository;
+    private final KafkaProducerService kafkaProducerService;
 
     @Autowired
-    public ManagementService(ManagementRepository managementRepository) {
+    public ManagementService(ManagementRepository managementRepository, KafkaProducerService kafkaProducerService) {
         this.managementRepository = managementRepository;
+        this.kafkaProducerService = kafkaProducerService;
     }
 
     // 챌린지 생성
     public Challenge createChallenge(ChallengeDto challengeDto) {
         LoggerUtil.info(this.getClass().getName(), "createChallenge", "Creating challenge with data: " + challengeDto.getTitle());
-        return managementRepository.createChallenge(challengeDto);
+        Challenge challenge = managementRepository.createChallenge(challengeDto);
+        String notificationMessage = KafkaMessageTemplate.challengeEventNotification(challengeDto.getTitle(), "추가");
+        kafkaProducerService.sendMessage(KafkaTopic.MANAGEMENT, notificationMessage);
+        return challenge;
     }
 
     // 전체 챌린지 목록 조회 with 커서 기반 페이지네이션
