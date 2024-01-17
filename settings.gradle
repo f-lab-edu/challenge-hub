@@ -1,3 +1,5 @@
 include ':api'
 include ':kafka-common'
 include ':kafka-consumer'
+include ':websocket'
+
