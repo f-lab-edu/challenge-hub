@@ -5,7 +5,7 @@ import daehee.challengehub.challenge.management.entity.Participant;
 import daehee.challengehub.challenge.management.model.ChallengeDto;
 import daehee.challengehub.challenge.management.model.ParticipantDto;
 import daehee.challengehub.challenge.management.service.ManagementService;
-import daehee.challengehub.common.util.LoggerUtil;
+import jakarta.validation.ValidationException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/challenges")
@@ -33,15 +34,22 @@ public class ManagementController {
         this.modelMapper = modelMapper;
     }
 
-    // 챌린지 생성
     @PostMapping
     public ChallengeDto createChallenge(@RequestBody ChallengeDto challengeData) {
-        LoggerUtil.info(this.getClass().getSimpleName(), "createChallenge", "Received challenge data: " + challengeData.getTitle());
-        Challenge createdChallenge = managementService.createChallenge(challengeData);
-        LoggerUtil.info(this.getClass().getSimpleName(), "createChallenge", "Received createdChallenge data: " + createdChallenge.getChallengeId());
-
-        return modelMapper.map(createdChallenge, ChallengeDto.class);
+        try {
+            challengeData.validate();
+            return managementService.createChallenge(challengeData)
+                    .thenApplyAsync(challenge -> modelMapper.map(challenge, ChallengeDto.class))
+                    .join();
+        } catch (ValidationException | InterruptedException | ExecutionException e) {
+            // TODO: 유효성 검사 실패 시 처리
+            // - 로그 기록
+            // - 사용자에게 오류 메시지 반환
+            return null;
+        }
     }
+
+
 
     // 전체 챌린지 목록 조회 with 인피니트 스크롤 & 커서 기반 페이지네이션
     @GetMapping

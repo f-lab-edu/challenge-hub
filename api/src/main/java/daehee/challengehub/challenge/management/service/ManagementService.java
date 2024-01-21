@@ -4,14 +4,15 @@ import daehee.challengehub.challenge.management.entity.Challenge;
 import daehee.challengehub.challenge.management.entity.Participant;
 import daehee.challengehub.challenge.management.model.ChallengeDto;
 import daehee.challengehub.challenge.management.repository.ManagementRepository;
-import daehee.challengehub.common.util.LoggerUtil;
 import daehee.challengehub.interfaces.KafkaProducerService;
 import daehee.challengehub.topic.KafkaTopic;
 import daehee.challengehub.util.KafkaMessageTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class ManagementService {
@@ -26,13 +27,19 @@ public class ManagementService {
     }
 
     // 챌린지 생성
-    public Challenge createChallenge(ChallengeDto challengeDto) {
-        LoggerUtil.info(this.getClass().getName(), "createChallenge", "Creating challenge with data: " + challengeDto.getTitle());
-        Challenge challenge = managementRepository.createChallenge(challengeDto);
-        String notificationMessage = KafkaMessageTemplate.challengeEventNotification(challengeDto.getTitle(), "추가");
-        kafkaProducerService.sendMessage(KafkaTopic.MANAGEMENT, notificationMessage);
-        return challenge;
+    @Transactional
+    public CompletableFuture<Challenge> createChallenge(ChallengeDto challengeDto) {
+        return CompletableFuture.supplyAsync(() -> {
+            // 챌린지 생성
+            return managementRepository.createChallenge(challengeDto);
+        }).thenApplyAsync(challenge -> {
+            // Kafka 메시지 전송
+            String notificationMessage = KafkaMessageTemplate.challengeEventNotification(challengeDto.getTitle(), "추가");
+            kafkaProducerService.sendMessage(KafkaTopic.MANAGEMENT, notificationMessage);
+            return challenge;
+        });
     }
+
 
     // 전체 챌린지 목록 조회 with 커서 기반 페이지네이션
     public List<Challenge> getAllChallenges(String lastId, int limit) {

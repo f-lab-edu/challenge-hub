@@ -12,6 +12,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 public class ChatRoomDto {
-    private String challengeId;
+    private String challengeId; // // 채팅 룸 Id = 챌린지 Id
     private Integer participantCount;
 }

@@ -5,7 +5,6 @@ import daehee.challengehub.challenge.management.entity.Participant;
 import daehee.challengehub.challenge.management.model.ChallengeDto;
 import daehee.challengehub.common.constants.ErrorCode;
 import daehee.challengehub.common.exception.CustomException;
-import daehee.challengehub.common.util.LoggerUtil;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -31,6 +30,10 @@ public class ManagementRepository {
 
     // 챌린지 생성
     public Challenge createChallenge(ChallengeDto challengeDto) {
+        if (mongoTemplate.exists(Query.query(Criteria.where("title").is(challengeDto.getTitle())), Challenge.class)) {
+            throw new IllegalStateException("이미 존재하는 챌린지 제목입니다.");
+        }
+
         Challenge challenge = Challenge.builder()
                 .title(challengeDto.getTitle())
                 .frequency(challengeDto.getFrequency())
@@ -51,9 +54,7 @@ public class ManagementRepository {
                 .lastModified(Instant.now())
                 .build();
 
-        Challenge savedChallenge = mongoTemplate.save(challenge);
-        LoggerUtil.info(this.getClass().getSimpleName(), "createChallenge", "Saved challenge saveChallenge Object: " + savedChallenge.getChallengeId() + ", Type: " + savedChallenge.getChallengeId().getClass().getName());
-        return savedChallenge;
+        return mongoTemplate.save(challenge);
     }
 
     // 전체 챌린지 목록 조회

@@ -12,6 +12,6 @@ import java.util.List;
 @Getter
 public class ChatRoom {
     @Id
-    private String challengeId;
+    private String challengeId; // // 채팅 룸 Id = 챌린지 Id
     private List<String> participants; // 참여자 ID의 리스트
 }
