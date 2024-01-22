@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.index.Index;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -28,8 +29,35 @@ public class ManagementRepository {
         this.mongoTemplate = mongoTemplate;
     }
 
-    // 챌린지 생성
-    public Challenge createChallenge(ChallengeDto challengeDto) {
+    // 챌린지 생성, v1
+    public Challenge createChallengeV1(ChallengeDto challengeDto) {
+        Challenge challenge = Challenge.builder()
+                .title(challengeDto.getTitle())
+                .frequency(challengeDto.getFrequency())
+                .duration(challengeDto.getDuration())
+                .startTime(challengeDto.getStartTime())
+                .endTime(challengeDto.getEndTime())
+                .startDate(challengeDto.getStartDate())
+                .verificationMethod(challengeDto.getVerificationMethod())
+                .verificationExampleUrls(challengeDto.getVerificationExampleUrls())
+                .isCameraOnly(challengeDto.getIsCameraOnly())
+                .description(challengeDto.getDescription())
+                .category(challengeDto.getCategory())
+                .coverImageUrl(challengeDto.getCoverImageUrl())
+                .keywords(challengeDto.getKeywords())
+                .isPublic(challengeDto.getIsPublic())
+                .createdBy(challengeDto.getCreatedBy())
+                .createdAt(Instant.now())
+                .lastModified(Instant.now())
+                .build();
+
+        return mongoTemplate.save(challenge);
+    }
+
+
+    // 챌린지 생성, v2
+    public Challenge createChallengeV2(ChallengeDto challengeDto) {
+        mongoTemplate.indexOps(Challenge.class).ensureIndex(new Index().on("title", Sort.Direction.ASC));
         if (mongoTemplate.exists(Query.query(Criteria.where("title").is(challengeDto.getTitle())), Challenge.class)) {
             throw new IllegalStateException("이미 존재하는 챌린지 제목입니다.");
         }

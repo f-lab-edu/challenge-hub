@@ -34,11 +34,18 @@ public class ManagementController {
         this.modelMapper = modelMapper;
     }
 
-    @PostMapping
-    public ChallengeDto createChallenge(@RequestBody ChallengeDto challengeData) {
+
+    @PostMapping("/v1")
+    public ChallengeDto createChallengeV1(@RequestBody ChallengeDto challengeData) {
+        Challenge createdChallenge = managementService.createChallengeV1(challengeData);
+        return modelMapper.map(createdChallenge, ChallengeDto.class);
+    }
+
+    @PostMapping("/v2")
+    public ChallengeDto createChallengeV2(@RequestBody ChallengeDto challengeData) {
         try {
             challengeData.validate();
-            return managementService.createChallenge(challengeData)
+            return managementService.createChallengeV2(challengeData)
                     .thenApplyAsync(challenge -> modelMapper.map(challenge, ChallengeDto.class))
                     .join();
         } catch (ValidationException | InterruptedException | ExecutionException e) {

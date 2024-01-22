@@ -26,12 +26,20 @@ public class ManagementService {
         this.kafkaProducerService = kafkaProducerService;
     }
 
-    // 챌린지 생성
+    // 챌린지 생성, v1
+    public Challenge createChallengeV1(ChallengeDto challengeDto) {
+        Challenge challenge = managementRepository.createChallengeV1(challengeDto);
+        String notificationMessage = KafkaMessageTemplate.challengeEventNotification(challengeDto.getTitle(), "추가");
+        kafkaProducerService.sendMessage(KafkaTopic.MANAGEMENT, notificationMessage);
+        return challenge;
+    }
+
+    // 챌린지 생성, v2
     @Transactional
-    public CompletableFuture<Challenge> createChallenge(ChallengeDto challengeDto) {
+    public CompletableFuture<Challenge> createChallengeV2(ChallengeDto challengeDto) {
         return CompletableFuture.supplyAsync(() -> {
             // 챌린지 생성
-            return managementRepository.createChallenge(challengeDto);
+            return managementRepository.createChallengeV2(challengeDto);
         }).thenApplyAsync(challenge -> {
             // Kafka 메시지 전송
             String notificationMessage = KafkaMessageTemplate.challengeEventNotification(challengeDto.getTitle(), "추가");
