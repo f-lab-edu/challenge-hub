@@ -11,7 +11,7 @@ services:
       - bridge-net
     command: --bind_ip 0.0.0.0
     volumes:
-      - /data/db:/data/db
+      - ./data/db:/data/db
 
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
@@ -38,7 +38,7 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
-      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-1:29092,EXTERNAL:// :9092
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-1:29092,EXTERNAL://localhost:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
@@ -93,6 +93,28 @@ services:
       - KAFKA_CLUSTERS_0_NAME=local
       - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka-1:29092,kafka-2:29093,kafka-3:29094
       - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:2181
+    networks:
+      - bridge-net
+
+  controller:
+    image: ngrinder/controller
+    container_name: ngrinder-controller
+    ports:
+      - "8300:80"
+      - "16001:16001"
+      - "12000-12009:12000-12009"
+    volumes:
+      - ./ngrinder-controller:/opt/ngrinder-controller
+    networks:
+      - bridge-net
+
+  ngrinder-agent:
+    image: ngrinder/agent
+    container_name: ngrinder-agent
+    depends_on:
+      - controller
+    environment:
+      NGRINDER_CONTROLLER_IP: "controller:80"
     networks:
       - bridge-net
 
