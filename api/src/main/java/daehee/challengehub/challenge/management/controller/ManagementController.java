@@ -5,9 +5,13 @@ import daehee.challengehub.challenge.management.entity.Participant;
 import daehee.challengehub.challenge.management.model.ChallengeDto;
 import daehee.challengehub.challenge.management.model.ParticipantDto;
 import daehee.challengehub.challenge.management.service.ManagementService;
+import daehee.challengehub.common.util.LoggerUtil;
+import io.micrometer.core.instrument.MeterRegistry;
 import jakarta.validation.ValidationException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -27,35 +31,91 @@ import java.util.concurrent.ExecutionException;
 public class ManagementController {
     private final ManagementService managementService;
     private final ModelMapper modelMapper;
+    private final MeterRegistry registry;
+
 
     @Autowired
-    public ManagementController(ManagementService managementService, ModelMapper modelMapper) {
+    public ManagementController(ManagementService managementService, ModelMapper modelMapper, MeterRegistry registry) {
         this.managementService = managementService;
         this.modelMapper = modelMapper;
+        this.registry = registry;
     }
 
 
     @PostMapping("/v1")
-    public ChallengeDto createChallengeV1(@RequestBody ChallengeDto challengeData) {
-        Challenge createdChallenge = managementService.createChallengeV1(challengeData);
-        return modelMapper.map(createdChallenge, ChallengeDto.class);
-    }
+    public ResponseEntity<ChallengeDto> createChallengeV1(@RequestBody ChallengeDto challengeData) {
+        long startTime = System.currentTimeMillis();
+        String className = this.getClass().getName();
 
-    @PostMapping("/v2")
-    public ChallengeDto createChallengeV2(@RequestBody ChallengeDto challengeData) {
         try {
-            challengeData.validate();
-            return managementService.createChallengeV2(challengeData)
-                    .thenApplyAsync(challenge -> modelMapper.map(challenge, ChallengeDto.class))
-                    .join();
+            challengeData.validate(); // 유효성 검사 추가
+
+            Challenge createdChallenge = managementService.createChallengeV1(challengeData);
+            ChallengeDto response = modelMapper.map(createdChallenge, ChallengeDto.class);
+
+            long endTime = System.currentTimeMillis();
+            long duration = endTime - startTime;
+            response.setProcessingTime(duration); // 처리 시간을 응답 DTO에 추가
+            LoggerUtil.info(className, "createChallengeV1", "Challenge created successfully in " + duration + " ms.");
+
+            return ResponseEntity.ok(response);
         } catch (ValidationException | InterruptedException | ExecutionException e) {
-            // TODO: 유효성 검사 실패 시 처리
-            // - 로그 기록
-            // - 사용자에게 오류 메시지 반환
-            return null;
+            long endTime = System.currentTimeMillis();
+            long duration = endTime - startTime;
+            LoggerUtil.info(className, "createChallengeV1", "Validation error: " + e.getMessage());
+
+            ChallengeDto errorResponse = new ChallengeDto();
+            errorResponse.setProcessingTime(duration); // 처리 시간을 오류 응답 DTO에 추가
+            errorResponse.setError("Validation error: " + e.getMessage());
+            return ResponseEntity.badRequest().body(errorResponse);
         }
     }
 
+
+    @PostMapping("/v2")
+    public ResponseEntity<ChallengeDto> createChallengeV2(@RequestBody ChallengeDto challengeData) {
+        long startTime = System.currentTimeMillis();
+        String className = this.getClass().getName();
+
+        try {
+            challengeData.validate();
+            ChallengeDto challengeDto = managementService.createChallengeV2(challengeData)
+                    .thenApplyAsync(challenge -> modelMapper.map(challenge, ChallengeDto.class))
+                    .join();
+
+            long endTime = System.currentTimeMillis();
+            long duration = endTime - startTime;
+            challengeDto.setProcessingTime(duration); // 처리 시간을 응답 DTO에 추가
+            LoggerUtil.info(className, "createChallengeV2", "Challenge created successfully in " + duration + " ms.");
+
+            return ResponseEntity.ok(challengeDto);
+        } catch (ValidationException e) {
+            long endTime = System.currentTimeMillis();
+            long duration = endTime - startTime;
+            LoggerUtil.error(className, "createChallengeV2", "Validation error", e);
+            ChallengeDto errorResponse = new ChallengeDto();
+            errorResponse.setProcessingTime(duration); // 처리 시간을 오류 응답 DTO에 추가
+            errorResponse.setError("Validation error: " + e.getMessage());
+            return ResponseEntity.badRequest().body(errorResponse);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            long endTime = System.currentTimeMillis();
+            long duration = endTime - startTime;
+            LoggerUtil.error(className, "createChallengeV2", "Thread interrupted", e);
+            ChallengeDto errorResponse = new ChallengeDto();
+            errorResponse.setProcessingTime(duration); // 처리 시간을 오류 응답 DTO에 추가
+            errorResponse.setError("Thread interrupted: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        } catch (ExecutionException e) {
+            long endTime = System.currentTimeMillis();
+            long duration = endTime - startTime;
+            LoggerUtil.error(className, "createChallengeV2", "Execution error", e);
+            ChallengeDto errorResponse = new ChallengeDto();
+            errorResponse.setProcessingTime(duration); // 처리 시간을 오류 응답 DTO에 추가
+            errorResponse.setError("Execution error: " + e.getCause().getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
+    }
 
 
     // 전체 챌린지 목록 조회 with 인피니트 스크롤 & 커서 기반 페이지네이션

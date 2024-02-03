@@ -58,7 +58,7 @@ public class ManagementRepositoryTest {
     @Test
     public void testCreateChallenge() {
         // 새로운 챌린지 생성
-        Challenge createdChallenge = managementRepository.createChallenge(sampleChallengeDto);
+        Challenge createdChallenge = managementRepository.createChallengeV2(sampleChallengeDto);
 
         // 생성된 챌린지의 속성 검증
         assertNotNull(createdChallenge);

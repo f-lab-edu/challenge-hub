@@ -42,11 +42,13 @@ public class ChallengeDto {
     private Instant createdAt;
     private Instant lastModified;
 
+    private String error;
+    private long processingTime; // 요청 처리 시간을 위한 필드
 
     public boolean validate() throws ValidationException, InterruptedException, ExecutionException {
         if (title == null || title.trim().isEmpty()) {
             throw new ValidationException("제목은 비워둘 수 없습니다");
-        }
+        }2
         if (frequency == null || frequency.trim().isEmpty()) {
             throw new ValidationException("빈도는 비워둘 수 없습니다");
         }

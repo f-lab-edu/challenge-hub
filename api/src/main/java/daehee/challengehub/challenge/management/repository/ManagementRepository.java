@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.index.Index;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -26,8 +25,8 @@ public class ManagementRepository {
 
     @Autowired
     public ManagementRepository(MongoTemplate mongoTemplate) {
-        this.mongoTemplate = mongoTemplate;
-    }
+            this.mongoTemplate = mongoTemplate;
+        }
 
     // 챌린지 생성, v1
     public Challenge createChallengeV1(ChallengeDto challengeDto) {
@@ -57,10 +56,10 @@ public class ManagementRepository {
 
     // 챌린지 생성, v2
     public Challenge createChallengeV2(ChallengeDto challengeDto) {
-        mongoTemplate.indexOps(Challenge.class).ensureIndex(new Index().on("title", Sort.Direction.ASC));
-        if (mongoTemplate.exists(Query.query(Criteria.where("title").is(challengeDto.getTitle())), Challenge.class)) {
-            throw new IllegalStateException("이미 존재하는 챌린지 제목입니다.");
-        }
+//        mongoTemplate.indexOps(Challenge.class).ensureIndex(new Index().on("title", Sort.Direction.ASC));
+//        if (mongoTemplate.exists(Query.query(Criteria.where("title").is(challengeDto.getTitle())), Challenge.class)) {
+//            throw new IllegalStateException("이미 존재하는 챌린지 제목입니다.");
+//        }
 
         Challenge challenge = Challenge.builder()
                 .title(challengeDto.getTitle())
