@@ -5,7 +5,7 @@ import daehee.challengehub.challenge.management.entity.Participant;
 import daehee.challengehub.challenge.management.model.ChallengeDto;
 import daehee.challengehub.challenge.management.model.ParticipantDto;
 import daehee.challengehub.challenge.management.service.ManagementService;
-import daehee.challengehub.common.util.LoggerUtil;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,28 +20,41 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/challenges")
 public class ManagementController {
     private final ManagementService managementService;
     private final ModelMapper modelMapper;
+    private final MeterRegistry registry;
+
 
     @Autowired
-    public ManagementController(ManagementService managementService, ModelMapper modelMapper) {
+    public ManagementController(ManagementService managementService, ModelMapper modelMapper, MeterRegistry registry) {
         this.managementService = managementService;
         this.modelMapper = modelMapper;
+        this.registry = registry;
     }
 
-    // 챌린지 생성
-    @PostMapping
-    public ChallengeDto createChallenge(@RequestBody ChallengeDto challengeData) {
-        LoggerUtil.info(this.getClass().getSimpleName(), "createChallenge", "Received challenge data: " + challengeData.getTitle());
-        Challenge createdChallenge = managementService.createChallenge(challengeData);
-        LoggerUtil.info(this.getClass().getSimpleName(), "createChallenge", "Received createdChallenge data: " + createdChallenge.getChallengeId());
 
+    @PostMapping("/v1")
+    public ChallengeDto createChallengeV1(@RequestBody ChallengeDto challengeData) throws ExecutionException, InterruptedException {
+        challengeData.validate();
+        Challenge createdChallenge = managementService.createChallengeV1(challengeData);
         return modelMapper.map(createdChallenge, ChallengeDto.class);
     }
+
+
+    @PostMapping("/v2")
+    public ChallengeDto createChallengeV2(@RequestBody ChallengeDto challengeData) throws ExecutionException, InterruptedException {
+        challengeData.validate();
+
+        return managementService.createChallengeV2(challengeData)
+                .thenApplyAsync(challenge -> modelMapper.map(challenge, ChallengeDto.class))
+                .join();
+    }
+
 
     // 전체 챌린지 목록 조회 with 인피니트 스크롤 & 커서 기반 페이지네이션
     @GetMapping

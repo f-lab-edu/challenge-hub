@@ -1,5 +1,6 @@
 package daehee.challengehub.challenge.interaction.entity;
 
+import daehee.challengehub.challenge.interaction.enums.MessageType;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.annotation.Id;
@@ -16,5 +17,7 @@ public class ChatMessage {
     private String challengeId; // 채팅 룸 Id = 챌린지 Id
     private String senderId;
     private String content;
+    private MessageType type;
     private Instant timestamp;
+
 }

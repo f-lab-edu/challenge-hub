@@ -1,13 +1,21 @@
 package daehee.challengehub.challenge.management.model;
 
+import jakarta.validation.ValidationException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.time.Instant;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 @Builder
 @Setter
@@ -33,4 +41,49 @@ public class ChallengeDto {
     private String createdBy;
     private Instant createdAt;
     private Instant lastModified;
+
+    public boolean validate() throws ValidationException, InterruptedException, ExecutionException {
+        if (title == null || title.trim().isEmpty()) {
+            throw new ValidationException("제목은 비워둘 수 없습니다");
+        }
+        if (frequency == null || frequency.trim().isEmpty()) {
+            throw new ValidationException("빈도는 비워둘 수 없습니다");
+        }
+        if (startTime != null && endTime != null && startTime.isAfter(endTime)) {
+            throw new ValidationException("시작 시간은 종료 시간 이전이어야 합니다");
+        }
+        if (startDate != null && !startDate.isAfter(Instant.now())) {
+            throw new ValidationException("시작 날짜는 미래여야 합니다");
+        }
+
+        if (verificationExampleUrls != null) {
+            CompletableFuture[] futures = verificationExampleUrls.stream()
+                    .map(url -> CompletableFuture.supplyAsync(() -> isValidImageUrl(url)))
+                    .toArray(CompletableFuture[]::new); // 수정된 부분
+
+            CompletableFuture.allOf(futures).join(); // 모든 비동기 작업 완료 대기
+
+            for (CompletableFuture<Boolean> future : futures) {
+                if (!future.get()) { // 수정된 부분
+                    throw new ValidationException("검증 예시 URL 중 잘못된 URL이 있습니다");
+                }
+            }
+        }
+
+        return true;
+    }
+
+    private boolean isValidImageUrl(String url) {
+        try {
+            URL imageUrl = new URL(url);
+            URLConnection connection = imageUrl.openConnection();
+            connection.setConnectTimeout(5000);
+            connection.setReadTimeout(5000);
+            BufferedImage image = ImageIO.read(connection.getInputStream());
+            return image != null;
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
 }

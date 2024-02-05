@@ -11,7 +11,7 @@ services:
       - bridge-net
     command: --bind_ip 0.0.0.0
     volumes:
-      - /data/db:/data/db
+      - ./data/db:/data/db
 
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
@@ -32,7 +32,7 @@ services:
     ports:
       - "9092:9092"
     env_file:
-      - ./.env.docker.volume
+      - ./.env
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
@@ -96,10 +96,43 @@ services:
     networks:
       - bridge-net
 
+# TODO: 로컬에서 설치하고 삭제 예정
+#  controller:
+#    image: ngrinder/controller
+#    container_name: ngrinder-controller
+#    ports:
+#      - "8300:80"
+#      - "16001:16001"
+#      - "12000-12009:12000-12009"
+#    volumes:
+#      - ./ngrinder-controller:/opt/ngrinder-controller
+#    networks:
+#      - bridge-net
+#
+#  agent:
+#    image: ngrinder/agent
+#    container_name: ngrinder-agent
+#    depends_on:
+#      - controller
+#    environment:
+#      NGRINDER_CONTROLLER_IP: "controller:80"
+#    networks:
+#      - bridge-net
+#  jmeter:
+#    image: justb4/jmeter:latest
+#    container_name: jmeter-gui
+#    environment:
+#      - DISPLAY=172.30.1.5:0.0
+#    volumes:
+#      - ./jmeter-plans:/jmeter-plans
+#    networks:
+#      - bridge-net
+
 networks:
   bridge-net:
-    name: kafka-network
+    driver: bridge
 
 volumes:
   mongodb_data:
   kafka_data:
+
